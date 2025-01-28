@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Encoder;
 public class Algae_Mechanism {
     public Algae_Mechanism() {
 
-        XboxController gamepad2 = new XboxController(1);
+        XboxController gamepad2 = new XboxController(1); //move to robot container
         DCMotor spinnerWheelMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
         DCMotor pivotMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
         //Fix this later
@@ -17,16 +17,16 @@ public class Algae_Mechanism {
     }
 
     public static void spinnerPower(XboxController gamepad2, DCMotor spinnerWheelMotor, PWMMotorController spinnerWheelMotorController) {
-        boolean isRightBumperPressed = gamepad2.getRightBumperPressed();
-        double speedOfSpinnerWheels = 0.5;
-
+        boolean isRightBumperPressed = gamepad2.getRightBumperPressed();//move to robot container
+        double speedOfSpinnerWheels = 0.5; //move to command
+//Change speed in the command file, speed is changed based off of if the bumper is pressed
         if(isRightBumperPressed) {
             //Set speed to 0.5 if bumper is pressed
             spinnerWheelMotorController.set(speedOfSpinnerWheels);
         }
         else {
             //Do not set a speed if bumper is not pressed
-            spinnerWheelMotorController.set(0);
+            spinnerWheelMotorController.set(speedOfSpinnerWheels);
         }
     }
     public static boolean isUp(Encoder pivotMotorEncoder) {
