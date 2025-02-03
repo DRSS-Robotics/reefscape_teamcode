@@ -17,11 +17,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.Algae_Mechanism;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private double MaxSpeedScalar = 0.20;
+    private Algae_Mechanism algaeMechanism = new Algae_Mechanism();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -42,6 +44,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        gamepad2.whileTrue();
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -69,6 +72,8 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+        //When the right bumper is pressed, execute the algae mechanism command
+        gamepad2.rightBumper().onTrue(execute(algaeMechanism.Algae_Mechanism_Spinner_Command()));
     }
 
     public Command getAutonomousCommand() {
