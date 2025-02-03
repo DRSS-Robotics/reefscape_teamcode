@@ -1,1 +1,15 @@
-[]
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="0" y="0"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
+		<location x="0" y="0"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
+		<location x="0" y="0"/>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>
