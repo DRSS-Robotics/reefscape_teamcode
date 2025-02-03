@@ -37,6 +37,7 @@ public class Algae_Mechanism {
         if (9 < pivotEncoderValue && pivotEncoderValue < 10) {
             isUp = true;
         } else if (0 < pivotEncoderValue && pivotEncoderValue < 1) {
+            //Why do we have this else if?
             isUp = false;
         } else{
             isUp = false;
