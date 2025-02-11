@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Algae_Mechanism;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class Algae_Mechanism_Pivot_Command extends Command{
+public class Algae_Mechanism_Intake_Command extends Command{
     Algae_Mechanism algaeMechanism;
     XboxController gamepad2;
 
-    public Algae_Mechanism_Pivot_Command(Algae_Mechanism algaeMechanism){
+    public Algae_Mechanism_Intake_Command(Algae_Mechanism algaeMechanism){
         this.algaeMechanism = algaeMechanism();
         XboxController gamepad2 = new XboxController(1);
         //Specifies that the command uses the algae subsystem. 
@@ -18,17 +18,8 @@ public class Algae_Mechanism_Pivot_Command extends Command{
 
     @Override
     public void execute(){
-        
-        double speedOfPivotMotor = 0.5;
-
-        if (Algae_Mechanism.isUp && Algae_Mechanism.pivotRemainingDistance > 0) {
-            //Reverse speed to go down instead of up
-            algaeMechanism.pivotMotorController.set(-Algae_Mechanism.speedOfPivotMotor);
-        } else if(!Algae_Mechanism.isUp && Algae_Mechanism.pivotRemainingDistance > 0) {
-            algaeMechanism.pivotMotorController.set(Algae_Mechanism.speedOfPivotMotor);
-        } else{
-            pivotMotorEncoder.reset();
-        }
+        //Set the speed of the spinner motor to 0.5
+        algaeMechanism.spinnerWheelMotorController.set(algaeMechanism.speedOfSpinnerWheels);
     }
 
     @Override

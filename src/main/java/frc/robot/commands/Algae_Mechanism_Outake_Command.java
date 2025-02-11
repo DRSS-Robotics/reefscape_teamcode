@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Algae_Mechanism;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class Algae_Mechanism_Spinner_Command extends Command{
+public class Algae_Mechanism_Outake_Command extends Command{
     Algae_Mechanism algaeMechanism;
     XboxController gamepad2;
 
-    public Algae_Mechanism_Spinner_Command(Algae_Mechanism algaeMechanism){
+    public Algae_Mechanism_Outake_Command(Algae_Mechanism algaeMechanism){
         this.algaeMechanism = algaeMechanism();
         XboxController gamepad2 = new XboxController(1);
         //Specifies that the command uses the algae subsystem. 
@@ -19,7 +19,7 @@ public class Algae_Mechanism_Spinner_Command extends Command{
     @Override
     public void execute(){
         //Set the speed of the spinner motor to 0.5
-        algaeMechanism.spinnerWheelMotorController.set(algaeMechanism.speedOfSpinnerWheels);
+        algaeMechanism.spinnerWheelMotorController.set(-algaeMechanism.speedOfSpinnerWheels);
     }
 
     @Override

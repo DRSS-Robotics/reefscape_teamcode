@@ -73,7 +73,8 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
         //When the right bumper is pressed, execute the algae mechanism command
-        gamepad2.rightBumper().onTrue(execute(algaeMechanism.Algae_Mechanism_Spinner_Command()));
+        gamepad2.rightBumper().onTrue(execute(algaeMechanism.Algae_Mechanism_Intake_Command()));
+        gamepad2.leftBumper().onTrue(execute(algaeMechanism.Algae_Mechanism_Outake_Command()));
         gamepad2.x().onTrue(execute(algaeMechanism.Algae_Mechanism_Pivot_Command()));
     }
 

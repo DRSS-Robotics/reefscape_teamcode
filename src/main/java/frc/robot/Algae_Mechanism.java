@@ -45,17 +45,17 @@ public class Algae_Mechanism {
         return isUp;
     }
     public static void pivotMotion(XboxController gamepad2, DCMotor pivotMotor, PWMMotorController pivotMotorController, boolean isUp, int pivotRemainingDistance, Encoder pivotMotorEncoder) {
-        boolean isXButtonPressed = gamepad2.getXButtonPressed();
-        double speedOfPivotMotor = 0.5;
+        // boolean isXButtonPressed = gamepad2.getXButtonPressed();
+        // double speedOfPivotMotor = 0.5;
 
-        if (isXButtonPressed && isUp && pivotRemainingDistance > 0) {
-            //Reverse speed to go down instead of up
-            pivotMotorController.set(-speedOfPivotMotor);
-        } else if(isXButtonPressed && !isUp && pivotRemainingDistance > 0) {
-            pivotMotorController.set(speedOfPivotMotor);
-        } else{
-            pivotMotorEncoder.reset();
-        }
+        // if (isXButtonPressed && isUp && pivotRemainingDistance > 0) {
+        //     //Reverse speed to go down instead of up
+        //     pivotMotorController.set(-speedOfPivotMotor);
+        // } else if(isXButtonPressed && !isUp && pivotRemainingDistance > 0) {
+        //     pivotMotorController.set(speedOfPivotMotor);
+        // } else{
+        //     pivotMotorEncoder.reset();
+        // }
     }
     public static int pivotRemainingDistance(Encoder pivotMotorEncoder) {
         int pivotTargetPosition = 9;
@@ -63,6 +63,5 @@ public class Algae_Mechanism {
         return pivotRemainingDistance;
     }
 }
-//i
 
 
