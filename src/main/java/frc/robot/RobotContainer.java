@@ -28,7 +28,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.25).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    double speedScalar = 0.15;
+    double speedScalar = 0.25;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -55,7 +55,7 @@ public class RobotContainer {
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
         // testing CalibAuto showed that the robot went 2.6797 meters instead of one
-        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
+        autoChooser = AutoBuilder.buildAutoChooser("inPlace");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 

@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
+        "x": 4.0,
         "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
+        "x": 5.079806030035025,
         "y": 7.0
       },
       "isLocked": false,
@@ -16,44 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.0,
+        "x": 6.0,
         "y": 7.0
       },
       "prevControl": {
-        "x": 3.000000878083531,
-        "y": 7.001325204243197
-      },
-      "nextControl": {
-        "x": 4.943250000000001,
-        "y": 6.99875
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.0,
+        "x": 5.75,
         "y": 7.0
-      },
-      "prevControl": {
-        "x": 2.5545000000000004,
-        "y": 7.018249999999999
-      },
-      "nextControl": {
-        "x": 1.4454999999999996,
-        "y": 6.981750000000001
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.0,
-        "y": 7.0
-      },
-      "prevControl": {
-        "x": 2.58625,
-        "y": 7.03775
       },
       "nextControl": null,
       "isLocked": false,
@@ -66,26 +34,26 @@
   "eventMarkers": [
     {
       "name": "test-OneThird",
-      "waypointRelativePos": 0.33,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "test-TwoThirds",
-      "waypointRelativePos": 0.67,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "test-Complete",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 0.2,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
