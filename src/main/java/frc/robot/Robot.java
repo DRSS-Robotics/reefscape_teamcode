@@ -6,8 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Algae_Mechanism;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Algae_Mechanism;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -15,7 +15,7 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   public Robot() {
-    RobotContainer m_robotContainer = new RobotContainer();
+     m_robotContainer = new RobotContainer();
   }
 
   @Override

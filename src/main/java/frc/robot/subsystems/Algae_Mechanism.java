@@ -1,20 +1,19 @@
-package frc.robot;
+package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.*;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Encoder;
 
-public class Algae_Mechanism {
+public class Algae_Mechanism extends SubsystemBase{
     public Algae_Mechanism() {
 
         XboxController gamepad2 = new XboxController(1); //move to robot container
-        DCMotor spinnerWheelMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
-        DCMotor pivotMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
         double speedOfSpinnerWheels = 0.5;
         //Fix this later
         Encoder pivotMotorEncoder = new Encoder(0,0);
-        PWMMotorController spinnerWheelMotorController = new PWMMotorController("spinnerWheelMotorController",0) {};
-        PWMMotorController pivotMotorController = new PWMMotorController("pivotMotorController",0) {};
+        
     }
 
 //     public static void spinnerPower(XboxController gamepad2, DCMotor spinnerWheelMotor, PWMMotorController spinnerWheelMotorController) {
@@ -62,6 +61,16 @@ public class Algae_Mechanism {
         int pivotRemainingDistance = pivotTargetPosition - pivotMotorEncoder.get();
         return pivotRemainingDistance;
     }
-}
+
+    public Command Algae_Intake_Command(DCMotor spinnerWheelMotor, PWMMotorController spinnerWheelMotorController, double speedOfSpinnerWheels ) {
+        return runOnce(() -> spinnerWheelMotorController.set(speedOfSpinnerWheels));
+
+        }
+    public Command Algae_Outake_Command(DCMotor spinnerWheelMotor, PWMMotorController spinnerWheelMotorController, double speedOfSpinnerWheels ) {
+            return runOnce(() -> spinnerWheelMotorController.set(-speedOfSpinnerWheels));
+    
+        }
+    }
+
 
 

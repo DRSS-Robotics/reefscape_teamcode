@@ -9,8 +9,8 @@ public class Algae_Mechanism_Pivot_Command extends Command{
     XboxController gamepad2;
 
     public Algae_Mechanism_Pivot_Command(Algae_Mechanism algaeMechanism){
-        this.algaeMechanism = algaeMechanism();
-        XboxController gamepad2 = new XboxController(1);
+        Algae_Mechanism algaeMechanism = new algaeMechanism();
+        //XboxController gamepad2 = new XboxController(1);
         //Specifies that the command uses the algae subsystem. 
         //This stops other commands that require this subsystem from being run
         addRequirements(this.algaeMechanism);

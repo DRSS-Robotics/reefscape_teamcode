@@ -10,20 +10,28 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Algae_Mechanism;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.Algae_Mechanism;
+import frc.robot.commands.Algae_Mechanism_Intake_Command;
+
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private double MaxSpeedScalar = 0.20;
     private Algae_Mechanism algaeMechanism = new Algae_Mechanism();
+    private Algae_Mechanism_Intake_Command algaeIntakeCommand = new Algae_Mechanism_Intake_Command(algaeMechanism);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -36,15 +44,19 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
+    public final XboxController gamepad2 = new XboxController(0);
+    public static PWMMotorController spinnerWheelMotorController = new PWMMotorController("spinnerWheelMotorController",0) {};
+    public static PWMMotorController pivotMotorController = new PWMMotorController("pivotMotorController",0) {};
+    public static double speedOfSpinnerWheels = 0.5;
 
+    public static DCMotor spinnerWheelMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
+    public static DCMotor pivotMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-
     public RobotContainer() {
         configureBindings();
     }
 
     private void configureBindings() {
-        gamepad2.whileTrue();
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -68,14 +80,18 @@ public class RobotContainer {
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
+        Trigger rightBumper = new JoystickButton(gamepad2, XboxController.Button.kRightBumper.value);
+        Trigger leftBumper = new JoystickButton(gamepad2, XboxController.Button.kLeftBumper.value);
+        Trigger buttonX = new JoystickButton(gamepad2, XboxController.Button.kX.value);
+
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
         //When the right bumper is pressed, execute the algae mechanism command
-        gamepad2.rightBumper().onTrue(execute(algaeMechanism.Algae_Mechanism_Intake_Command()));
-        gamepad2.leftBumper().onTrue(execute(algaeMechanism.Algae_Mechanism_Outake_Command()));
-        gamepad2.x().onTrue(execute(algaeMechanism.Algae_Mechanism_Pivot_Command()));
+        rightBumper.onTrue(algaeMechanism.Algae_Intake_Command(spinnerWheelMotor, spinnerWheelMotorController, speedOfSpinnerWheels));
+        leftBumper.onTrue(algaeMechanism.Algae_Outake_Command(spinnerWheelMotor, spinnerWheelMotorController, speedOfSpinnerWheels));
+        buttonX.onTrue(algaeMechanism.);
     }
 
     public Command getAutonomousCommand() {
