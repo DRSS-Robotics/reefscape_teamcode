@@ -18,15 +18,23 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class TunerConstants {
 
-    // The steer motor uses any SwerveModule.SteerRequestType control request with the
-    // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
-    private static final Slot0Configs steerGains = new Slot0Configs()
+    //multiplying by 1/0.3 because 0.3 is our current speed scalar, will be removed in final code
+
+    //kp here should br 7.4
+    public static Slot0Configs steerGainsTeleOp = new Slot0Configs()
+        .withKP(18).withKI(0.0).withKD(0.253)
+        .withKS(0).withKV(0.75562).withKA(0.023957)
+        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
+    public static Slot0Configs steerGainsAuto = new Slot0Configs()
         .withKP(5).withKI(0.0).withKD(0)
         .withKS(0).withKV(0).withKA(0)
         .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
-    private static final Slot0Configs driveGains = new Slot0Configs()
+    public static Slot0Configs driveGainsTeleOp = new Slot0Configs()
+        .withKP(0.07).withKI(0).withKD(0)
+        .withKS(0.10711);//.withKV(0.1142 / 2).withKA(0.0078281);
+    public static Slot0Configs driveGainsAuto = new Slot0Configs()
         .withKP(0.05).withKI(0).withKD(0)
         .withKS(0).withKV(0);
 
@@ -101,8 +109,8 @@ public class TunerConstants {
             .withSteerMotorGearRatio(kSteerGearRatio)
             .withCouplingGearRatio(kCoupleRatio)
             .withWheelRadius(kWheelRadius)
-            .withSteerMotorGains(steerGains)
-            .withDriveMotorGains(driveGains)
+            .withSteerMotorGains(steerGainsTeleOp)
+            .withDriveMotorGains(driveGainsTeleOp)
             .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
             .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
             .withSlipCurrent(kSlipCurrent)
@@ -210,6 +218,7 @@ public class TunerConstants {
          * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
          * @param modules               Constants for each specific module
          */
+
         public TunerSwerveDrivetrain(
             SwerveDrivetrainConstants drivetrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules
