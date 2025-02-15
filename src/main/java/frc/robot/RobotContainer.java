@@ -23,7 +23,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Algae_Mechanism;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.commands.Algae_Mechanism_Down_Command;
 import frc.robot.commands.Algae_Mechanism_Intake_Command;
+import frc.robot.commands.Algae_Mechanism_Outake_Command;
+import frc.robot.commands.Algae_Mechanism_Up_Command;
+import edu.wpi.first.wpilibj.Encoder;
 
 
 public class RobotContainer {
@@ -32,6 +36,9 @@ public class RobotContainer {
     private double MaxSpeedScalar = 0.20;
     private Algae_Mechanism algaeMechanism = new Algae_Mechanism();
     private Algae_Mechanism_Intake_Command algaeIntakeCommand = new Algae_Mechanism_Intake_Command(algaeMechanism);
+    private Algae_Mechanism_Outake_Command algaeOuttakeCommand = new Algae_Mechanism_Outake_Command(algaeMechanism);
+    private Algae_Mechanism_Up_Command algaeUpCommand = new Algae_Mechanism_Up_Command(algaeMechanism);
+    private Algae_Mechanism_Down_Command algaeDownCommand = new Algae_Mechanism_Down_Command(algaeMechanism);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -48,9 +55,11 @@ public class RobotContainer {
     public static PWMMotorController spinnerWheelMotorController = new PWMMotorController("spinnerWheelMotorController",0) {};
     public static PWMMotorController pivotMotorController = new PWMMotorController("pivotMotorController",0) {};
     public static double speedOfSpinnerWheels = 0.5;
+    public static double speedOfPivotMotor = 0.5;
 
     public static DCMotor spinnerWheelMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
     public static DCMotor pivotMotor = new DCMotor(12,0.97,100,1.4,1151.9,1);
+    public static Encoder pivotEncoder = new Encoder(0,0);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public RobotContainer() {
         configureBindings();
@@ -83,6 +92,7 @@ public class RobotContainer {
         Trigger rightBumper = new JoystickButton(gamepad2, XboxController.Button.kRightBumper.value);
         Trigger leftBumper = new JoystickButton(gamepad2, XboxController.Button.kLeftBumper.value);
         Trigger buttonX = new JoystickButton(gamepad2, XboxController.Button.kX.value);
+       // Trigger isUp = new algaeMechanism.isUp(); 
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -91,8 +101,16 @@ public class RobotContainer {
         //When the right bumper is pressed, execute the algae mechanism command
         rightBumper.onTrue(algaeMechanism.Algae_Intake_Command(spinnerWheelMotor, spinnerWheelMotorController, speedOfSpinnerWheels));
         leftBumper.onTrue(algaeMechanism.Algae_Outake_Command(spinnerWheelMotor, spinnerWheelMotorController, speedOfSpinnerWheels));
-        buttonX.onTrue(algaeMechanism.);
-    }
+    
+        if (!algaeMechanism.isUp(null)){
+            buttonX.onTrue(algaeMechanism.Algae_Up_Command(pivotMotor, pivotMotorController, speedOfPivotMotor));
+        } else if (algaeMechanism.isUp(null)){
+            buttonX.onTrue(algaeMechanism.Algae_Down_Command(pivotMotor, pivotMotorController, speedOfPivotMotor));
+        } else{
+
+        }
+        }
+        
 
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");

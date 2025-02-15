@@ -12,7 +12,7 @@ public class Algae_Mechanism extends SubsystemBase{
         XboxController gamepad2 = new XboxController(1); //move to robot container
         double speedOfSpinnerWheels = 0.5;
         //Fix this later
-        Encoder pivotMotorEncoder = new Encoder(0,0);
+        //Encoder pivotMotorEncoder = new Encoder(0,0);
         
     }
 
@@ -70,7 +70,15 @@ public class Algae_Mechanism extends SubsystemBase{
             return runOnce(() -> spinnerWheelMotorController.set(-speedOfSpinnerWheels));
     
         }
+
+    public Command Algae_Up_Command(DCMotor pivotMotor, PWMMotorController pivotMotorController, double speedOfPivotMotor){
+          return runOnce(() -> pivotMotorController.set(speedOfPivotMotor));
+            
+        }
+    public Command Algae_Down_Command(DCMotor pivotMotor, PWMMotorController pivotMotorController, double speedOfPivotMotor){
+            return runOnce(() -> pivotMotorController.set(-speedOfPivotMotor));
+              //Possibly change speed later we might have it backwards
+          }
     }
-
-
+    
 
