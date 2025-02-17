@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Commands.MotorOnCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -36,6 +36,11 @@ public class RobotContainer {
     public final CommandXboxController joystick = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+    public final CommandHangSubsystem hangSubsystem = new CommandHangSubsystem();
+    public final MotorOnCommand motorOncommand = new MotorOnCommand(hangSubsystem);
+
+    // public final CommandHangSubsystem hang = 
 
     public RobotContainer() {
         configureBindings();
@@ -64,6 +69,9 @@ public class RobotContainer {
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        joystick.start().and(joystick.a()).whileTrue(motorOncommand);
+
+        // joystick.start().and(joystick.a()).whileTrue(hang.setSpeed(0.5));
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
