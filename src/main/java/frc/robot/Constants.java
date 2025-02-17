@@ -30,6 +30,8 @@ public class Constants {
   public static final double kMinElevatorHeightMeters = 0.0;
   public static final double kMaxElevatorHeightMeters = 1.25;
 
+
+  public static final double hangSpeed = 0.5;
   // distance per pulse = (distance per revolution) / (pulses per revolution)
   //  = (Pi * D) / ppr
   public static final double kElevatorEncoderDistPerPulse =

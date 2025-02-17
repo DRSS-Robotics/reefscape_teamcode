@@ -10,19 +10,29 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Commands.Test_Hang_Up_Command;
+import frc.robot.Commands.Test_Hang_Down_Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.TestHang;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private double MaxSpeedScalar = 0.20;
 
+    private TestHang test_Hang = new TestHang();
+    private Test_Hang_Up_Command upCommand = new Test_Hang_Up_Command(test_Hang);
+    private Test_Hang_Down_Command downCommand = new Test_Hang_Down_Command(test_Hang);
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
@@ -34,8 +44,12 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
+    public final XboxController gamepad2 = new XboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public static DCMotor hangMotor = new DCMotor(12,2.6,105,1.8,594.4,1);
+    public static PWMMotorController hangMotorController = new PWMMotorController("hangMotorController",0){};
+
 
     public RobotContainer() {
         configureBindings();
@@ -69,6 +83,12 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        Trigger buttonY = new JoystickButton(gamepad2, XboxController.Button.kY.value);
+        Trigger buttonB = new JoystickButton(gamepad2, XboxController.Button.kB.value);
+
+        buttonY.onTrue(test_Hang.HangUpCommand(hangMotor, hangMotorController, Constants.hangSpeed));
+        buttonB.onTrue(test_Hang.HangDownCommand(hangMotor, hangMotorController, Constants.hangSpeed));
     }
 
     public Command getAutonomousCommand() {
