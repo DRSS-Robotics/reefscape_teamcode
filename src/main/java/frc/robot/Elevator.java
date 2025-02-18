@@ -5,10 +5,12 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Elevator implements AutoCloseable {
+public class Elevator extends SubsystemBase {
   // Define the motor for Kraken X60
   private final PWMSparkMax m_motor = new PWMSparkMax(Constants.kMotorPort);
 
@@ -62,9 +64,5 @@ public class Elevator implements AutoCloseable {
     SmartDashboard.putNumber("Elevator Position", m_encoder.getDistance());
   }
 
-  @Override
-  public void close() {
-    m_encoder.close();
-    m_motor.close();
-  }
+  //Need to write commands down here
 }
