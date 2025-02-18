@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.motorcontrol.*;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class CommandHangSubsystem extends SubsystemBase { 
     private int motorID;
@@ -16,9 +18,19 @@ public class CommandHangSubsystem extends SubsystemBase {
     }
 
     //constructor to initialize the motor's ID and speed
-    public void motor(int motorID, double speed) {
+    public CommandHangSubsystem(int motorID, double speed) {
         this.motorID = motorID;
         this.speed = speed;
+        XboxController gamepad2 = new XboxController(motorID);
+    }
+    public void XboxController(){
+
+
+
+
+
+
+
     }
 
     public void setSpeed(double speed) {
