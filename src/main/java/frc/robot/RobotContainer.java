@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.XboxController;
+// import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
 import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -25,6 +26,8 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.TestHang;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -48,12 +51,9 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public static DCMotor hangMotor = new DCMotor(12,2.6,105,1.8,594.4,1);
-    public static PWMMotorController hangMotorController = new PWMMotorController("hangMotorController",0){};
-
-
-    public RobotContainer() {
-        configureBindings();
-    }
+    //public static PWMMotorController hangMotorController = new PWMMotorController("hangMotorController",0){};
+    public SparkMax hangController = new SparkMax(0, MotorType.kBrushless);
+        
 
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -87,8 +87,8 @@ public class RobotContainer {
         Trigger buttonY = new JoystickButton(gamepad2, XboxController.Button.kY.value);
         Trigger buttonB = new JoystickButton(gamepad2, XboxController.Button.kB.value);
 
-        buttonY.onTrue(test_Hang.HangUpCommand(hangMotor, hangMotorController, Constants.hangSpeed));
-        buttonB.onTrue(test_Hang.HangDownCommand(hangMotor, hangMotorController, Constants.hangSpeed));
+        buttonY.onTrue(test_Hang.HangUpCommand(hangMotor, hangController, Constants.hangSpeed));
+        buttonB.onTrue(test_Hang.HangDownCommand(hangMotor, hangController, Constants.hangSpeed));
     }
 
     public Command getAutonomousCommand() {
