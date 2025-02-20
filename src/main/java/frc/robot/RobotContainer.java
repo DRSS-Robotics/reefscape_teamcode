@@ -13,6 +13,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
@@ -34,8 +36,11 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
+    public final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    //Change to brushless for the real motor
+    public static SparkMax hangMotorController = new SparkMax(0, MotorType.kBrushed);
 
     public RobotContainer() {
         configureBindings();
@@ -67,6 +72,19 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        joystick2.b().whileTrue(Commands.run(() -> {
+            hangMotorController.set(0.5);
+        }));
+        joystick2.y().whileTrue(Commands.run(() -> {
+            hangMotorController.set(-0.5);
+        }));
+
+        joystick2.b().whileFalse(Commands.run(() -> {
+            hangMotorController.set(0.0);
+        }));
+        joystick2.y().whileFalse(Commands.run(() -> {
+            hangMotorController.set(0.0);
+        }));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
