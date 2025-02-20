@@ -52,7 +52,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public static DCMotor hangMotor = new DCMotor(12,2.6,105,1.8,594.4,1);
     //public static PWMMotorController hangMotorController = new PWMMotorController("hangMotorController",0){};
-    public SparkMax hangController = new SparkMax(0, MotorType.kBrushless);
+    public SparkMax hangController = new SparkMax(11, MotorType.kBrushed);
         
 
     private void configureBindings() {
