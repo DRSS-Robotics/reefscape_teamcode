@@ -29,12 +29,12 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
-    double speedScalar = 0.4;
+    double speedScalar = 0.35;
     double SlownessModifier = 1;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.05 * SlownessModifier).withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -47,7 +47,7 @@ public class RobotContainer {
     private final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-
+    
     public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
@@ -59,8 +59,7 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        // testing CalibAuto showed that the robot went 2.6797 meters instead of one
-        autoChooser = AutoBuilder.buildAutoChooser("inPlace");
+        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 
@@ -80,10 +79,11 @@ public class RobotContainer {
         );
 
         // set these to joystick2 later
-        joystick.a().whileTrue(Commands.run(() -> {
+        // We fixed it for you- Micah and William L.
+        joystick2.a().whileTrue(Commands.run(() -> {
             outtakeMotor.set(0.75);
         }));
-        joystick.a().whileFalse(Commands.run(() -> {
+        joystick2.a().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0.0);
         }));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -98,7 +98,7 @@ public class RobotContainer {
         //         .withRotationalRate(0)
         //     // point.withAngle(Rotation2d.fromDegrees(0));
         //     )
-        joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.25));
+        joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
         joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         

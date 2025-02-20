@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2RP2-Segment"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dropCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2RP-Algae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "pickupAlgae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2RP-Processor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dropAlgae"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2RP",
+  "choreoAuto": false
+}
