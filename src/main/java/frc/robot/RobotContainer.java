@@ -47,7 +47,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
-    public final XboxController gamepad2 = new XboxController(0);
+    public final CommandXboxController gamepad2 = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public static DCMotor hangMotor = new DCMotor(12,2.6,105,1.8,594.4,1);
@@ -84,8 +84,8 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        Trigger buttonY = new JoystickButton(gamepad2, XboxController.Button.kY.value);
-        Trigger buttonB = new JoystickButton(gamepad2, XboxController.Button.kB.value);
+        Trigger buttonY = gamepad2.y();
+        Trigger buttonB = gamepad2.b();
 
         buttonY.onTrue(test_Hang.HangUpCommand(hangMotor, hangController, Constants.hangSpeed));
         buttonB.onTrue(test_Hang.HangDownCommand(hangMotor, hangController, Constants.hangSpeed));
