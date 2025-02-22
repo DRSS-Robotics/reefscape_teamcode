@@ -26,20 +26,23 @@ public class RobotContainer {
     private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
     private double MaxSpeedScalar = 0.20;
 
+    private final MotorController motorController = new MotorController();
+    private final ElevatorFinal elevatorInstance = new ElevatorFinal(motorController);
+    private final XboxController gamepad1 = new XboxController(0);
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-
-    private Elevator elevatorMechanism = new Elevator();    
+   
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
 
-    public final XboxController gamepad2 = new XboxController(0);
+    public final XboxController Gamepad2 = new XboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -59,6 +62,7 @@ public class RobotContainer {
             )
         );
 
+
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
@@ -70,19 +74,18 @@ public class RobotContainer {
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        //use left joystick on gamepad 2 to control the elevator
-        Trigger joystickL = new JoystickButton(gamepad2, XboxController.Button.kLeftStick.value);
     }
 
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
     }
-
+    
     //test
 }

@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public class Constants {
-  public static final int kMotorPort = 0;
+  public static final int kElevatorMotorPort = 0;
   public static final int kEncoderAChannel = 0;
   public static final int kEncoderBChannel = 1;
   public static final int kJoystickPort = 0;
