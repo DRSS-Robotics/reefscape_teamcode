@@ -80,6 +80,12 @@ public class RobotContainer {
         joystick.a().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0);
         }));
+        joystick.x().whileTrue(Commands.run(() -> {
+            outtakeMotor.set(-0.3);
+        }));
+        joystick.x().whileFalse(Commands.run(() -> {
+            outtakeMotor.set(0);
+        }));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
