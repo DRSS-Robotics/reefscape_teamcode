@@ -81,15 +81,21 @@ public class RobotContainer {
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
         joystick2.a().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(0.75);
+            outtakeMotor.set(0.5);
         }));
         joystick2.a().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0.0);
         }));
-        joystick.x().whileTrue(Commands.run(() -> {
+        joystick2.x().whileTrue(Commands.run(() -> {
             outtakeMotor.set(-0.3);
         }));
-        joystick.x().whileFalse(Commands.run(() -> {
+        joystick2.x().whileFalse(Commands.run(() -> {
+            outtakeMotor.set(0);
+        }));
+        joystick2.y().whileTrue(Commands.run(() -> {
+            outtakeMotor.set(-0.15);
+        }));
+        joystick2.y().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0);
         }));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -110,7 +116,7 @@ public class RobotContainer {
         
 
         joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(0.5).withVelocityY(0))
+            forwardStraight.withVelocityX(0.55).withVelocityY(0))
         );
         joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
