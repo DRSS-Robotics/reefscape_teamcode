@@ -7,6 +7,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.GenericPublisher;
 import edu.wpi.first.networktables.NetworkTable;
@@ -40,6 +41,8 @@ public class CameraSubsystem {
         double closestYaw = 0.0;
         Transform3d closestOffset;
         int closestID;
+          DoublePublisher DataRange;
+          DoublePublisher DataYaw;
 
         var results = camera.getAllUnreadResults();
         if (!results.isEmpty()) {
@@ -86,7 +89,12 @@ public class CameraSubsystem {
                     System.out.println(closestRange);
                     NetworkTableInstance inst = NetworkTableInstance.getDefault();
                     NetworkTable table = inst.getTable("CameraData");
-                                   
+                    DataRange = table.getDoubleTopic("targetYaw").publish();
+                    DataYaw = table.getDoubleTopic("targetRange").publish();
+          
+                    DataRange.set(targetYaw);
+                    DataYaw.set(targetRange);
+
           
                 }
         }
