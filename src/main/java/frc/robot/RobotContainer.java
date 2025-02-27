@@ -10,6 +10,9 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Coral_Mechanism;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -34,8 +38,13 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
+    public final CommandXboxController joystick2 = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final static SparkMax coralElevator = new SparkMax(0,MotorType.kBrushless);
+    public final static SparkMax coralIntake = new SparkMax(0, MotorType.kBrushless);
+
+    public Coral_Mechanism coralMechanism = new Coral_Mechanism();
 
     public RobotContainer() {
         configureBindings();
@@ -69,7 +78,19 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        Commands.runOnce(() -> coralMechanism.startCoralElevatorAction(joystick2 ,coralElevator));
+        
+
+        //Intake
+        joystick2.rightBumper().whileTrue(Commands.run(() -> {coralIntake.set(0.5);}));
+        //Outtake
+        joystick2.leftBumper().whileTrue(Commands.run(() -> {coralIntake.set(-0.5);}));
+        
+        
     }
+
+   
 
     public Command getAutonomousCommand() {
         return Commands.print("No autonomous command configured");
