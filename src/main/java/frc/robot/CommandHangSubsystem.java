@@ -1,16 +1,26 @@
 package frc.robot;
 
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.motorcontrol.*;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class CommandHangSubsystem extends SubsystemBase { 
     private int motorID;
     private double speed;   
 
+    private SparkMax hangMotor = new SparkMax(1, MotorType.kBrushed);
+    private final CommandXboxController joystick = new CommandXboxController(0);
 
     private MyDCMotor motor; 
+
+
+
 
     public void motorOn(DCMotor motor) {
         this.motor.setSpeed(1.0); // Set motor to full speed
@@ -24,40 +34,11 @@ public class CommandHangSubsystem extends SubsystemBase {
         XboxController gamepad2 = new XboxController(motorID);
     }
     public void XboxController(){
-
-
-
-
-
-
-
     }
 
     public void setSpeed(double speed) {
         this.speed = speed;
     }
-
-    //get the current speed of the motor
-    public double getSpeed() {
-        return speed;
-    }
-
-    //get the motor's ID
-    public int getMotorID() {
-        return motorID;
-    }
-    
-    public void motorOff(DCMotor motor) {
-        this.motor(1,0); //sets motor to full speed
-     }
-
-    //main method to test the hangSubsystem
-    // public static void main(String[] args) {
-    //     hangSubsystem subsystem = new hangSubsystem();
-    //     motor HangMotor = new motor(1, 0.0); //create a new DCMotor with ID 1 and initial speed 0.0 [THIS IS WHERE THE PORT WOULD BE MODIFIED]
-
-    //     //turn the motor on
-    // }
 }
 
 
