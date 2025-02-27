@@ -40,5 +40,5 @@ public class Coral_Mechanism extends SubsystemBase{
            else {
             return runOnce(() -> coralElevator.set(0.0));
        }
-   }s
+   }
 }
