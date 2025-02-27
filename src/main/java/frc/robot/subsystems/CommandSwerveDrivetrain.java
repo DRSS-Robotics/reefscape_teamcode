@@ -196,7 +196,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     // code from https://github.com/CrossTheRoadElec/Phoenix6-Examples/blob/main/java/SwerveWithPathPlanner/src/main/java/frc/robot/subsystems/CommandSwerveDrivetrain.java
-    
+     
      public void configureAutoBuilder() {
         RobotConfig config;
         try {
@@ -216,7 +216,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
                     // TODO: correctly tune PID
                     // translation
-                    new PIDConstants(3, 0, 0),
+                    new PIDConstants(10, 0, 0),
                     // rotation
                     new PIDConstants(3.25, 0, 0)
                 ),

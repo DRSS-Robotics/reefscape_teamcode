@@ -80,6 +80,8 @@ public class RobotContainer {
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
+        // btw the reason it was set to joystick (and not joystick2) was so that
+        // it could be tested on a single controller
         joystick2.a().whileTrue(Commands.run(() -> {
             outtakeMotor.set(0.75);
         }));

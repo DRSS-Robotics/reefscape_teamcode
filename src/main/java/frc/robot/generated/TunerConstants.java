@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
@@ -28,8 +29,8 @@ public class TunerConstants {
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     public static Slot0Configs driveGains = new Slot0Configs()
-        .withKP(0.07).withKI(0).withKD(0)
-        .withKS(0.10711);//.withKV(0.1142 / 2).withKA(0.0078281);
+        .withKP(0.07).withKI(0).withKD(0);
+        //.withKS(0.10711);//.withKV(0.1142 / 2).withKA(0.0078281);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -49,6 +50,7 @@ public class TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
+    //TODO: tune this ahh
     private static final Current kSlipCurrent = Amps.of(120.0);
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
@@ -70,6 +72,7 @@ public class TunerConstants {
     public static final CANBus kCANBus = new CANBus("", "./logs/example.hoot");
 
     // Theoretical free speed (m/s) at 12 V applied output;
+        //TODO: tune this ahh
     public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(1.5);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -85,6 +88,7 @@ public class TunerConstants {
     private static final int kPigeonId = 0;
 
     // These are only used for simulation
+        //TODO: tune this ahh
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);
     private static final MomentOfInertia kDriveInertia = KilogramSquareMeters.of(0.01);
     // Simulated voltage necessary to overcome friction
