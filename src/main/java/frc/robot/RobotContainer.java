@@ -49,7 +49,9 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
+    public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed); // creates a new instance of the SparkMax motor controller//
+
+
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */
@@ -78,20 +80,23 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
             )
         );
-        if (joystick2.getRightY()<-0.3){
+        if (joystick2.getRightY() < -0.3) {
+            // If the right Y-axis value of joystick2 is less than -0.3, set the outtake motor speed to 0.3 (forward direction)
             Commands.run(() -> {
-                outtakeMotor.set(0.3);});
-        }
-        else if (joystick2.getRightY()>0.3){
+                outtakeMotor.set(0.3);
+            });
+        } else if (joystick2.getRightY() > 0.3) {
+            // If the right Y-axis value of joystick2 is greater than 0.3, set the outtake motor speed to -0.3 (reverse direction)
             Commands.run(() -> {
-                outtakeMotor.set(-0.3);});
-        }
-        // else (joystick2.getRightY()>-0.3&&joystick2.getRightY()<0.3)
-
-        else{
+                outtakeMotor.set(-0.3);
+            });
+        } else {
+            // If the right Y-axis value of joystick2 is between -0.3 and 0.3, set the outtake motor speed to 0 (stop the motor)
             Commands.run(() -> {
-                outtakeMotor.set(-0.3);});
+                outtakeMotor.set(0);
+            });
         }
+        
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
