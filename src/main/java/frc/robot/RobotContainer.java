@@ -5,6 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
+import frc.robot.subsystems.Coral_Mechanism;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -38,11 +39,11 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     public final CommandXboxController joystick = new CommandXboxController(0);
-    public final CommandXboxController joystick2 = new CommandXboxController(0);
+    public final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final static SparkMax coralElevator = new SparkMax(0,MotorType.kBrushless);
-    public final static SparkMax coralIntake = new SparkMax(0, MotorType.kBrushless);
+    public final static SparkMax coralIntake = new SparkMax(1, MotorType.kBrushless);
 
     public Coral_Mechanism coralMechanism = new Coral_Mechanism();
 
@@ -79,16 +80,32 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        Commands.runOnce(() -> coralMechanism.startCoralElevatorAction(joystick2 ,coralElevator));
-        
+        // //Intake
+        // joystick2.rightBumper().whileTrue(Commands.run(() -> {coralIntake.set(0.5);}));
+        // //Outtake
+        // joystick2.leftBumper().whileTrue(Commands.run(() -> {coralIntake.set(-0.5);}));
+        //     //Intake Control - Runs while button is held, stops when released
 
-        //Intake
-        joystick2.rightBumper().whileTrue(Commands.run(() -> {coralIntake.set(0.5);}));
-        //Outtake
-        joystick2.leftBumper().whileTrue(Commands.run(() -> {coralIntake.set(-0.5);}));
+
+
+
+// Manually start the command
+    coralMechanism.startCoralElevatorAction(joystick2).schedule();
+
+    //Intake
+    joystick2.rightBumper().whileTrue(
+        Commands.run(()  -> coralIntake.set(0.5))
+    ).onFalse(
+        Commands.runOnce(() -> coralIntake.set(0))
+    );
+//Outake
+    joystick2.leftBumper().whileTrue(
+        Commands.run(() -> coralIntake.set(-0.5))
+    ).onFalse(
+        Commands.runOnce(() -> coralIntake.set(0))
+    );
+}
         
-        
-    }
 
    
 
