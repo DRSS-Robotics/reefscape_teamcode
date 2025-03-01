@@ -42,8 +42,7 @@ public class RobotContainer {
     public final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final static SparkMax coralElevator = new SparkMax(0,MotorType.kBrushless);
-    public final static SparkMax coralIntake = new SparkMax(1, MotorType.kBrushless);
+
 
     public Coral_Mechanism coralMechanism = new Coral_Mechanism();
 
@@ -94,15 +93,15 @@ public class RobotContainer {
 
     //Intake
     joystick2.rightBumper().whileTrue(
-        Commands.run(()  -> coralIntake.set(0.5))
+        Commands.run(()  -> coralMechanism.coralIntake.set(0.5))
     ).onFalse(
-        Commands.runOnce(() -> coralIntake.set(0))
+        Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
     );
 //Outake
     joystick2.leftBumper().whileTrue(
-        Commands.run(() -> coralIntake.set(-0.5))
+        Commands.run(() -> coralMechanism.coralIntake.set(-0.5))
     ).onFalse(
-        Commands.runOnce(() -> coralIntake.set(0))
+        Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
     );
 }
         
