@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Coral_Mechanism;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -47,9 +48,12 @@ public class RobotContainer {
     private final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public Coral_Mechanism coralMechanism = new Coral_Mechanism();
     
     public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
     // public TalonFXConfigurator = new TalonFXConfigurator();
+
+    //NamedCommands.registerCommand("dropCoral", coralMechanism.exampleCommand() );
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -134,6 +138,22 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         drivetrain.registerTelemetry(logger::telemeterize);
+
+
+        coralMechanism.startCoralElevatorAction(joystick2).schedule();
+
+        //Intake
+        joystick2.rightBumper().whileTrue(
+            Commands.run(()  -> coralMechanism.coralIntake.set(0.5))
+        ).onFalse(
+            Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
+        );
+    //Outake
+        joystick2.leftBumper().whileTrue(
+            Commands.run(() -> coralMechanism.coralIntake.set(-0.5))
+        ).onFalse(
+            Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
+        );
     }
 
     public Command getAutonomousCommand() {
