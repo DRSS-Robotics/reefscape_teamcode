@@ -80,6 +80,7 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
             )
         );
+        
         if (joystick2.getRightY() < -0.3) {
             // If the right Y-axis value of joystick2 is less than -0.3, set the outtake motor speed to 0.3 (forward direction)
             Commands.run(() -> {
