@@ -47,10 +47,11 @@ public class RobotContainer {
     private final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CoralMechanism Coral = new CoralMechanism();
     
     public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
 
-    public final SparkMax CoralMotor = new SparkMax(0 /* replace w/ id */, MotorType.kBrushed);
+    public final SparkMax CoralMotor = new SparkMax(0 /* TODO: replace w/ id */, MotorType.kBrushed);
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */
@@ -80,8 +81,6 @@ public class RobotContainer {
             )
         );
 
-        // set these to joystick2 later
-        // We fixed it for you- Micah and William L.
         joystick2.a().whileTrue(Commands.run(() -> {
             outtakeMotor.set(0.5);
         }));
@@ -116,23 +115,27 @@ public class RobotContainer {
         joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         joystick2.leftBumper().whileTrue(Commands.parallel(
-            CoralMotor.set(0.5),
+            CoralMotor.SetIntakeSpeed(0.5),
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(0.15).withVelocityY(0))
         ));
         joystick2.rightBumper().whileTrue(Commands.parallel(
-            CoralMotor.set(-0.5),
+            CoralMotor.SetIntakeSpeed(-0.5),
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
-        
 
-        joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(0.55).withVelocityY(0))
-        );
-        joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(-0.5).withVelocityY(0))
-        );
+        joystick2.leftStick(CoralMechanism.Deadband)
+            .whileTrue(CoralMechanism.DriveElevator(joystick2))
+            .onTrue(Commands.run(() -> CoralMechanism.SetState(true)))
+            .onFalse(Commands.run(() -> CoralMechanism.SetState(false)));
+
+        // joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
+        //     forwardStraight.withVelocityX(0.55).withVelocityY(0))
+        // );
+        // joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
+        //     forwardStraight.withVelocityX(-0.5).withVelocityY(0))
+        // );
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

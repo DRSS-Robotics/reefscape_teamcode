@@ -8,37 +8,34 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 
 
-public class Coral_Mechanism extends SubsystemBase {
+public class CoralMechanism extends SubsystemBase {
 
-    public boolean coralActivate;
+    public boolean ElevatorActivated = false;
+    public double Deadband = 0.04;
+    public int MinElevEncoderHeight = 0;
+    public int MaxElevEncoderHeight = 3;
 
-    public Coral_Mechanism(){
-        RobotContainer robotContainer = new RobotContainer();
-       SparkMax coralElevator = new SparkMax(0, MotorType.kBrushless);
-        coralActivate = false;
-
+    public CoralMechanism() {
+        SparkMax Elevator = new SparkMax(0 /* TODO: replace w/ elevator motor id */, MotorType.kBrushless);
+        SparkMax Intake = new SparkMax(0 /* TODO: replace w/ intake motor id */, MotorType.kBrushless);
     }
-    public boolean isCoralActivated (CommandXboxController joystick2) {
-        if (joystick2.getLeftY() > 0.04) {
-           coralActivate = true;
-       } else if (joystick2.getLeftY() < -0.04) {
-           coralActivate = true;
-       } else{
-        coralActivate = false;
-       }
-       return coralActivate;
-   }
 
-   public Command startCoralElevatorAction(CommandXboxController joystick2, SparkMax coralElevator) {
-       if ((coralActivate) && (joystick2.getLeftY() < 0)){
-           //We want to go up
-           return runOnce(() -> coralElevator.set(0.5));
-       } else if ((coralActivate) && (joystick2.getLeftY() > 0)){
-           //We want to go down
-           return runOnce(() -> coralElevator.set(-0.5));
-       }
-           else {
-            return runOnce(() -> coralElevator.set(0.0));
+    public void SetState(NewState) {
+        ElevatorActivated = NewState;
+        if (!NewState) {
+            Elevator.set(0);
+        }
+    }
+
+    public Command SetIntakeSpeed(double Speed) {
+        return Commands.runOnce(() -> Intake.set(Speed));
+    }
+
+    public Command DriveElevator(CommandXboxController Controller) {
+        if (ElevatorActivated) {
+            return Commands.runOnce(() -> Elevator.set(-0.5 * Controller.getLeftY()));
+        } else {
+            return Commands.runOnce(() -> Elevator.set(0));
+        }
        }
    }
-}
