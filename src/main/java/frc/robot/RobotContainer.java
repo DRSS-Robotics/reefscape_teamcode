@@ -50,8 +50,7 @@ public class RobotContainer {
     public final CoralMechanism Coral = new CoralMechanism();
     
     public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
-
-    public final SparkMax CoralMotor = new SparkMax(0 /* TODO: replace w/ id */, MotorType.kBrushed);
+;
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */
@@ -115,12 +114,12 @@ public class RobotContainer {
         joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         joystick2.leftBumper().whileTrue(Commands.parallel(
-            CoralMotor.SetIntakeSpeed(0.5),
+            CoralMechanism.SetIntakeSpeed(0.5),
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(0.15).withVelocityY(0))
         ));
         joystick2.rightBumper().whileTrue(Commands.parallel(
-            CoralMotor.SetIntakeSpeed(-0.5),
+            CoralMechanism.SetIntakeSpeed(-0.5),
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
