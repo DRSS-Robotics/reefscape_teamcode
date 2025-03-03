@@ -27,18 +27,20 @@ public class Coral_Mechanism extends SubsystemBase {
         return coralActivate;
     }
 
-    public Command startCoralElevatorAction(CommandXboxController joystick2) {
+    public void startCoralElevatorAction(CommandXboxController joystick2) {
         // Control the elevator motor based on joystick Y-axis
         if (coralActivate) {
             if (joystick2.getLeftY() < -0.4) {
                 // Move the elevator up
-                return runOnce(() -> coralElevator.set(0.75));
+                runOnce(() -> coralElevator.set(0.75));
+            
             } else if (joystick2.getLeftY() > 0.4) {
                 // Move the elevator down
-                return runOnce(() -> coralElevator.set(-0.5));
+                runOnce(() -> coralElevator.set(-0.75));
             }
+        } else{
+            runOnce(() -> coralElevator.set(0.0));
         }
         // Stop the elevator if not activated
-        return runOnce(() -> coralElevator.set(0.0));
     }
 }
