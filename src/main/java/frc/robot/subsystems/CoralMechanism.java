@@ -2,10 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 
 
 public class CoralMechanism extends SubsystemBase {
@@ -14,28 +13,27 @@ public class CoralMechanism extends SubsystemBase {
     public double Deadband = 0.04;
     public int MinElevEncoderHeight = 0;
     public int MaxElevEncoderHeight = 3;
+    SparkMax Elevator;
+    SparkMax Intake;
 
-    public CoralMechanism() {
-        SparkMax Elevator = new SparkMax(0 /* TODO: replace w/ elevator motor id */, MotorType.kBrushless);
-        SparkMax Intake = new SparkMax(0 /* TODO: replace w/ intake motor id */, MotorType.kBrushless);
+    public CoralMechanism(int ElevID, int IntakeID) {
+        // Elevator = new SparkMax(ElevID, MotorType.kBrushless);
+        // Intake = new SparkMax(IntakeID, MotorType.kBrushless);
     }
 
-    public void SetState(NewState) {
-        ElevatorActivated = NewState;
-        if (!NewState) {
-            Elevator.set(0);
-        }
+    public boolean DeadbandCheck(double Value) {
+        return Math.abs(Value) > Deadband;
     }
 
     public Command SetIntakeSpeed(double Speed) {
         return Commands.runOnce(() -> Intake.set(Speed));
     }
 
-    public Command DriveElevator(CommandXboxController Controller) {
-        if (ElevatorActivated) {
-            return Commands.runOnce(() -> Elevator.set(-0.5 * Controller.getLeftY()));
+    public Command DriveElevator(double Speed) {
+        if (DeadbandCheck(Speed)) {
+            return Commands.runOnce(() -> /*Elevator.set(-0.5 * Speed)*/ System.out.println(Speed));
         } else {
-            return Commands.runOnce(() -> Elevator.set(0));
+            return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
         }
        }
    }

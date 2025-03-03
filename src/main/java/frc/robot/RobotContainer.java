@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralMechanism;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -43,11 +44,11 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
-    private final CommandXboxController joystick2 = new CommandXboxController(1);
+    private final CommandXboxController controller1 = new CommandXboxController(0);
+    private final CommandXboxController controller2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final CoralMechanism Coral = new CoralMechanism();
+    public final CoralMechanism Coral = new CoralMechanism(11, 12);
     
     public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
 ;
@@ -74,79 +75,78 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed * speedScalar * SlownessModifier) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * speedScalar * SlownessModifier) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-controller1.getLeftY() * MaxSpeed * speedScalar * SlownessModifier) // Drive forward with negative Y (forward)
+                    .withVelocityY(-controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier) // Drive left with negative X (left)
+                    .withRotationalRate(-controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
             )
         );
 
-        joystick2.a().whileTrue(Commands.run(() -> {
+        controller2.a().whileTrue(Commands.run(() -> {
             outtakeMotor.set(0.5);
         }));
-        joystick2.a().whileFalse(Commands.run(() -> {
+        controller2.a().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0.0);
         }));
-        joystick2.x().whileTrue(Commands.run(() -> {
+        controller2.x().whileTrue(Commands.run(() -> {
             outtakeMotor.set(-0.3);
         }));
-        joystick2.x().whileFalse(Commands.run(() -> {
+        controller2.x().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0);
         }));
-        joystick2.y().whileTrue(Commands.run(() -> {
+        controller2.y().whileTrue(Commands.run(() -> {
             outtakeMotor.set(-0.15);
         }));
-        joystick2.y().whileFalse(Commands.run(() -> {
+        controller2.y().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0);
         }));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        controller1.b().whileTrue(drivetrain.applyRequest(() ->
             drive.withVelocityX(0)
                 .withVelocityY(0)
                 .withRotationalRate(-0.25 * Math.PI) // clockwise
             )
         );
-        // joystick.x().whileTrue(drivetrain.applyRequest(() ->
+        // controller1.x().whileTrue(drivetrain.applyRequest(() ->
         //     drive.withVelocityX(-0.5) // forward
         //         .withVelocityY(0)
         //         .withRotationalRate(0)
         //     // point.withAngle(Rotation2d.fromDegrees(0));
         //     )
-        joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
-        joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+        controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
+        controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        joystick2.leftBumper().whileTrue(Commands.parallel(
-            CoralMechanism.SetIntakeSpeed(0.5),
+        controller2.leftBumper().whileTrue(Commands.parallel(
+            Coral.SetIntakeSpeed(0.5),
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(0.15).withVelocityY(0))
         ));
-        joystick2.rightBumper().whileTrue(Commands.parallel(
-            CoralMechanism.SetIntakeSpeed(-0.5),
+        controller2.rightBumper().whileTrue(Commands.parallel(
+            Coral.SetIntakeSpeed(-0.5),
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
 
-        joystick2.leftStick(CoralMechanism.Deadband)
-            .whileTrue(CoralMechanism.DriveElevator(joystick2))
-            .onTrue(Commands.run(() -> CoralMechanism.SetState(true)))
-            .onFalse(Commands.run(() -> CoralMechanism.SetState(false)));
+        controller2.leftStick()
+            // .whileTrue(Coral.DriveElevator(controller2.getLeftY()));
+            .whileTrue(Commands.runOnce(() -> System.out.println("left stick")));
 
-        // joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
+        // controller1.pov(0).whileTrue(drivetrain.applyRequest(() ->
         //     forwardStraight.withVelocityX(0.55).withVelocityY(0))
         // );
-        // joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
+        // controller1.pov(180).whileTrue(drivetrain.applyRequest(() ->
         //     forwardStraight.withVelocityX(-0.5).withVelocityY(0))
         // );
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        // joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        // joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        controller1.back().and(controller1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        controller1.back().and(controller1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        controller1.start().and(controller1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        controller1.start().and(controller1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // controller1.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        // controller1.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
         // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        controller1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
