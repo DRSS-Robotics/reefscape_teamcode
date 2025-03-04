@@ -88,6 +88,7 @@ public class RobotContainer {
                 //     .withRotationalRate(-joystick.getRightX() * MaxAngularRate * speedScalar * SlownessModifier); // Drive counterclockwise with negative X (left)
           //  )
       //  );
+      //Hang button bindings
         if (joystick2.getRightY()<-0.3){
             Commands.run(() -> {
                 hangMotor.set(0.75);});
@@ -101,7 +102,9 @@ public class RobotContainer {
             Commands.run(() -> {
                 hangMotor.set(0);});
         }
-        
+
+
+        //POV is used to turn the joysticks into trigger types instead of doubles
         joystick2.pov(1,0, null).whileTrue(
             Commands.run(() -> coralMechanism.startCoralElevatorAction(joystick2))
         );
@@ -110,12 +113,15 @@ public class RobotContainer {
         );
 
 
+
+        //Coral intake
         joystick2.rightBumper().whileTrue(
             Commands.run(()  -> coralMechanism.coralIntake.set(0.9))
         ).onFalse(
             Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
         );
 
+        //Coral outtake
         joystick2.leftBumper().whileTrue(
             Commands.run(() -> coralMechanism.coralIntake.set(-0.9))
         ).onFalse(

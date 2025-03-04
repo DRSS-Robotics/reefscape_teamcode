@@ -20,11 +20,13 @@ public class coralElevatorCommand extends Command {
 
 @Override
 public void initialize() {
+    //Start the elevator action when the command is scheduled
     coralMechanism.startCoralElevatorAction(robotContainer.joystick2);
 }
 
 @Override
 public boolean isFinished() {
+    //If the joystick is inactive, the command is done
     if(coralMechanism.isCoralActivated(robotContainer.joystick2)) {
         return false;
     }

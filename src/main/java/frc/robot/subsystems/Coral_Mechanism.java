@@ -17,16 +17,20 @@ public class Coral_Mechanism extends SubsystemBase {
         coralActivate = false;
     }
 
+    //CHeck if the joystick is in use. If it is, the coral is activated.
     public boolean isCoralActivated(CommandXboxController joystick2) {
         // Check if the joystick is moved significantly in the Y-axis
         if (joystick2.getLeftY() > 0.04 || joystick2.getLeftY() < -0.04) {
+            //Joystick in use
             coralActivate = true;
         } else {
+            //Joystick not in use
             coralActivate = false;
         }
         return coralActivate;
     }
 
+    //Start an elevator action depending on whether we are pushing up or down
     public void startCoralElevatorAction(CommandXboxController joystick2) {
         // Control the elevator motor based on joystick Y-axis
         if (coralActivate) {
