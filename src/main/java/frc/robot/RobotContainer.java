@@ -83,10 +83,22 @@ public class RobotContainer {
         // btw the reason it was set to joystick (and not joystick2) was so that
         // it could be tested on a single controller
         joystick2.a().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(0.75);
+            outtakeMotor.set(0.5);
         }));
         joystick2.a().whileFalse(Commands.run(() -> {
             outtakeMotor.set(0.0);
+        }));
+        joystick2.x().whileTrue(Commands.run(() -> {
+            outtakeMotor.set(-0.3);
+        }));
+        joystick2.x().whileFalse(Commands.run(() -> {
+            outtakeMotor.set(0);
+        }));
+        joystick2.y().whileTrue(Commands.run(() -> {
+            outtakeMotor.set(-0.15);
+        }));
+        joystick2.y().whileFalse(Commands.run(() -> {
+            outtakeMotor.set(0);
         }));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             drive.withVelocityX(0)
@@ -106,7 +118,7 @@ public class RobotContainer {
         
 
         joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(0.5).withVelocityY(0))
+            forwardStraight.withVelocityX(0.55).withVelocityY(0))
         );
         joystick.pov(180).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(-0.5).withVelocityY(0))
