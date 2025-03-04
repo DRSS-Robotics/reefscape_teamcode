@@ -28,7 +28,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(1.5).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
     double speedScalar = 0.35;
     double SlownessModifier = 1;
 
@@ -100,8 +100,8 @@ public class RobotContainer {
         //         .withRotationalRate(0)
         //     // point.withAngle(Rotation2d.fromDegrees(0));
         //     )
-        joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
-        joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+        // joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
+        // joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         
 
@@ -118,11 +118,11 @@ public class RobotContainer {
         joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        // joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        // joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        joystick.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        joystick.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
         // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        // joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
