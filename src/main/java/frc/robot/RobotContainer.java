@@ -50,20 +50,25 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public Coral_Mechanism coralMechanism = new Coral_Mechanism();
     
-    public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
+    public final SparkMax outtakeMotor = new SparkMax(14, MotorType.kBrushed);
+    public final SparkMax coralElevator = new SparkMax(13, MotorType.kBrushless);  // PWM Port 0 for Elevator motor
+   // public static final SparkMax coralIntake = new SparkMax(11, MotorType.kBrushless);     // PWM Port 1 for Intake motor
+
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
-    //NamedCommands.registerCommand("dropCoral", coralMechanism.exampleCommand() );
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        // drivetrain.getModules()[0].getDriveMotor()
-        //must register commands and event triggers before building the auto chooser
-        //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
-
-        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
+       NamedCommands.registerCommand("LiftElevator", Commands.run(()  -> coralElevator.set(0.75))); 
+       NamedCommands.registerCommand("dropCoral", Commands.run(()  -> Commands.run(()  -> 
+       coralMechanism.coralIntake.set(-0.5)))); 
+       NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  -> Commands.run(()  ->
+        coralMechanism.coralIntake.set(0.0)))); 
+       NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> coralElevator.set(-0.5))); 
+      
+        autoChooser = AutoBuilder.buildAutoChooser("Test");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 
