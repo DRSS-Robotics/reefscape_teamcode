@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -16,6 +17,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,9 +26,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.subsystems.Coral_Mechanism;
-import frc.robot.subsystems.coralElevatorCommand;
-import frc.robot.Robot;
+ import frc.robot.subsystems.Coral_Mechanism;
+ import frc.robot.subsystems.coralElevatorCommand;
+//import frc.robot.Robot;
 
 //import frc.robot.generated.TunerConstants;
 //import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -51,14 +53,18 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
     public final CommandXboxController joystick2 = new CommandXboxController(1);
 
+    public SparkMax coralIntake = new SparkMax(14, MotorType.kBrushless);     // PWM Port 1 for Intake motor
+
 
     //public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    public final SparkMax hangMotor = new SparkMax(12, MotorType.kBrushed); // adds an outtake motor to the 0
+   // public final SparkMax hangMotor = new SparkMax(12, MotorType.kBrushed); // adds an outtake motor to the 0
 
     public Coral_Mechanism coralMechanism = new Coral_Mechanism();
-    public Robot robot = new Robot();
-    public coralElevatorCommand coralElevatorCommand = new coralElevatorCommand(coralMechanism, null);
+
+    public final EventLoop elevatorLoop = new EventLoop();
+    //public Robot robot = new Robot();
+    public coralElevatorCommand coralElevatorCommand = new coralElevatorCommand();
     
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
@@ -89,45 +95,49 @@ public class RobotContainer {
           //  )
       //  );
       //Hang button bindings
-        if (joystick2.getRightY()<-0.3){
-            Commands.run(() -> {
-                hangMotor.set(0.75);});
-        }
-        else if (joystick2.getRightY()>0.3){
-            Commands.run(() -> {
-                hangMotor.set(-0.75);});
-        }
+        // if (joystick2.getRightY()<-0.3){
+        //     Commands.run(() -> {
+        //         hangMotor.set(0.75);});
+        // }
+        // else if (joystick2.getRightY()>0.3){
+        //     Commands.run(() -> {
+        //         hangMotor.set(-0.75);});
+        // }
 
-        else{
-            Commands.run(() -> {
-                hangMotor.set(0);});
-        }
+        // else{
+        //     Commands.run(() -> {
+        //         hangMotor.set(0);});
+        // }
 
 
         //POV is used to turn the joysticks into trigger types instead of doubles
-        joystick2.pov(1,0, null).whileTrue(
-            Commands.run(() -> coralMechanism.startCoralElevatorAction(joystick2))
-        );
-        joystick2.pov(1,0, null).whileFalse(
-            Commands.run(() -> coralMechanism.startCoralElevatorAction(joystick2))
-        );
+        // joystick2.pov(1,0, null).whileTrue(
+        //     Commands.run(() -> coralMechanism.startCoralElevatorAction(joystick2))
+        // );
+        // joystick2.pov(1,0, null).whileFalse(
+        //     Commands.run(() -> coralMechanism.startCoralElevatorAction(joystick2))
+        // );
 
+        elevatorLoop.bind(coralElevatorCommand);
 
 
         //Coral intake
-        joystick2.rightBumper().whileTrue(
-            Commands.run(()  -> coralMechanism.coralIntake.set(0.9))
-        ).onFalse(
-            Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
-        );
+        joystick2.a().whileTrue(Commands.run(() -> {
+            coralIntake.set(0.95); //if you see this message William know I made fun of you for not making the speed 1 WHYYYYYYYY JUST MAKE IT ONE THERE IS NO POINT
+        }));
+        joystick2.a().whileFalse(Commands.run(() -> {
+            coralIntake.set(0.0);
+        }));
+
 
         //Coral outtake
         joystick2.leftBumper().whileTrue(
-            Commands.run(() -> coralMechanism.coralIntake.set(-0.9))
+            Commands.run(() -> coralIntake.set(-0.9))
         ).onFalse(
-            Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
+            Commands.run(() -> coralIntake.set(0))
         );
 
+       
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     drive.withVelocityX(0)
         //         .withVelocityY(0)
@@ -135,6 +145,7 @@ public class RobotContainer {
         //     )
         // );
         // joystick.x().whileTrue(drivetrain.applyRequest(() ->
+
         //     drive.withVelocityX(-0.5) // forward
         //         .withVelocityY(0)
         //         .withRotationalRate(0)
@@ -143,7 +154,6 @@ public class RobotContainer {
         joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
         joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        
 
         // joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
         //     forwardStraight.withVelocityX(0.55).withVelocityY(0))

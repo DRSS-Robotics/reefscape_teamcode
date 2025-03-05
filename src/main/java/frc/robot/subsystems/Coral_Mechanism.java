@@ -10,8 +10,8 @@ public class Coral_Mechanism extends SubsystemBase {
 
     private boolean coralActivate;
 
-    public static final SparkMax coralElevator = new SparkMax(13, MotorType.kBrushless);  // PWM Port 0 for Elevator motor
-    public static final SparkMax coralIntake = new SparkMax(11, MotorType.kBrushless);     // PWM Port 1 for Intake motor
+    public static final SparkMax coralElevator = new SparkMax(12, MotorType.kBrushless);  // PWM Port 0 for Elevator motor
+  
 
     public Coral_Mechanism() {
         coralActivate = false;

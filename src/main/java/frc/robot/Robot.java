@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //System.out.println("angle error: " + (m_robotContainer.joystick.getRightX() - ));
+    m_robotContainer.elevatorLoop.poll();
   }
 
   @Override

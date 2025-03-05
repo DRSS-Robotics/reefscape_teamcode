@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
-public class coralElevatorCommand extends Command {
+public class coralElevatorCommand extends Command implements Runnable {
     private Coral_Mechanism coralMechanism;
     private RobotContainer robotContainer;
 
-    public coralElevatorCommand(Coral_Mechanism coralMechanism, RobotContainer robotContainer) {
+    public coralElevatorCommand() {
         coralMechanism = new Coral_Mechanism();
         robotContainer = new RobotContainer();
 
@@ -33,5 +33,13 @@ public boolean isFinished() {
     else {
         return true;
     }
+}
+
+
+@Override
+public void run() {
+    coralMechanism.startCoralElevatorAction(robotContainer.joystick2);
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'run'");
 }
 }
