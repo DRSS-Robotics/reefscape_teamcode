@@ -6,16 +6,17 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.RobotContainer;
 
 public class Coral_Mechanism extends SubsystemBase {
 
     private boolean coralActivate;
 
-    public static final SparkMax coralElevator = new SparkMax(13, MotorType.kBrushless);  // PWM Port 0 for Elevator motor
-    public static final SparkMax coralIntake = new SparkMax(11, MotorType.kBrushless);     // PWM Port 1 for Intake motor
+    private RobotContainer robotContainer;
 
     public Coral_Mechanism() {
         coralActivate = false;
+        robotContainer = new RobotContainer();
     }
 
     public boolean isCoralActivated(CommandXboxController joystick2) {
@@ -33,13 +34,13 @@ public class Coral_Mechanism extends SubsystemBase {
         if (coralActivate) {
             if (joystick2.getLeftY() < -0.4) {
                 // Move the elevator up
-                return runOnce(() -> coralElevator.set(0.75));
+                return runOnce(() -> robotContainer.coralElevator.set(0.75));
             } else if (joystick2.getLeftY() > 0.4) {
                 // Move the elevator down
-                return runOnce(() -> coralElevator.set(-0.5));
+                return runOnce(() -> robotContainer.coralElevator.set(-0.5));
             }
         }
         // Stop the elevator if not activated
-        return runOnce(() -> coralElevator.set(0.0));
+        return runOnce(() -> robotContainer.coralElevator.set(0.0));
     }
 }
