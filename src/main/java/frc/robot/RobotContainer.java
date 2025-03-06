@@ -125,7 +125,7 @@ public class RobotContainer {
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
 
-        Command CoralController = DriveElevator().repeatedly();
+        Command CoralElevator = Coral.DriveElevator(controller2).repeatedly();
 
         // controller1.pov(0).whileTrue(drivetrain.applyRequest(() ->
         //     forwardStraight.withVelocityX(0.55).withVelocityY(0))

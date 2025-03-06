@@ -41,9 +41,18 @@ public class CoralMechanism extends SubsystemBase {
             return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
         }
     }
-    public Command DriveElevator(CommandXboxController Controller) {
+
+    public Command DriveElevator(double Speed) {
         if (DeadbandCheck(Speed)) {
             return Commands.runOnce(() -> /*Elevator.set(-0.5 * Speed)*/ System.out.println(Speed));
+        } else {
+            return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
+        }
+    }
+
+    public Command DriveElevator(CommandXboxController Controller) {
+        if (DeadbandCheck(Controller.getLeftY())) {
+            return Commands.runOnce(() -> /*Elevator.set(-0.5 * Controller.getLeftY())*/ System.out.println(Controller.getLeftY()));
         } else {
             return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
         }
