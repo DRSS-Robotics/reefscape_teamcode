@@ -125,9 +125,7 @@ public class RobotContainer {
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
 
-        controller2.leftStick()
-            // .whileTrue(Coral.DriveElevator(controller2.getLeftY()));
-            .whileTrue(Commands.runOnce(() -> System.out.println("left stick")));
+        Command CoralController = DriveElevator().repeatedly();
 
         // controller1.pov(0).whileTrue(drivetrain.applyRequest(() ->
         //     forwardStraight.withVelocityX(0.55).withVelocityY(0))

@@ -9,8 +9,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralMechanism extends SubsystemBase {
 
+    public SparkMax Elevator;
+    public SparkMax Intake;
+
     public boolean ElevatorActivated = false;
-    public double Deadband = 0.04;
+    public final double Deadband = 0.04;
+    
+    // placeholders 'til we actually measure & calulate, not actually implemented right now
     public int MinElevEncoderHeight = 0;
     public int MaxElevEncoderHeight = 3;
     SparkMax Elevator;
@@ -35,5 +40,12 @@ public class CoralMechanism extends SubsystemBase {
         } else {
             return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
         }
-       }
+    }
+    public Command DriveElevator(CommandXboxController Controller) {
+        if (DeadbandCheck(Speed)) {
+            return Commands.runOnce(() -> /*Elevator.set(-0.5 * Speed)*/ System.out.println(Speed));
+        } else {
+            return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
+        }
+    }
    }
