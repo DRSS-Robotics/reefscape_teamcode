@@ -58,11 +58,17 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        // drivetrain.getModules()[0].getDriveMotor()
-        //must register commands and event triggers before building the auto chooser
-        //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
+        NamedCommands.registerCommand("LiftElevator", Commands.run(()  -> elevatorMechanism.set(0.75))); 
+        NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> elevatorMechanism.set(-0.75))); 
+        NamedCommands.registerCommand("StopElveator", Commands.run(()  -> elevatorMechanism.set(0.0))); 
+        NamedCommands.registerCommand("dropCoral", Commands.run(()  -> Commands.run(()  -> 
+        coralIntake.set(-0.75)))); 
+        NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  -> Commands.run(()  ->
+        coralIntake.set(0.0)))); 
+        
+        NamedCommands.registerCommand("LiftElevator", Commands.run(()  -> elevatorMechanism.set(0.75))); 
 
-        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
+        autoChooser = AutoBuilder.buildAutoChooser("Test");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 

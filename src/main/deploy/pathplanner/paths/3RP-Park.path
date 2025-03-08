@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 12.2,
-        "y": 2.5
+        "x": 12.346,
+        "y": 2.353
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.7195,
-        "y": 1.685
+        "x": 11.8655,
+        "y": 1.5380000000000003
       },
       "isLocked": false,
       "linkedName": null
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 15.292000000000002,
-        "y": 1.075
+        "y": 1.0750000000000002
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "LowerElevator",
+      "waypointRelativePos": 0.3761194029850743,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
