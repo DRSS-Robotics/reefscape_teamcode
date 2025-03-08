@@ -120,8 +120,6 @@ public class RobotContainer {
             elevatorMechanism.set(0);
         }));
 
-
-
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             drive.withVelocityX(0)
                 .withVelocityY(0)
