@@ -4,6 +4,8 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -41,5 +43,17 @@ public class Coral_Mechanism extends SubsystemBase {
         }
         // Stop the elevator if not activated
         return runOnce(() -> coralElevator.set(0.0));
+    }
+
+    public Command startCoralIntakeAction() {
+        // Control the elevator motor based on joystick Y-axis
+        
+        return Commands.run(()  -> coralIntake.set(0.5));
+    }
+
+    public Command startCoralOuttakeAction() {
+        // Control the elevator motor based on joystick Y-axis
+        return Commands.run(()  -> coralIntake.set(-0.5));
+
     }
 }

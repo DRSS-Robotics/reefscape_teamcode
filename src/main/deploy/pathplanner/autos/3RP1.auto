@@ -27,11 +27,17 @@
           "data": {
             "pathName": "3RP-Park"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": []
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3RP",
+  "folder": null,
   "choreoAuto": false
 }

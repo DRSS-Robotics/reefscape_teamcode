@@ -10,7 +10,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.events.EventTrigger;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -53,7 +52,7 @@ public class RobotContainer {
     public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
-    //NamedCommands.registerCommand("dropCoral", coralMechanism.exampleCommand() );
+    
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -65,7 +64,8 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
         SmartDashboard.putData("Auto Mode", autoChooser);
-        
+        NamedCommands.registerCommand("dropCoral", coralMechanism.startCoralOuttakeAction());
+        NamedCommands.registerCommand("pickUpCoral", coralMechanism.startCoralIntakeAction());
 
         configureBindings();
     }
