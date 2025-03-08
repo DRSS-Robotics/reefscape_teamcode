@@ -6,6 +6,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,10 +22,11 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.65).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
-    double speedScalar = 0.35;
+    private double MaxAngularRate = RotationsPerSecond.of(0.45).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
+    double speedScalar = 0.55;
     double SlownessModifier = 1;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
@@ -43,9 +45,9 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    // public final SparkMax hangMechanism = new SparkMax(12, MotorType.kBrushless);
-    // public final SparkMax coralIntake = new SparkMax(18, MotorType.kBrushless);
-    // public final SparkMax elevatorMechanism = new SparkMax(13, MotorType.kBrushless);
+    public final SparkMax hangMechanism = new SparkMax(12, MotorType.kBrushless);
+    public final SparkMax coralIntake = new SparkMax(18, MotorType.kBrushless);
+    public final SparkMax elevatorMechanism = new SparkMax(13, MotorType.kBrushless);
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
@@ -78,42 +80,42 @@ public class RobotContainer {
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
-        // Controller2.y().whileTrue(Commands.run(() -> {
-        //     hangMechanism.set(0.75);
-        // }));
-        // Controller2.y().whileFalse(Commands.run(() -> {
-        //     hangMechanism.set(0.0);
-        // }));
-        // Controller2.a().whileTrue(Commands.run(() -> {
-        //     hangMechanism.set(-0.75);
-        // }));
-        // Controller2.a().whileFalse(Commands.run(() -> {
-        //     hangMechanism.set(0);
-        // }));
-        // Controller2.x().whileTrue(Commands.run(() -> {
-        //     coralIntake.set(0.75);
-        // }));
-        // Controller2.x().whileFalse(Commands.run(() -> {
-        //     coralIntake.set(0);
-        // }));
-        // Controller2.b().whileTrue(Commands.run(() -> {
-        //     coralIntake.set(-0.75);
-        // }));
-        // Controller2.b().whileFalse(Commands.run(() -> {
-        //     coralIntake.set(0);
-        // }));
-        // Controller2.leftBumper().whileTrue(Commands.run(() -> {
-        //     elevatorMechanism.set(0.75);
-        // }));
-        // Controller2.leftBumper().whileFalse(Commands.run(() -> {
-        //     elevatorMechanism.set(0);
-        // }));
-        // Controller2.rightBumper().whileTrue(Commands.run(() -> {
-        //     elevatorMechanism.set(-0.75);
-        // }));
-        // Controller2.rightBumper().whileFalse(Commands.run(() -> {
-        //     elevatorMechanism.set(0);
-        // }));
+        Controller2.y().whileTrue(Commands.run(() -> {
+            hangMechanism.set(0.75);
+        }));
+        Controller2.y().whileFalse(Commands.run(() -> {
+            hangMechanism.set(0.0);
+        }));
+        Controller2.a().whileTrue(Commands.run(() -> {
+            hangMechanism.set(-0.75);
+        }));
+        Controller2.a().whileFalse(Commands.run(() -> {
+            hangMechanism.set(0);
+        }));
+        Controller2.x().whileTrue(Commands.run(() -> {
+            coralIntake.set(0.75);
+        }));
+        Controller2.x().whileFalse(Commands.run(() -> {
+            coralIntake.set(0);
+        }));
+        Controller2.b().whileTrue(Commands.run(() -> {
+            coralIntake.set(-0.75);
+        }));
+        Controller2.b().whileFalse(Commands.run(() -> {
+            coralIntake.set(0);
+        }));
+        Controller2.leftBumper().whileTrue(Commands.run(() -> {
+            elevatorMechanism.set(0.75);
+        }));
+        Controller2.leftBumper().whileFalse(Commands.run(() -> {
+            elevatorMechanism.set(0);
+        }));
+        Controller2.rightBumper().whileTrue(Commands.run(() -> {
+            elevatorMechanism.set(-0.75);
+        }));
+        Controller2.rightBumper().whileFalse(Commands.run(() -> {
+            elevatorMechanism.set(0);
+        }));
 
 
 
@@ -143,16 +145,16 @@ public class RobotContainer {
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        Controller1.back().and(Controller1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        Controller1.back().and(Controller1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
         Controller1.start().and(Controller1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         Controller1.start().and(Controller1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        Controller1.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        Controller1.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        Controller1.back().and(Controller1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        Controller1.back().and(Controller1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // Controller1.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
+        // Controller1.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
         // reset the field-centric heading on left bumper press
         Controller1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        // drivetrain.registerTelemetry(logger::telemeterize);
+        drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() {
