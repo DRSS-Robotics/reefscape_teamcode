@@ -72,7 +72,7 @@ public class RobotContainer {
             )
         );
 
-        Coral.setDefaultCommand(Coral.DriveElevator(Controller2));
+        Coral.initDefaultCommand(Controller2);
 
         Controller2.leftBumper().whileTrue(Commands.parallel(
             Coral.SetIntakeSpeed(0.5),

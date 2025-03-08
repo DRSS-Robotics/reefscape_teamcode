@@ -68,4 +68,9 @@ public class CoralMechanism extends SubsystemBase {
             return Commands.runOnce(() -> Elevator.stopMotor());
         }
     }
+
+    public void initDefaultCommand(CommandXboxController Controller) {
+        // Set the default command for a subsystem here.
+        setDefaultCommand(DriveElevator(Controller));
+    }
    }
