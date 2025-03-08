@@ -37,8 +37,10 @@ public class CoralMechanism extends SubsystemBase {
         Elevator.getEncoder().getVelocity() * Constants.kElevatorDrumRadius * 2 * Math.PI;
 
         System.out.println(MotorPositionLinear);
-        if (MotorPositionLinear + MotorVelocityLinear >= Constants.kMaxElevatorHeightMeters ||
-            MotorPositionLinear + MotorVelocityLinear < Constants.kMinElevatorHeightMeters) {
+        // if (MotorPositionLinear + MotorVelocityLinear >= Constants.kMaxElevatorHeightMeters ||
+        //     MotorPositionLinear + MotorVelocityLinear < Constants.kMinElevatorHeightMeters) {
+        if (Elevator.getEncoder().getPosition() < 5 ||
+            Elevator.getEncoder().getPosition() >= 120) {
             Elevator.stopMotor();
             return false;
         } else {
