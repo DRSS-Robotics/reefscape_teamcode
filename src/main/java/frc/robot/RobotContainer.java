@@ -49,9 +49,8 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final CoralMechanism Coral = new CoralMechanism(11, 12);
-    
-    public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
-;
+
+
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */
@@ -81,36 +80,6 @@ public class RobotContainer {
             )
         );
 
-        controller2.a().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(0.5);
-        }));
-        controller2.a().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0.0);
-        }));
-        controller2.x().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(-0.3);
-        }));
-        controller2.x().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0);
-        }));
-        controller2.y().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(-0.15);
-        }));
-        controller2.y().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0);
-        }));
-        controller1.b().whileTrue(drivetrain.applyRequest(() ->
-            drive.withVelocityX(0)
-                .withVelocityY(0)
-                .withRotationalRate(-0.25 * Math.PI) // clockwise
-            )
-        );
-        // controller1.x().whileTrue(drivetrain.applyRequest(() ->
-        //     drive.withVelocityX(-0.5) // forward
-        //         .withVelocityY(0)
-        //         .withRotationalRate(0)
-        //     // point.withAngle(Rotation2d.fromDegrees(0));
-        //     )
         controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
         controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
@@ -125,15 +94,8 @@ public class RobotContainer {
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
 
-        Command CoralElevator = Coral.DriveElevator(controller2).repeatedly();
-
-        // controller1.pov(0).whileTrue(drivetrain.applyRequest(() ->
-        //     forwardStraight.withVelocityX(0.55).withVelocityY(0))
-        // );
-        // controller1.pov(180).whileTrue(drivetrain.applyRequest(() ->
-        //     forwardStraight.withVelocityX(-0.5).withVelocityY(0))
-        // );
-
+        Command CoralElevatorCommand = Coral.DriveElevator(controller2).repeatedly();
+        
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
         controller1.back().and(controller1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
