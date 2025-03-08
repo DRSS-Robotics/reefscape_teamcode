@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralElevatorCom;
+import frc.robot.subsystems.Coral_Mechanism;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -43,19 +46,24 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
-    private final CommandXboxController joystick2 = new CommandXboxController(1);
+    public final CommandXboxController joystick = new CommandXboxController(0);
+    public final CommandXboxController joystick2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    public final SparkMax hangMechcanism = new SparkMax(12, MotorType.kBrushless);
+    // public final SparkMax hangMechcanism = new SparkMax(12, MotorType.kBrushless);
     public final SparkMax coralIntake = new SparkMax(18, MotorType.kBrushless);
-    public final SparkMax elevatorMechanism = new SparkMax(13, MotorType.kBrushless);
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
+
+    //public Robot robot = new Robot();
+    public CoralElevatorCom coralElevatorCom = new CoralElevatorCom();
+        public Coral_Mechanism coralMechanism = new Coral_Mechanism();
+
+    public final EventLoop elevatorLoop = new EventLoop();
 
     public RobotContainer() {
         // drivetrain.getModules()[0].getDriveMotor()
@@ -83,42 +91,42 @@ public class RobotContainer {
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
-        joystick2.y().whileTrue(Commands.run(() -> {
-            hangMechcanism.set(0.75);
-        }));
-        joystick2.y().whileFalse(Commands.run(() -> {
-            hangMechcanism.set(0.0);
-        }));
-        joystick2.a().whileTrue(Commands.run(() -> {
-            hangMechcanism.set(-0.75);
-        }));
-        joystick2.a().whileFalse(Commands.run(() -> {
-            hangMechcanism.set(0);
-        }));
-        joystick2.x().whileTrue(Commands.run(() -> {
-            coralIntake.set(0.75);
-        }));
-        joystick2.x().whileFalse(Commands.run(() -> {
-            coralIntake.set(0);
-        }));
-        joystick2.b().whileTrue(Commands.run(() -> {
-            coralIntake.set(-0.75);
-        }));
-        joystick2.b().whileFalse(Commands.run(() -> {
-            coralIntake.set(0);
-        }));
-        joystick2.leftBumper().whileTrue(Commands.run(() -> {
-            elevatorMechanism.set(0.75);
-        }));
-        joystick2.leftBumper().whileFalse(Commands.run(() -> {
-            elevatorMechanism.set(0);
-        }));
-        joystick2.rightBumper().whileTrue(Commands.run(() -> {
-            elevatorMechanism.set(-0.75);
-        }));
-        joystick2.rightBumper().whileFalse(Commands.run(() -> {
-            elevatorMechanism.set(0);
-        }));
+        // joystick2.y().whileTrue(Commands.run(() -> {
+        //     hangMechcanism.set(0.75);
+        // }));
+        // joystick2.y().whileFalse(Commands.run(() -> {
+        //     hangMechcanism.set(0.0);
+        // }));
+        // joystick2.a().whileTrue(Commands.run(() -> {
+        //     hangMechcanism.set(-0.75);
+        // }));
+        // joystick2.a().whileFalse(Commands.run(() -> {
+        //     hangMechcanism.set(0);
+        // }));
+        // joystick2.x().whileTrue(Commands.run(() -> {
+        //     coralIntake.set(0.75);
+        // }));
+        // joystick2.x().whileFalse(Commands.run(() -> {
+        //     coralIntake.set(0);
+        // }));
+        // joystick2.b().whileTrue(Commands.run(() -> {
+        //     coralIntake.set(-0.75);
+        // }));
+        // joystick2.b().whileFalse(Commands.run(() -> {
+        //     coralIntake.set(0);
+        // }));
+        // joystick2.leftBumper().whileTrue(Commands.run(() -> {
+        //     elevatorMechanism.set(0.75);
+        // }));
+        // joystick2.leftBumper().whileFalse(Commands.run(() -> {
+        //     elevatorMechanism.set(0);
+        // }));
+        // joystick2.rightBumper().whileTrue(Commands.run(() -> {
+        //     elevatorMechanism.set(-0.75);
+        // }));
+        // joystick2.rightBumper().whileFalse(Commands.run(() -> {
+        //     elevatorMechanism.set(0);
+        // }));
 
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             drive.withVelocityX(0)
@@ -126,16 +134,26 @@ public class RobotContainer {
                 .withRotationalRate(-0.25 * Math.PI) // clockwise
             )
         );
-        // joystick.x().whileTrue(drivetrain.applyRequest(() ->
-        //     drive.withVelocityX(-0.5) // forward
-        //         .withVelocityY(0)
-        //         .withRotationalRate(0)
-        //     // point.withAngle(Rotation2d.fromDegrees(0));
-        //     )
-        // joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
-        // joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        
+        joystick.x().whileTrue(drivetrain.applyRequest(() ->
+            drive.withVelocityX(-0.5) // forward
+                .withVelocityY(0)
+                .withRotationalRate(0)
+            // point.withAngle(Rotation2d.fromDegrees(0));
+        ));
+        joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
+        joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+
+                // POV is used to turn the joysticks into trigger types instead of doubles
+
+
+        elevatorLoop.bind(coralElevatorCom);
+
+
+
+
+
+
 
         joystick.pov(0).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(0.55).withVelocityY(0))
