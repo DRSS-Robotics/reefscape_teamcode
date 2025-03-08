@@ -17,8 +17,9 @@ public class CoralMechanism extends SubsystemBase {
     public final double Deadband = 0.04;
     public CoralMechanism(int ElevID, int IntakeID) {
         Elevator = new SparkMax(ElevID, MotorType.kBrushless);
-        Elevator.getEncoder().setPosition(0);
+        // Elevator.getEncoder().setPosition(0);
         Intake = new SparkMax(IntakeID, MotorType.kBrushless);
+        System.out.println(Elevator.getEncoder().getClass());
     }
 
     public boolean DeadbandCheck(double Value) {
@@ -26,6 +27,7 @@ public class CoralMechanism extends SubsystemBase {
     }
 
     public boolean MotorHeightBounds() {
+        // TODO: change this to use joystick pos and not motor velocity
         // in meters
         double MotorPositionLinear =
         Elevator.getEncoder().getPosition() * Constants.kElevatorDrumRadius * 2 * Math.PI;
@@ -50,17 +52,17 @@ public class CoralMechanism extends SubsystemBase {
 
     public Command DriveElevator(double Speed) {
         if (DeadbandCheck(Speed) && MotorHeightBounds()) {
-            return Commands.runOnce(() -> /*Elevator.set(-0.5 * Speed)*/ System.out.println(Speed));
+            return Commands.runOnce(() -> Elevator.set(0.5 * Speed));
         } else {
-            return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
+            return Commands.runOnce(() -> Elevator.stopMotor());
         }
     }
 
     public Command DriveElevator(CommandXboxController Controller) {
-        if (DeadbandCheck(Controller.getLeftY())) {
-            return Commands.runOnce(() -> /*Elevator.set(-0.5 * Controller.getLeftY())*/ System.out.println(Controller.getLeftY()));
+        if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds()) {
+            return Commands.runOnce(() -> Elevator.set(0.5 * Controller.getLeftY()));
         } else {
-            return Commands.runOnce(() -> /*Elevator.set(0)*/ System.out.println("stop"));
+            return Commands.runOnce(() -> Elevator.stopMotor());
         }
     }
    }
