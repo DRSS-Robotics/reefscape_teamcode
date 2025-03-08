@@ -25,8 +25,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.45).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
-    double speedScalar = 0.55;
+    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
+    double speedScalar = 0.7;
     double SlownessModifier = 1;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
@@ -93,46 +93,39 @@ public class RobotContainer {
             hangMechanism.set(0);
         }));
         Controller2.x().whileTrue(Commands.run(() -> {
-            coralIntake.set(0.75);
+            coralIntake.set(0.55);
         }));
         Controller2.x().whileFalse(Commands.run(() -> {
             coralIntake.set(0);
         }));
         Controller2.b().whileTrue(Commands.run(() -> {
-            coralIntake.set(-0.75);
+            coralIntake.set(-0.55);
         }));
         Controller2.b().whileFalse(Commands.run(() -> {
             coralIntake.set(0);
         }));
         Controller2.leftBumper().whileTrue(Commands.run(() -> {
-            elevatorMechanism.set(0.75);
+            elevatorMechanism.set(0.55);
         }));
         Controller2.leftBumper().whileFalse(Commands.run(() -> {
             elevatorMechanism.set(0);
         }));
         Controller2.rightBumper().whileTrue(Commands.run(() -> {
-            elevatorMechanism.set(-0.75);
+            elevatorMechanism.set(-0.55);
         }));
         Controller2.rightBumper().whileFalse(Commands.run(() -> {
             elevatorMechanism.set(0);
         }));
 
 
-
-        Controller1.b().whileTrue(drivetrain.applyRequest(() ->
-            drive.withVelocityX(0)
-                .withVelocityY(0)
-                .withRotationalRate(-0.25 * Math.PI) // clockwise
-            )
-        );
         // joystick.x().whileTrue(drivetrain.applyRequest(() ->
         //     drive.withVelocityX(-0.5) // forward
         //         .withVelocityY(0)
         //         .withRotationalRate(0)
         //     // point.withAngle(Rotation2d.fromDegrees(0));
         //     )
-        // joystick.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
-        // joystick.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+        Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
+        Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         
 
