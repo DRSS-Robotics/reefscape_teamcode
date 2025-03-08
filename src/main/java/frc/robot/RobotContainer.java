@@ -49,7 +49,10 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public Coral_Mechanism coralMechanism = new Coral_Mechanism();
     
-    public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
+    public final SparkMax coralIntake = new SparkMax(14, MotorType.kBrushed);
+    public final SparkMax coralElevator = new SparkMax(13, MotorType.kBrushless);  // PWM Port 0 for Elevator motor
+   // public static final SparkMax coralIntake = new SparkMax(11, MotorType.kBrushless);     // PWM Port 1 for Intake motor
+
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     
@@ -58,11 +61,14 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        // drivetrain.getModules()[0].getDriveMotor()
-        //must register commands and event triggers before building the auto chooser
-        //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
-
-        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
+       NamedCommands.registerCommand("LiftElevator", Commands.run(()  -> coralElevator.set(0.75))); 
+       NamedCommands.registerCommand("dropCoral", Commands.run(()  -> Commands.run(()  -> 
+       coralIntake.set(-0.5)))); 
+       NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  -> Commands.run(()  ->
+        coralIntake.set(0.0)))); 
+       NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> coralElevator.set(-0.5))); 
+      
+        autoChooser = AutoBuilder.buildAutoChooser("Test");
         SmartDashboard.putData("Auto Mode", autoChooser);
         NamedCommands.registerCommand("dropCoral", coralMechanism.startCoralOuttakeAction());
         NamedCommands.registerCommand("pickUpCoral", coralMechanism.startCoralIntakeAction());
@@ -84,24 +90,24 @@ public class RobotContainer {
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
-        joystick2.a().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(0.5);
-        }));
-        joystick2.a().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0.0);
-        }));
-        joystick2.x().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(-0.3);
-        }));
-        joystick2.x().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0);
-        }));
-        joystick2.y().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(-0.15);
-        }));
-        joystick2.y().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0);
-        }));
+        // joystick2.a().whileTrue(Commands.run(() -> {
+        //     outtakeMotor.set(0.5);
+        // }));
+        // joystick2.a().whileFalse(Commands.run(() -> {
+        //     outtakeMotor.set(0.0);
+        // }));
+        // joystick2.x().whileTrue(Commands.run(() -> {
+        //     outtakeMotor.set(-0.3);
+        // }));
+        // joystick2.x().whileFalse(Commands.run(() -> {
+        //     outtakeMotor.set(0);
+        // }));
+        // joystick2.y().whileTrue(Commands.run(() -> {
+        //     outtakeMotor.set(-0.15);
+        // }));
+        // joystick2.y().whileFalse(Commands.run(() -> {
+        //     outtakeMotor.set(0);
+        // }));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             drive.withVelocityX(0)
                 .withVelocityY(0)
@@ -144,15 +150,15 @@ public class RobotContainer {
 
         //Intake
         joystick2.rightBumper().whileTrue(
-            Commands.run(()  -> coralMechanism.coralIntake.set(0.5))
+            Commands.run(()  -> coralIntake.set(0.5))
         ).onFalse(
-            Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
+            Commands.runOnce(() -> coralIntake.set(0))
         );
     //Outake
         joystick2.leftBumper().whileTrue(
-            Commands.run(() -> coralMechanism.coralIntake.set(-0.5))
+            Commands.run(() -> coralIntake.set(-0.5))
         ).onFalse(
-            Commands.runOnce(() -> coralMechanism.coralIntake.set(0))
+            Commands.runOnce(() -> coralIntake.set(0))
         );
     }
 
