@@ -53,7 +53,7 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
     public final CommandXboxController joystick2 = new CommandXboxController(1);
 
-    public SparkMax coralIntake = new SparkMax(14, MotorType.kBrushless);     // PWM Port 1 for Intake motor
+    public SparkMax coralIntake = new SparkMax(14, MotorType.kBrushless);     // PWM Port 11 for Intake motor
 
 
     //public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -132,7 +132,7 @@ public class RobotContainer {
 
         //Coral outtake
         joystick2.leftBumper().whileTrue(
-            Commands.run(() -> coralIntake.set(-0.9))
+            Commands.run(() -> coralIntake.set(-0.95))
         ).onFalse(
             Commands.run(() -> coralIntake.set(0))
         );
@@ -175,9 +175,9 @@ public class RobotContainer {
         // joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         // drivetrain.registerTelemetry(logger::telemeterize);
     }
+}
 
     // public Command getAutonomousCommand() {
     //     /* Run the path selected from the auto chooser */
     //     return autoChooser.getSelected();
     // }
-}
