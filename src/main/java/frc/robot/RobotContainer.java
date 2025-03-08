@@ -48,7 +48,10 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    public final SparkMax outtakeMotor = new SparkMax(11, MotorType.kBrushed);
+    public final SparkMax hangMechcanism = new SparkMax(12, MotorType.kBrushless);
+    public final SparkMax coralIntake = new SparkMax(18, MotorType.kBrushless);
+    public final SparkMax elevatorMechanism = new SparkMax(13, MotorType.kBrushless);
+
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */
@@ -80,24 +83,45 @@ public class RobotContainer {
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
-        joystick2.a().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(0.5);
-        }));
-        joystick2.a().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0.0);
-        }));
-        joystick2.x().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(-0.3);
-        }));
-        joystick2.x().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0);
-        }));
         joystick2.y().whileTrue(Commands.run(() -> {
-            outtakeMotor.set(-0.15);
+            hangMechcanism.set(0.75);
         }));
         joystick2.y().whileFalse(Commands.run(() -> {
-            outtakeMotor.set(0);
+            hangMechcanism.set(0.0);
         }));
+        joystick2.a().whileTrue(Commands.run(() -> {
+            hangMechcanism.set(-0.75);
+        }));
+        joystick2.a().whileFalse(Commands.run(() -> {
+            hangMechcanism.set(0);
+        }));
+        joystick2.x().whileTrue(Commands.run(() -> {
+            coralIntake.set(0.75);
+        }));
+        joystick2.x().whileFalse(Commands.run(() -> {
+            coralIntake.set(0);
+        }));
+        joystick2.b().whileTrue(Commands.run(() -> {
+            coralIntake.set(-0.75);
+        }));
+        joystick2.b().whileFalse(Commands.run(() -> {
+            coralIntake.set(0);
+        }));
+        joystick2.leftBumper().whileTrue(Commands.run(() -> {
+            elevatorMechanism.set(0.75);
+        }));
+        joystick2.leftBumper().whileFalse(Commands.run(() -> {
+            elevatorMechanism.set(0);
+        }));
+        joystick2.rightBumper().whileTrue(Commands.run(() -> {
+            elevatorMechanism.set(-0.75);
+        }));
+        joystick2.rightBumper().whileFalse(Commands.run(() -> {
+            elevatorMechanism.set(0);
+        }));
+
+
+
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             drive.withVelocityX(0)
                 .withVelocityY(0)
