@@ -18,6 +18,7 @@ public class CoralMechanism extends SubsystemBase {
     public CoralMechanism(int ElevID, int IntakeID) {
         Elevator = new SparkMax(ElevID, MotorType.kBrushless);
         // Elevator.getEncoder().setPosition(0);
+        // elevator encoder is relative
         Intake = new SparkMax(IntakeID, MotorType.kBrushless);
         System.out.println(Elevator.getEncoder().getClass());
     }
