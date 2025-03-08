@@ -105,13 +105,18 @@ public class RobotContainer {
             coralIntake.set(0);
         }));
         Controller2.leftBumper().whileTrue(Commands.run(() -> {
-            elevatorMechanism.set(0.55);
+            if (elevatorMechanism.getEncoder().getPosition() < 115.0) {
+                elevatorMechanism.set(0.55);
+            }
+            //System.out.println(elevatorMechanism.getEncoder().getPosition());
         }));
         Controller2.leftBumper().whileFalse(Commands.run(() -> {
             elevatorMechanism.set(0);
         }));
         Controller2.rightBumper().whileTrue(Commands.run(() -> {
-            elevatorMechanism.set(-0.55);
+            if(elevatorMechanism.getEncoder().getPosition() > 3.0 || Controller2.start().getAsBoolean()) {
+                elevatorMechanism.set(-0.55);
+            }
         }));
         Controller2.rightBumper().whileFalse(Commands.run(() -> {
             elevatorMechanism.set(0);
