@@ -59,7 +59,7 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
+        autoChooser = AutoBuilder.buildAutoChooser("Trough");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 
