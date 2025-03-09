@@ -93,7 +93,7 @@ public class RobotContainer {
             hangMechanism.set(0);
         }));
         Controller2.x().whileTrue(Commands.run(() -> {
-            coralIntake.set(0.55);
+            coralIntake.set(0.9);
         }));
         Controller2.x().whileFalse(Commands.run(() -> {
             coralIntake.set(0);

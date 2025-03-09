@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3RP1-Segment1"
+            "pathName": "TroughPart1"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Calibration Autos",
+  "folder": null,
   "choreoAuto": false
 }
