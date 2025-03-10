@@ -45,7 +45,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
     public final SparkMax hangMechanism = new SparkMax(12, MotorType.kBrushless);
-    public final CoralMechanism Coral = new CoralMechanism(13, 18);
+    public final CoralMechanism Coral = new CoralMechanism(13, 18, Controller2);
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
@@ -72,8 +72,6 @@ public class RobotContainer {
             )
         );
 
-        Coral.initDefaultCommand(Controller2);
-
         Controller2.leftBumper().whileTrue(Commands.parallel(
             Coral.SetIntakeSpeed(0.5),
             drivetrain.applyRequest(() ->
@@ -84,6 +82,8 @@ public class RobotContainer {
             drivetrain.applyRequest(() ->
                 forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
+        Controller2.rightBumper().whileFalse(Coral.SetIntakeSpeed(0));
+        Controller2.leftBumper().whileFalse(Coral.SetIntakeSpeed(0));
 
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
