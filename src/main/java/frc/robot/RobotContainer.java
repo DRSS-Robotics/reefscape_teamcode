@@ -73,18 +73,18 @@ public class RobotContainer {
         );
 
 
-        Controller2.leftBumper().whileTrue(Commands.parallel(
-            Coral.SetIntakeSpeed(0.5),
-            drivetrain.applyRequest(() ->
-                forwardStraight.withVelocityX(0.15).withVelocityY(0))
+        Controller2.b().whileTrue(Commands.parallel(
+            Coral.SetIntakeSpeed(0.5)
+            // drivetrain.applyRequest(() ->
+            //     forwardStraight.withVelocityX(0.15).withVelocityY(0))
         ));
-        Controller2.rightBumper().whileTrue(Commands.parallel(
-            Coral.SetIntakeSpeed(-0.5),
-            drivetrain.applyRequest(() ->
-                forwardStraight.withVelocityX(-0.15).withVelocityY(0))
+        Controller2.x().whileTrue(Commands.parallel(
+            Coral.SetIntakeSpeed(-0.5)
+            // drivetrain.applyRequest(() ->
+            //     forwardStraight.withVelocityX(-0.15).withVelocityY(0))
         ));
-        Controller2.rightBumper().whileFalse(Coral.SetIntakeSpeed(0));
-        Controller2.leftBumper().whileFalse(Coral.SetIntakeSpeed(0));
+        Controller2.b().whileFalse(Coral.SetIntakeSpeed(0));
+        Controller2.x().whileFalse(Coral.SetIntakeSpeed(0));
 
 
         // set these to joystick2 later
@@ -101,35 +101,7 @@ public class RobotContainer {
         Controller2.a().whileFalse(Commands.run(() -> {
             hangMechanism.set(0);
         }));
-        Controller2.x().whileTrue(Commands.run(() -> {
-            coralIntake.set(0.55);
-        }));
-        Controller2.x().whileFalse(Commands.run(() -> {
-            coralIntake.set(0);
-        }));
-        Controller2.b().whileTrue(Commands.run(() -> {
-            coralIntake.set(-0.55);
-        }));
-        Controller2.b().whileFalse(Commands.run(() -> {
-            coralIntake.set(0);
-        }));
-        Controller2.leftBumper().whileTrue(Commands.run(() -> {
-            if (elevatorMechanism.getEncoder().getPosition() < 115.0) {
-                elevatorMechanism.set(0.55);
-            }
-            //System.out.println(elevatorMechanism.getEncoder().getPosition());
-        }));
-        Controller2.leftBumper().whileFalse(Commands.run(() -> {
-            elevatorMechanism.set(0);
-        }));
-        Controller2.rightBumper().whileTrue(Commands.run(() -> {
-            if(elevatorMechanism.getEncoder().getPosition() > 3.0 || Controller2.start().getAsBoolean()) {
-                elevatorMechanism.set(-0.55);
-            }
-        }));
-        Controller2.rightBumper().whileFalse(Commands.run(() -> {
-            elevatorMechanism.set(0);
-        }));
+
 
 
         // joystick.x().whileTrue(drivetrain.applyRequest(() ->
