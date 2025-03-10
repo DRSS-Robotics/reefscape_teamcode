@@ -59,7 +59,7 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        autoChooser = AutoBuilder.buildAutoChooser("Trough");
+        autoChooser = AutoBuilder.buildAutoChooser("TroughMiddle");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 
@@ -106,7 +106,7 @@ public class RobotContainer {
         }));
         Controller2.leftBumper().whileTrue(Commands.run(() -> {
             if (elevatorMechanism.getEncoder().getPosition() < 115.0) {
-                elevatorMechanism.set(0.55);
+                elevatorMechanism.set(0.65);
             }
             //System.out.println(elevatorMechanism.getEncoder().getPosition());
         }));
@@ -115,7 +115,7 @@ public class RobotContainer {
         }));
         Controller2.rightBumper().whileTrue(Commands.run(() -> {
             if(elevatorMechanism.getEncoder().getPosition() > 3.0 || Controller2.start().getAsBoolean()) {
-                elevatorMechanism.set(-0.55);
+                elevatorMechanism.set(-0.5);
             }
         }));
         Controller2.rightBumper().whileFalse(Commands.run(() -> {
@@ -132,7 +132,7 @@ public class RobotContainer {
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        
+        // Nathan was here
 
         Controller1.pov(0).whileTrue(drivetrain.applyRequest(() ->
             forwardStraight.withVelocityX(0.55).withVelocityY(0))
