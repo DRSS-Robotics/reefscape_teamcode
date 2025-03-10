@@ -21,6 +21,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 
 public class RobotContainer {
@@ -59,7 +60,14 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        autoChooser = AutoBuilder.buildAutoChooser("TroughMiddle");
+        NamedCommands.registerCommand("LiftElevator", Commands.run(()  -> elevatorMechanism.set(0.75))); 
+        NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> elevatorMechanism.set(-0.75))); 
+        NamedCommands.registerCommand("StopElveator", Commands.run(()  -> elevatorMechanism.set(0.0))); 
+        NamedCommands.registerCommand("DropCoral", Commands.run(()  -> coralIntake.set(0.75)
+        )); 
+        NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  -> Commands.run(()  ->
+        coralIntake.set(0.0)))); 
+        autoChooser = AutoBuilder.buildAutoChooser("TroughMiddleRED");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 
@@ -77,6 +85,7 @@ public class RobotContainer {
                     .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
             )
         );
+
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
