@@ -22,12 +22,12 @@ public class CoralMechanism extends SubsystemBase {
         // Elevator.getEncoder().setPosition(0);
         // elevator encoder is relative
         Intake = new SparkMax(IntakeID, MotorType.kBrushless);
-        System.out.println(Elevator.getEncoder().getClass());
+        //System.out.println(Elevator.getEncoder().getClass());
         TeleController = Controller;
     }
 
     public boolean DeadbandCheck(double Value) {
-        System.out.println(Math.abs(Value) > Deadband);
+        //System.out.println(Math.abs(Value) > Deadband);
         return Math.abs(Value) > Deadband;
     }
 
