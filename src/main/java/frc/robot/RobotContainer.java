@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CoralMechanism;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -33,8 +34,6 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05 * SlownessModifier).withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
@@ -46,17 +45,12 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
     public final SparkMax hangMechanism = new SparkMax(12, MotorType.kBrushless);
-    public final SparkMax coralIntake = new SparkMax(18, MotorType.kBrushless);
-    public final SparkMax elevatorMechanism = new SparkMax(13, MotorType.kBrushless);
-
-    // public TalonFXConfigurator = new TalonFXConfigurator();
+    public final CoralMechanism Coral = new CoralMechanism(13, 18, Controller2);
 
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        // drivetrain.getModules()[0].getDriveMotor()
-        //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
         autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
@@ -77,6 +71,21 @@ public class RobotContainer {
                     .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
             )
         );
+
+
+        Controller2.leftBumper().whileTrue(Commands.parallel(
+            Coral.SetIntakeSpeed(0.5),
+            drivetrain.applyRequest(() ->
+                forwardStraight.withVelocityX(0.15).withVelocityY(0))
+        ));
+        Controller2.rightBumper().whileTrue(Commands.parallel(
+            Coral.SetIntakeSpeed(-0.5),
+            drivetrain.applyRequest(() ->
+                forwardStraight.withVelocityX(-0.15).withVelocityY(0))
+        ));
+        Controller2.rightBumper().whileFalse(Coral.SetIntakeSpeed(0));
+        Controller2.leftBumper().whileFalse(Coral.SetIntakeSpeed(0));
+
 
         // set these to joystick2 later
         // We fixed it for you- Micah and William L.
@@ -129,6 +138,7 @@ public class RobotContainer {
         //         .withRotationalRate(0)
         //     // point.withAngle(Rotation2d.fromDegrees(0));
         //     )
+
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
