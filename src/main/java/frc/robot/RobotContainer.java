@@ -114,9 +114,11 @@ public class RobotContainer {
             coralIntake.set(0);
         }));
         Controller2.leftBumper().whileTrue(Commands.run(() -> {
-            if (elevatorMechanism.getEncoder().getPosition() < 115.0) {
+            //115
+            if (elevatorMechanism.getEncoder().getPosition() < 73.0) {
                 elevatorMechanism.set(0.65);
-            }
+                System.out.println("Encoder Height" + elevatorMechanism.getEncoder().getPosition());
+  }
             //System.out.println(elevatorMechanism.getEncoder().getPosition());
         }));
         Controller2.leftBumper().whileFalse(Commands.run(() -> {
