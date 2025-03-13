@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TroughPositionAwayfromReef"
+            "pathName": "TroughPositionMiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DropCoral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "RED",
   "choreoAuto": false
 }

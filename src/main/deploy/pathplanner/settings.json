@@ -14,7 +14,9 @@
     "2RP",
     "3RP",
     "4RP",
-    "Calibration Autos"
+    "Calibration Autos",
+    "BLUE",
+    "RED"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
