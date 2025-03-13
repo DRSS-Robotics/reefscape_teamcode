@@ -60,14 +60,18 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        NamedCommands.registerCommand("LiftElevator", Commands.run(()  -> elevatorMechanism.set(0.75))); 
+        NamedCommands.registerCommand("LiftElevatorLevel2", Commands.run(()  -> {if(elevatorMechanism.getEncoder().getPosition() > 49 || Controller2.start().getAsBoolean()) {
+            elevatorMechanism.set(-0.5);
+        }
+    })); 
         NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> elevatorMechanism.set(-0.75))); 
         NamedCommands.registerCommand("StopElveator", Commands.run(()  -> elevatorMechanism.set(0.0))); 
         NamedCommands.registerCommand("DropCoral", Commands.run(()  -> coralIntake.set(0.75)
         )); 
+        NamedCommands.registerCommand("pickupCoral", Commands.run(()  -> coralIntake.set(-0.75))); 
         NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  -> Commands.run(()  ->
         coralIntake.set(0.0)))); 
-        autoChooser = AutoBuilder.buildAutoChooser("TroughMiddleRED");
+        autoChooser = AutoBuilder.buildAutoChooser("TroughAwayBLUE");
         SmartDashboard.putData("Auto Mode", autoChooser);
         
 
@@ -115,7 +119,7 @@ public class RobotContainer {
         }));
         Controller2.leftBumper().whileTrue(Commands.run(() -> {
             //115
-            if (elevatorMechanism.getEncoder().getPosition() < 73.0) {
+            if (elevatorMechanism.getEncoder().getPosition() < 115.0) {
                 elevatorMechanism.set(0.65);
                 System.out.println("Encoder Height" + elevatorMechanism.getEncoder().getPosition());
   }

@@ -11,13 +11,32 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "L2Middle"
+                  "pathName": "L2MiddlePart1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "LiftElevator"
+                  "name": "LiftElevatorLevel2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DropCoral"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
                 }
               }
             ]
