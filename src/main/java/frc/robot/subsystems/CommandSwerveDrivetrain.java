@@ -216,9 +216,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
                     // TODO: correctly tune PID
                     // translation
-                    new PIDConstants(10, 0, 0),
+                    new PIDConstants(4, 0, 0),
                     // rotation
-                    new PIDConstants(3.25, 0, 0)
+                    new PIDConstants(5, 0, 0)
                 ),
                 config,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,

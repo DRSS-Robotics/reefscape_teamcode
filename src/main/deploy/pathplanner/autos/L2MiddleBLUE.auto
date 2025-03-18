@@ -5,7 +5,13 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "path",
+          "data": {
+            "pathName": "L2MiddlePart1BLUE"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -17,32 +23,20 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "StopElveator"
+                  "waitTime": 0.25
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "L2MiddlePart1BLUE"
+            "name": "StopElveator"
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -56,11 +50,24 @@
                 "data": {
                   "waitTime": 2.0
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "StopCoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -70,6 +77,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "BLUE",
   "choreoAuto": false
 }

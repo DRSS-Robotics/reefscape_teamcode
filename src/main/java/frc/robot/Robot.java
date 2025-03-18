@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    System.out.println("started teleop");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -72,7 +73,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // System.out.println("angle error: " + (m_robotContainer.joystick.getRightX() -
     // ));
-    
+    System.out.println(m_robotContainer.elevatorMechanism.getEncoder().getPosition());
+
   }
 
   @Override
