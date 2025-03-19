@@ -1,8 +1,14 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,21 +18,27 @@ import frc.robot.Constants;
 
 public class CoralMechanism extends SubsystemBase {
 
-    SparkMax Elevator;
+    ClosedLoopConfig ElevCCLoop = new ClosedLoopConfig().p(0.15).i(0.0).d(0.0);
+    SparkMaxConfig ElevConfig = new SparkMaxConfig();
+    
+    public SparkMax Elevator;
+    
     SparkMax Intake;
     CommandXboxController TeleController;
     boolean JoystickDrive;
     boolean IsAtTarget = false;
     boolean ShouldGoUp = false;
-    int DesiredCoralHeight;
-    double[] CoralHeights = { 15.0, 15.0, 110.0, 110.0 };
-
+    public int DesiredCoralHeight;
+    public double[] CoralHeights = { 15.0, 15.0, 110.0, 110.0 };
+    
     boolean PrevElevDir = true;
-
+    
     public final double Deadband = 0.04;
-
+    
     public CoralMechanism(int ElevID, int IntakeID, CommandXboxController Controller, boolean DriveWithJoystick) {
+        ElevConfig.apply(ElevCCLoop);
         Elevator = new SparkMax(ElevID, MotorType.kBrushless);
+        Elevator.configure(ElevConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
         // Elevator.getEncoder().setPosition(0);
         // elevator encoder is relative
         Intake = new SparkMax(IntakeID, MotorType.kBrushless);
@@ -82,36 +94,40 @@ public class CoralMechanism extends SubsystemBase {
     }
 
     // public Command DriveToPosition() {
-    //     ShouldGoUp = (Elevator.getEncoder().getPosition() < CoralHeights[DesiredCoralHeight]);
+    // ShouldGoUp = (Elevator.getEncoder().getPosition() <
+    // CoralHeights[DesiredCoralHeight]);
 
-    //     if (PrevElevDir != ShouldGoUp) {
-    //         IsAtTarget = true;
-    //         Elevator.stopMotor();
-    //         System.out.println("reached target");
-    //     }
+    // if (PrevElevDir != ShouldGoUp) {
+    // IsAtTarget = true;
+    // Elevator.stopMotor();
+    // System.out.println("reached target");
+    // }
 
-    //     if (!IsAtTarget) {
-    //         if (ShouldGoUp) {
-    //             DriveWithMotorSpeed(0.6);
-    //             // System.out.println("up");
-    //         } else {
-    //             DriveWithMotorSpeed(-0.6);
-    //             // System.out.println("down");
-    //         }
-    //     }
+    // if (!IsAtTarget) {
+    // if (ShouldGoUp) {
+    // DriveWithMotorSpeed(0.6);
+    // // System.out.println("up");
+    // } else {
+    // DriveWithMotorSpeed(-0.6);
+    // // System.out.println("down");
+    // }
+    // }
 
-    //     PrevElevDir = ShouldGoUp;
+    // PrevElevDir = ShouldGoUp;
 
-    //     return Commands.none();
+    // return Commands.none();
     // }
     public Command DriveToPosition(double InPos) {
-        // ShouldGoUp = (Elevator.getEncoder().getPosition() < CoralHeights[DesiredCoralHeight]);
+        // ShouldGoUp = (Elevator.getEncoder().getPosition() <
+        // CoralHeights[DesiredCoralHeight]);
         Elevator.getClosedLoopController().setReference(InPos, ControlType.kPosition);
         return Commands.none();
     }
 
     @Override
     public void periodic() {
-        Command CurrentState = JoystickDrive ? DriveWithJoystick(TeleController) : DriveToPosition(CoralHeights[DesiredCoralHeight]);
+        System.out.println(Elevator.getEncoder().getPosition());
+        Command CurrentState = JoystickDrive ? DriveWithJoystick(TeleController) : Commands.none();
+    // DriveToPosition(CoralHeights[DesiredCoralHeight]);
     }
 }

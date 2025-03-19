@@ -13,7 +13,7 @@ import frc.robot.RobotContainer;
 
 public class Robot extends TimedRobot {
     XboxController controller = new XboxController(0);
-    private CameraSubsystem cam = new CameraSubsystem();
+    // private CameraSubsystem cam = new CameraSubsystem();
    // private RobotContainer robotContainer = new RobotContainer();
   private Command m_autonomousCommand;
 
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    cam.readCamera();
+    // cam.readCamera();
   }
 
   @Override
