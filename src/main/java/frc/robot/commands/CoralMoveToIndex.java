@@ -10,8 +10,9 @@ public class CoralMoveToIndex extends Command {
     int DH;
 
 
-    public CoralMoveToIndex(CoralMechanism Coral) {
+    public CoralMoveToIndex(CoralMechanism Coral, int NewHeight) {
         CM = Coral;
+        DH = NewHeight;
         addRequirements(Coral);
     }
 
@@ -21,11 +22,7 @@ public class CoralMoveToIndex extends Command {
     
     @Override
     public void execute() {
-        if (!isFinished()) {
-            CM.Elevator.getClosedLoopController().setReference(CM.CoralHeights[CM.DesiredCoralHeight], ControlType.kPosition);
-        } else {
-            end(false);
-        }
+        CM.Elevator.getClosedLoopController().setReference(CM.CoralHeights[DH], ControlType.kPosition);
     }
     
     @Override
@@ -35,8 +32,7 @@ public class CoralMoveToIndex extends Command {
 
     @Override
     public boolean isFinished() {
-        System.out.println("Guhh");
       return (Math.abs(CM.Elevator.getEncoder().getPosition() -
-      CM.CoralHeights[CM.DesiredCoralHeight]) < 0.25);
+      CM.CoralHeights[DH]) < 0.25);
     }
 }

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -98,6 +99,8 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
+        CameraServer.startAutomaticCapture();
+        System.out.println("testing this above code work");
     }
 
     private void configureBindings() {
@@ -119,8 +122,6 @@ public class RobotContainer {
         // l2 is 15.0 on enc readings
         // l3 is 110.0
 
-        // set these to joystick2 later
-        // We fixed it for you- Micah and William L.
         Controller2.a().whileTrue(Commands.run(() -> {
             if(hangMechanism.getEncoder().getPosition() > -120.0){
                 hangMechanism.set(-0.75);
@@ -148,9 +149,8 @@ public class RobotContainer {
         Controller2.b().onFalse(Coral.SetIntakeSpeed(0.0));
 
 
-        Controller2.start().onTrue(new CoralMoveToIndex(Coral));
-        Controller2.rightBumper().onTrue(new CoralSetDesiredHeight(Coral, 2));
-        Controller2.leftBumper().onTrue(new CoralSetDesiredHeight(Coral, 1));
+        Controller2.rightBumper().onTrue(new CoralMoveToIndex(Coral, 2));
+        Controller2.leftBumper().onTrue(new CoralMoveToIndex(Coral, 1));
 
 
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.3));
@@ -159,13 +159,8 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        // Nathan was here
-        // i hate you nathan -felix
-
         // reset the field-centric heading on left bumper press
         // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        // Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.getEncoder().getPosition())));
-        // Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.getEncoder().setPosition(0.0)));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
