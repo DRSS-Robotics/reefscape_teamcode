@@ -22,8 +22,8 @@ public class CoralMechanism extends SubsystemBase {
     SparkMaxConfig ElevConfig = new SparkMaxConfig();
     
     public SparkMax Elevator;
+    public SparkMax Intake;
     
-    SparkMax Intake;
     CommandXboxController TeleController;
     boolean JoystickDrive;
     boolean IsAtTarget = false;

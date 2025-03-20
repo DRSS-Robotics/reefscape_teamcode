@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.CoralMoveToIndex;
-import frc.robot.commands.CoralSetDesiredHeight;
+import frc.robot.commands.CoralSetIntakeSpeed;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralMechanism;
@@ -70,31 +70,14 @@ public class RobotContainer {
         // {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(()
         // -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        // NamedCommands.registerCommand("LiftElevatorLevel2", Commands.run(() ->
-        // elevatorMechanism.set(0.5)));
-
-        // NamedCommands.registerCommand("LowerElevator", Commands.run(() ->
-        // elevatorMechanism.set(-0.75)));
-        // NamedCommands.registerCommand("StopElveator", Commands.run(() ->
-        // elevatorMechanism.set(0.0)));
-        // NamedCommands.registerCommand("DropCoral", Commands.run(() ->
-        // coralIntake.set(0.9)));
-        // NamedCommands.registerCommand("pickupCoral", Commands.run(() ->
-        // coralIntake.set(-0.75)));
-
-        // //Don't use
-        // NamedCommands.registerCommand("dropCoral", Commands.run(() ->
-        // coralIntake.set(0.75)));
-        // NamedCommands.registerCommand("pickupAlgae", Commands.run(() ->
-        // coralIntake.set(-0.75)));
-        // NamedCommands.registerCommand("dropAlgae", Commands.run(() ->
-        // coralIntake.set(-0.75)));
-
-        // NamedCommands.registerCommand("StopCoralIntake", Commands.run(() ->
-        // coralIntake.set(0.0)));
+        NamedCommands.registerCommand("ElevatorL2", new CoralMoveToIndex(Coral, 1));
+        NamedCommands.registerCommand("ElevatorL3", new CoralMoveToIndex(Coral, 2));
+        NamedCommands.registerCommand("ElevatorCoralStation", new CoralMoveToIndex(Coral, 1));
+        NamedCommands.registerCommand("StopCoral", new CoralSetIntakeSpeed(Coral, 0.0));
+        NamedCommands.registerCommand("OuttakeCoral", new CoralSetIntakeSpeed(Coral, 0.65));
+        NamedCommands.registerCommand("IntakeCoral", new CoralSetIntakeSpeed(Coral, -0.65));
 
         autoChooser = AutoBuilder.buildAutoChooser("Straight");
-        // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
 
         SmartDashboard.putData("Auto Mode", autoChooser);
 
