@@ -4,31 +4,28 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.geometry.Transform2d;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.events.EventTrigger;
+
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.DoubleTopic;
-import edu.wpi.first.networktables.GenericPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 
-public class CameraSubsystem {  
+public class CameraCommand extends Command {  
  
-  private static CameraSubsystem Cam_instance = new CameraSubsystem();
-      public PhotonCamera camera;
-      private XboxController controller;
+  public PhotonCamera camera;
       private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+      private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric();
     private final NetworkTable CameraTable = inst.getTable("CameraAlign");
 
-          public CameraSubsystem() {
+          public CameraCommand() {
                 camera = new PhotonCamera("April_RGB_Cam");
-              controller = new XboxController(0);
                 System.out.println("works");
         /*  return camera/controller */
       }
@@ -82,7 +79,7 @@ public class CameraSubsystem {
                           // in the future
                           closestID = targetID;
                         }
-                        if (controller.getAButton() && targetVisible) {
+                        if (targetVisible) {
                             System.out.println("ID:");
                             System.out.println(targetID); /*print the ID */
                             System.out.println("Range:");
@@ -90,17 +87,18 @@ public class CameraSubsystem {
                             System.out.println("Yaw:");
                             System.out.println(targetYaw); /*print the yaw */
                             System.out.println("Offset:");
-                            System.out.println(targetOffset); /*print the yaw */
+                            System.out.println(targetOffset);
+
+                            DataRange = CameraTable.getDoubleTopic("targetYaw").publish();
+                            DataYaw = CameraTable.getDoubleTopic("targetRange").publish();
+                        
+                            DataRange.set(targetYaw);
+                            DataYaw.set(targetRange);
+                                
+
+                            }
                           }
                     }
-                    // print for testing the closest target values
-                    System.out.println("Closest Range:");
-                    System.out.println(closestRange);
-                    // DataRange = CameraTable.getDoubleTopic("targetYaw").publish();
-                    // DataYaw = CameraTable.getDoubleTopic("targetRange").publish();
-                
-                    // DataRange.set(targetYaw);
-                    // DataYaw.set(targetRange);
           
                 }
         }
@@ -114,24 +112,10 @@ public class CameraSubsystem {
         //     System.out.println(targetYaw);
         //   }
 
-            if(controller.getBButton() && targetVisible) {
-              System.out.println("dijzgh.gkcvjoz.xkchfuv");
-              System.out.println(targetRange - targetYaw);
-              if(targetRange == 0) 
-              if(targetRange == 0) {
-                System.out.println("You are there");
-              }
-              else if(targetRange > 0 && targetYaw > 0) {
-
-              }
               
             }
        
             
-      }
-      public static CameraSubsystem getInstance() {
-        return Cam_instance;
-    }
+
       
-    }
 //  }

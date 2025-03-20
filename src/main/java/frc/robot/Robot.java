@@ -10,11 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.generated.TunerConstants;
 
-public class Robot extends TimedRobot {
-    XboxController controller = new XboxController(0);
-    private CameraSubsystem cam = new CameraSubsystem();
-  private Command m_autonomousCommand;
 
+public class Robot extends TimedRobot {
+  private Command m_autonomousCommand;
+  private CameraSubsystem cam = new CameraSubsystem();
+  XboxController controller = new XboxController(0);
   private final RobotContainer m_robotContainer;
 
   public Robot() {
@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    cam.readCamera();
+    //cam.readCamera();
   }
 
   @Override
