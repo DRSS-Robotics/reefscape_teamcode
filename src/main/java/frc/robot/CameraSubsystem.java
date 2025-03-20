@@ -117,7 +117,6 @@ public class CameraSubsystem {
             if(controller.getBButton() && targetVisible) {
               System.out.println("dijzgh.gkcvjoz.xkchfuv");
               System.out.println(targetRange - targetYaw);
-              if(targetRange == 0) 
               if(targetRange == 0) {
                 System.out.println("You are there");
               }

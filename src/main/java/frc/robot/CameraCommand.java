@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public class CameraCommand extends Command {  
+  //This file is the same as the subsystem code
  
   public PhotonCamera camera;
       private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
