@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // System.out.println("angle error: " + (m_robotContainer.joystick.getRightX() -
     // ));
-    System.out.println(m_robotContainer.elevatorMechanism.getEncoder().getPosition());
+    //System.out.println(m_robotContainer.elevatorMechanism.getEncoder().getPosition());
 
   }
 
