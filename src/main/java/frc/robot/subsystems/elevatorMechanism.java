@@ -32,6 +32,7 @@ public class ElevatorMechanism extends SubsystemBase {
     boolean IsAtTarget = false;
     boolean ShouldGoUp = false;
     public int DesiredCoralHeight;
+    CommandXboxController Joystick;
     // This first one is the coral station and the last one is level 3
     // Change the coral station level
     
@@ -39,9 +40,10 @@ public class ElevatorMechanism extends SubsystemBase {
     /**
      * This subsytem that controls the arm.
      */
-    public ElevatorMechanism(int ElevID) {
+    public ElevatorMechanism(int ElevID, CommandXboxController Controller) {
         
         elevatorMotor = new SparkMax(ElevID, MotorType.kBrushless);
+        Joystick = Controller;
 
         ElevConfig.voltageCompensation(10);
         ElevConfig.smartCurrentLimit(60);
@@ -53,7 +55,7 @@ public class ElevatorMechanism extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // DriveElevator(RobotContainer.Controller2);
+        DriveElevator(Joystick);
     }
 
     public boolean DeadbandCheck(double Value) {

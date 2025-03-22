@@ -17,68 +17,52 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-
 public class HangMechanism extends SubsystemBase {
 
     public final double Deadband = 0.04;
     private final SparkMax HangMotor;
+    private CommandXboxController Joystick;
 
-    public HangMechanism() {
-        
-        HangMotor = new SparkMax(12, MotorType.kBrushless);
-    // Set up the arm motor as a brushed motor
-    
+    public HangMechanism(int HangID, CommandXboxController Controller) {
 
-    // Create and apply configuration for arm motor. Voltage compensation helps
-    // the arm behave the same as the battery
-    // voltage dips. The current limit helps prevent breaker trips or burning out
-    // the motor in the event the arm stalls.
-    SparkMaxConfig hangConfig = new SparkMaxConfig();
-    hangConfig.voltageCompensation(10);
-    hangConfig.smartCurrentLimit(60);
-    hangConfig.idleMode(IdleMode.kBrake);
-    HangMotor.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        HangMotor = new SparkMax(HangID, MotorType.kBrushless);
+        Joystick = Controller;
+        SparkMaxConfig hangConfig = new SparkMaxConfig();
+        hangConfig.voltageCompensation(10);
+        hangConfig.smartCurrentLimit(60);
+        hangConfig.idleMode(IdleMode.kBrake);
+        HangMotor.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
     public void periodic() {
-        DriveHang(RobotContainer.Controller2);
+        DriveHang(Joystick);
     }
-    /** 
-     * This is a method that makes the arm move at your desired speed
-     *  Positive values make it spin forward and negative values spin it in reverse
-     * 
-     * @param speed motor speed from -1.0 to 1, with 0 stopping it
-     */
-
 
     public boolean DeadbandCheck(double Value) {
-        //System.out.println(Math.abs(Value) > Deadband);
+        // System.out.println(Math.abs(Value) > Deadband);
         return Math.abs(Value) > Deadband;
     }
 
-
-    
-        public boolean MotorHeightBounds(double ControllerY) {
+    public boolean MotorHeightBounds(double ControllerY) {
 
         if (HangMotor.getEncoder().getPosition() - 8 * ControllerY < -3 ||
-        HangMotor.getEncoder().getPosition() - 8 * ControllerY >= -120) {
+                HangMotor.getEncoder().getPosition() - 8 * ControllerY >= -120) {
             return false;
         } else {
             return true;
         }
     }
 
-
-        public Command DriveHang(CommandXboxController Controller) {
-        if (DeadbandCheck(Controller.getRightY()) && MotorHeightBounds(Controller.getRightY())) {
+    public Command DriveHang(CommandXboxController Controller) {
+        System.out.println(HangMotor.getEncoder().getPosition());
+        if (DeadbandCheck(Controller.getRightY()) /*&& MotorHeightBounds(Controller.getRightY())*/) {
             HangMotor.set(-Controller.getRightY());
-            return Commands.run(() -> HangMotor.set(-Controller.getRightY()));
+            return Commands.none();
         } else {
             HangMotor.stopMotor();
-            return Commands.run(() -> HangMotor.stopMotor());
+            return Commands.none();
         }
     }
-
 
 }
