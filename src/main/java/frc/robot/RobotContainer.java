@@ -131,6 +131,7 @@ public class RobotContainer {
         Controller2.b().onTrue(Coral.SetIntakeSpeed(-0.65));
         Controller2.b().onFalse(Coral.SetIntakeSpeed(0.0));
 
+        Controller2.y().onTrue(new CoralMoveToIndex(Coral, 1));
 
         Controller2.rightBumper().onTrue(new CoralMoveToIndex(Coral, 2));
         Controller2.leftBumper().onTrue(new CoralMoveToIndex(Coral, 1));

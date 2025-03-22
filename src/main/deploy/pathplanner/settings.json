@@ -3,13 +3,15 @@
   "robotLength": 0.9398,
   "holonomicMode": true,
   "pathFolders": [
-    "OneCoralScorePath4",
+    "TwoCoralScorePath4",
     "OffLinePaths",
     "OneCoralScorePath1",
     "OneCoralScorePath2",
     "OneCoralScorePath3",
+    "OneCoralScorePath4",
     "TwoCoralScorePath1",
-    "TwoCoralScorePath2"
+    "TwoCoralScorePath2",
+    "TwoCoralScorePath3"
   ],
   "autoFolders": [
     "OffLinePaths",
