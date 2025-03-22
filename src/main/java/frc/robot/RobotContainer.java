@@ -62,7 +62,7 @@ public class RobotContainer {
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */ 
-    private final SendableChooser<Command> autoChooser;
+  //  private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         // drivetrain.getModules()[0].getDriveMotor()
@@ -83,10 +83,10 @@ public class RobotContainer {
 
 
         // NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  ->  coralIntake.set(0.0)));
-        autoChooser = AutoBuilder.buildAutoChooser("Straight");
+       // autoChooser = AutoBuilder.buildAutoChooser("Straight");
         // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
         
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        //SmartDashboard.putData("Auto Mode", autoChooser);
        
 
         configureBindings();
@@ -149,9 +149,6 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        // Nathan was here
-        // i hate you nathan -felix
-
         // reset the field-centric heading on left bumper press
         // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         //Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
@@ -159,8 +156,8 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
-    public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
-        return autoChooser.getSelected();
-    }
+    // public Command getAutonomousCommand() {
+    //     /* Run the path selected from the auto chooser */
+    //     return autoChooser.getSelected();
+    // }
 }

@@ -36,7 +36,7 @@ public class elevatorMechanism extends SubsystemBase {
      */
     public elevatorMechanism() {
         
-        elevatorMechanism = new SparkMax(12, MotorType.kBrushless);
+        elevatorMechanism = new SparkMax(13, MotorType.kBrushless);
     // Set up the arm motor as a brushed motor
     
 
