@@ -6,19 +6,19 @@ import frc.robot.subsystems.elevatorMechanism;
 
 public class CoralSetDesiredHeight extends Command {
 
-    elevatorMechanism coralElevatorMechanism;
+    private final elevatorMechanism m_elevatorMechanism;
     int desiredHeight;
 
 
     public CoralSetDesiredHeight(elevatorMechanism Coral, int Height) {
-        coralElevatorMechanism = Coral;
+        m_elevatorMechanism = Coral;
         desiredHeight = Height;
         // addRequirements(Coral);
     }
     
     @Override
     public void initialize() {
-        coralElevatorMechanism.DesiredCoralHeight = desiredHeight;
+        m_elevatorMechanism.DesiredCoralHeight = desiredHeight;
     }
 
     @Override
