@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "TroughPositionMiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DropCoral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Calibration Autos",
+  "folder": "RED",
   "choreoAuto": false
 }

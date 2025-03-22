@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3RP1-Segment2"
+            "pathName": "Straight"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "dropCoral"
+            "name": "DropCoral"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3RP-Park"
+            "name": "StopCoralIntake"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3RP",
+  "folder": null,
   "choreoAuto": false
 }

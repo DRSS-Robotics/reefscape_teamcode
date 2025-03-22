@@ -16,12 +16,19 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.commands.CoralIntakeCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralMechanism;
+import frc.robot.subsystems.ElevatorMechanism;
+import frc.robot.subsystems.HangMechanism;
+import frc.commands.CoralIntakeCommand;
+import frc.commands.CoralOuttakeCommand;
+import frc.commands.ElevatorMoveToIndex;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 
 public class RobotContainer {
@@ -40,22 +47,42 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController Controller1 = new CommandXboxController(0);
-    private final CommandXboxController Controller2 = new CommandXboxController(1);
+    public final static CommandXboxController Controller2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    
-    public final SparkMax hangMechanism = new SparkMax(12, MotorType.kBrushless);
-    public final CoralMechanism Coral = new CoralMechanism(13, 18, Controller2);
 
-    /* Path follower */
-    private final SendableChooser<Command> autoChooser;
+    public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
+    public final HangMechanism m_hangMechanism = new HangMechanism();
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13);
+
+    // public TalonFXConfigurator = new TalonFXConfigurator();
+
+    /* Path follower */ 
+   private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        autoChooser = AutoBuilder.buildAutoChooser("CalibAuto");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        NamedCommands.registerCommand("LiftElevatorLevel2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
+        NamedCommands.registerCommand("LiftElevatorLevel3", new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> m_elevatorMechanism.set(-0.75)));
+        //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> m_elevatorMechanism.set(0.0)));
+        NamedCommands.registerCommand("DropCoral", new CoralOuttakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("PickupCoral", new CoralIntakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("StopCoralIntake", new CoralIntakeCommand(m_coralMechanism));
+
+        //Don't use
+        // NamedCommands.registerCommand("dropCoral", Commands.run(()  -> coralIntake.set(0.75)));
+        // NamedCommands.registerCommand("pickupAlgae", new coralOuttakeCommand(coralMechanism));
+        // NamedCommands.registerCommand("dropAlgae", Commands.run(()  -> coralIntake.set(-0.75)));
+
+
+        //NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  ->  coralIntake.set(0.0)));
+       autoChooser = AutoBuilder.buildAutoChooser("Straight");
+        PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
         
+        SmartDashboard.putData("Auto Mode", autoChooser);
+       
 
         configureBindings();
     }
@@ -72,68 +99,28 @@ public class RobotContainer {
             )
         );
 
+        // l2 is 15.0 on enc readings
+        // l3 is 110.0
 
-        Controller2.b().whileTrue(Commands.parallel(
-            Coral.SetIntakeSpeed(0.5)
-            // drivetrain.applyRequest(() ->
-            //     forwardStraight.withVelocityX(0.15).withVelocityY(0))
-        ));
-        Controller2.x().whileTrue(Commands.parallel(
-            Coral.SetIntakeSpeed(-0.5)
-            // drivetrain.applyRequest(() ->
-            //     forwardStraight.withVelocityX(-0.15).withVelocityY(0))
-        ));
-        Controller2.b().whileFalse(Coral.SetIntakeSpeed(0));
-        Controller2.x().whileFalse(Coral.SetIntakeSpeed(0));
+         // Controller2.y().whileTrue();
+        // Controller2.y().whileFalse();
+        Controller2.x().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+        Controller2.b().whileTrue(new CoralIntakeCommand(m_coralMechanism));
 
-
-        // set these to joystick2 later
-        // We fixed it for you- Micah and William L.
-        Controller2.y().whileTrue(Commands.run(() -> {
-            hangMechanism.set(0.75);
-        }));
-        Controller2.y().whileFalse(Commands.run(() -> {
-            hangMechanism.set(0.0);
-        }));
-        Controller2.a().whileTrue(Commands.run(() -> {
-            hangMechanism.set(-0.75);
-        }));
-        Controller2.a().whileFalse(Commands.run(() -> {
-            hangMechanism.set(0);
-        }));
-
-
-
-        // joystick.x().whileTrue(drivetrain.applyRequest(() ->
-        //     drive.withVelocityX(-0.5) // forward
-        //         .withVelocityY(0)
-        //         .withRotationalRate(0)
-        //     // point.withAngle(Rotation2d.fromDegrees(0));
-        //     )
-
-        Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.35));
+        Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.3));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        
+        Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
+        Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        Controller1.pov(0).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(0.55).withVelocityY(0))
-        );
-        Controller1.pov(180).whileTrue(drivetrain.applyRequest(() ->
-            forwardStraight.withVelocityX(-0.5).withVelocityY(0))
-        );
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        Controller1.start().and(Controller1.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        Controller1.start().and(Controller1.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-        Controller1.back().and(Controller1.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        Controller1.back().and(Controller1.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // Controller1.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-        // Controller1.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
+        Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
+        Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        // Controller2.rightBumper().onTrue(Commands.run(() -> SlownessModifier = 1));
 
         // reset the field-centric heading on left bumper press
-        Controller1.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        //Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
+        //Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
