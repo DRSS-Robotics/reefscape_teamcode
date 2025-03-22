@@ -142,11 +142,11 @@ public class RobotContainer {
             hangMechanism.set(0);
         }));
 
-        Controller2.x().onTrue(Coral.SetIntakeSpeed(0.65));
-        Controller2.x().onFalse(Coral.SetIntakeSpeed(0.0));
+        Controller2.x().onTrue(Commands.runOnce(() -> Coral.SetIntakeSpeed(0.65)));
+        Controller2.x().onFalse(Commands.runOnce(() -> Coral.SetIntakeSpeed(0.0)));
 
-        Controller2.b().onTrue(Coral.SetIntakeSpeed(-0.65));
-        Controller2.b().onFalse(Coral.SetIntakeSpeed(0.0));
+        Controller2.b().onTrue(Commands.runOnce(() -> Coral.SetIntakeSpeed(-0.65)));
+        Controller2.b().onFalse(Commands.runOnce(() -> Coral.SetIntakeSpeed(0.0)));
 
 
         Controller2.rightBumper().onTrue(new CoralMoveToIndex(Coral, 2));

@@ -63,8 +63,8 @@ public class CoralMechanism extends SubsystemBase {
 
     }
 
-    public Command SetIntakeSpeed(double Speed) {
-        return Commands.runOnce(() -> Intake.set(Speed));
+    public void SetIntakeSpeed(double Speed) {
+        Intake.set(Speed);
     }
 
     public Command DriveWithMotorSpeed(double Speed) {
@@ -126,8 +126,8 @@ public class CoralMechanism extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(Elevator.getEncoder().getPosition());
-        Command CurrentState = JoystickDrive ? DriveWithJoystick(TeleController) : Commands.none();
+        // System.out.println(Elevator.getEncoder().getPosition());
+        // Command CurrentState = JoystickDrive ? DriveWithJoystick(TeleController) : Commands.none();
     // DriveToPosition(CoralHeights[DesiredCoralHeight]);
     }
 }
