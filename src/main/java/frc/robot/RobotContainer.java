@@ -55,9 +55,9 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    public final coralMechanism coralMechanism = new coralMechanism();
-    public final hangMechanism hangMechanism = new hangMechanism();
-    public final elevatorMechanism elevatorMechanism = new elevatorMechanism();
+    public final coralMechanism m_coralMechanism = new coralMechanism();
+    public final hangMechanism m_hangMechanism = new hangMechanism();
+    public final elevatorMechanism m_elevatorMechanism = new elevatorMechanism();
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
@@ -69,12 +69,12 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        NamedCommands.registerCommand("LiftElevatorLevel2", new CoralMoveToIndex(elevatorMechanism, 1));
-        NamedCommands.registerCommand("LiftElevatorLevel3", new CoralMoveToIndex(elevatorMechanism, 2));
-        //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> elevatorMechanism.set(-0.75)));
-        //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> elevatorMechanism.set(0.0)));
-        NamedCommands.registerCommand("DropCoral", new coralOuttakeCommand(coralMechanism));
-        NamedCommands.registerCommand("pickupCoral", new coralIntakeCommand(coralMechanism));
+        NamedCommands.registerCommand("LiftElevatorLevel2", new CoralMoveToIndex(m_elevatorMechanism, 1));
+        NamedCommands.registerCommand("LiftElevatorLevel3", new CoralMoveToIndex(m_elevatorMechanism, 2));
+        //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> m_elevatorMechanism.set(-0.75)));
+        //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> m_elevatorMechanism.set(0.0)));
+        NamedCommands.registerCommand("DropCoral", new coralOuttakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("pickupCoral", new coralIntakeCommand(m_coralMechanism));
 
         //Don't use
         // NamedCommands.registerCommand("dropCoral", Commands.run(()  -> coralIntake.set(0.75)));
@@ -110,10 +110,10 @@ public class RobotContainer {
 
          // Controller2.y().whileTrue();
         // Controller2.y().whileFalse();
-        Controller2.x().whileTrue(new coralOuttakeCommand(coralMechanism));
-        Controller2.x().whileFalse(new coralOuttakeCommand(coralMechanism));
-        Controller2.b().whileTrue(new coralIntakeCommand(coralMechanism));
-        Controller2.b().whileFalse(new coralIntakeCommand(coralMechanism));
+        Controller2.x().whileTrue(new coralOuttakeCommand(m_coralMechanism));
+        Controller2.x().whileFalse(new coralOuttakeCommand(m_coralMechanism));
+        Controller2.b().whileTrue(new coralIntakeCommand(m_coralMechanism));
+        Controller2.b().whileFalse(new coralIntakeCommand(m_coralMechanism));
       
         // Controller2.leftBumper().whileTrue(Commands.run(() -> {
 
@@ -154,8 +154,8 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
-        Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
+        //Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
+        //Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 

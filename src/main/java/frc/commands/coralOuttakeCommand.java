@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 /** An ArmUpCommand that uses an Arm subsystem. */
 public class coralOuttakeCommand extends Command {
-  private final coralMechanism coralMechanism = new coralMechanism();
+  private final coralMechanism m_coralMechanism;
 
   /**
    * Powers the arm up, when finished passively holds the arm up.
@@ -20,9 +20,9 @@ public class coralOuttakeCommand extends Command {
    *
    * @param arm The subsystem used by this command.
    */
-  public coralOuttakeCommand(coralMechanism coralMechanism) {
-    
-    addRequirements(coralMechanism);
+  public coralOuttakeCommand(coralMechanism cMechanism) {
+    m_coralMechanism = cMechanism;
+    addRequirements(cMechanism);
   }
 
   // Called when the command is initially scheduled.
@@ -32,7 +32,7 @@ public class coralOuttakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coralMechanism.runIntake(-0.5);
+    m_coralMechanism.runIntake(-0.5);
   }
 
   // Called once the command ends or is interrupted.
@@ -40,7 +40,7 @@ public class coralOuttakeCommand extends Command {
   // not drop due to gravity.
   @Override
   public void end(boolean interrupted) {
-    coralMechanism.runIntake(0);
+    m_coralMechanism.runIntake(0);
   }
 
   // Returns true when the command should end.
