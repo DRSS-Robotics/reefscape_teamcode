@@ -18,7 +18,7 @@ public class coralMechanism extends SubsystemBase {
      * This subsytem that controls the arm.
      */
     public coralMechanism() {
-        coralMechanism = new SparkMax(18, MotorType.kBrushless);
+        coralMechanism = new SparkMax(11, MotorType.kBrushless);
     // Set up the arm motor as a brushed motor
     
 

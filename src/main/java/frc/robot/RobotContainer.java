@@ -56,25 +56,25 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final coralMechanism coralMechanism = new coralMechanism();
-    public final hangMechanism hangMechanism = new hangMechanism();
-    public final elevatorMechanism elevatorMechanism = new elevatorMechanism();
+    //public final hangMechanism hangMechanism = new hangMechanism();
+  //  public final elevatorMechanism elevatorMechanism = new elevatorMechanism();
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */ 
-    private final SendableChooser<Command> autoChooser;
+  //  private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         // drivetrain.getModules()[0].getDriveMotor()
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        NamedCommands.registerCommand("LiftElevatorLevel2", new CoralMoveToIndex(elevatorMechanism, 1));
-        NamedCommands.registerCommand("LiftElevatorLevel3", new CoralMoveToIndex(elevatorMechanism, 2));
+        // NamedCommands.registerCommand("LiftElevatorLevel2", new CoralMoveToIndex(elevatorMechanism, 1));
+        // NamedCommands.registerCommand("LiftElevatorLevel3", new CoralMoveToIndex(elevatorMechanism, 2));
         //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> elevatorMechanism.set(-0.75)));
         //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> elevatorMechanism.set(0.0)));
-        NamedCommands.registerCommand("DropCoral", new coralOuttakeCommand(coralMechanism));
-        NamedCommands.registerCommand("pickupCoral", new coralIntakeCommand(coralMechanism));
+        // NamedCommands.registerCommand("DropCoral", new coralOuttakeCommand(coralMechanism));
+        // NamedCommands.registerCommand("pickupCoral", new coralIntakeCommand(coralMechanism));
 
         //Don't use
         // NamedCommands.registerCommand("dropCoral", Commands.run(()  -> coralIntake.set(0.75)));
@@ -83,10 +83,10 @@ public class RobotContainer {
 
 
         // NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  ->  coralIntake.set(0.0)));
-        autoChooser = AutoBuilder.buildAutoChooser("Straight");
+       // autoChooser = AutoBuilder.buildAutoChooser("Straight");
         // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
         
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        //SmartDashboard.putData("Auto Mode", autoChooser);
        
 
         configureBindings();
@@ -149,18 +149,15 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        // Nathan was here
-        // i hate you nathan -felix
-
         // reset the field-centric heading on left bumper press
         // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
-        Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
+        // Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
+        // Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
-    public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
-        return autoChooser.getSelected();
-    }
+    // public Command getAutonomousCommand() {
+    //     /* Run the path selected from the auto chooser */
+    //     return autoChooser.getSelected();
+    // }
 }

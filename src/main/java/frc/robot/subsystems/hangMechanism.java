@@ -27,10 +27,9 @@ public class hangMechanism extends SubsystemBase {
      */
     public hangMechanism() {
         
-        hangMechanism = new SparkMax(12, MotorType.kBrushless);
+        hangMechanism = new SparkMax(13, MotorType.kBrushless);
     // Set up the arm motor as a brushed motor
     
-
 
     // Create and apply configuration for arm motor. Voltage compensation helps
     // the arm behave the same as the battery
