@@ -62,7 +62,7 @@ public class RobotContainer {
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
     /* Path follower */ 
-  //  private final SendableChooser<Command> autoChooser;
+   private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         // drivetrain.getModules()[0].getDriveMotor()
@@ -82,11 +82,11 @@ public class RobotContainer {
         // NamedCommands.registerCommand("dropAlgae", Commands.run(()  -> coralIntake.set(-0.75)));
 
 
-        // NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  ->  coralIntake.set(0.0)));
-       // autoChooser = AutoBuilder.buildAutoChooser("Straight");
-        // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
+        //NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  ->  coralIntake.set(0.0)));
+       autoChooser = AutoBuilder.buildAutoChooser("Straight");
+        PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
         
-        //SmartDashboard.putData("Auto Mode", autoChooser);
+        SmartDashboard.putData("Auto Mode", autoChooser);
        
 
         configureBindings();
@@ -156,8 +156,8 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
-    // public Command getAutonomousCommand() {
-    //     /* Run the path selected from the auto chooser */
-    //     return autoChooser.getSelected();
-    // }
+    public Command getAutonomousCommand() {
+        /* Run the path selected from the auto chooser */
+        return autoChooser.getSelected();
+    }
 }
