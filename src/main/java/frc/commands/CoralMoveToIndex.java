@@ -6,12 +6,12 @@ import frc.robot.subsystems.elevatorMechanism;
 
 public class CoralMoveToIndex extends Command {
 
-    elevatorMechanism coralElevatorMechanism;
+    private final elevatorMechanism m_elevatorMechanism;
     int desiredHeight;
 
 
     public CoralMoveToIndex(elevatorMechanism Coral, int NewHeight) {
-        coralElevatorMechanism = Coral;
+        m_elevatorMechanism = Coral;
         desiredHeight = NewHeight;
         addRequirements(Coral);
     }
@@ -22,17 +22,17 @@ public class CoralMoveToIndex extends Command {
     
     @Override
     public void execute() {
-        coralElevatorMechanism.elevatorMechanism.getClosedLoopController().setReference(coralElevatorMechanism.CoralHeights[desiredHeight], ControlType.kPosition);
+        m_elevatorMechanism.elevatorMechanism.getClosedLoopController().setReference(m_elevatorMechanism.CoralHeights[desiredHeight], ControlType.kPosition);
     }
     
     @Override
     public void end(boolean Interrupted) {
-        coralElevatorMechanism.elevatorMechanism.stopMotor();
+        m_elevatorMechanism.elevatorMechanism.stopMotor();
     }
 
     @Override
     public boolean isFinished() {
-      return (Math.abs(coralElevatorMechanism.elevatorMechanism.getEncoder().getPosition() -
-      coralElevatorMechanism.CoralHeights[desiredHeight]) < 0.25);
+      return (Math.abs(m_elevatorMechanism.elevatorMechanism.getEncoder().getPosition() -
+      m_elevatorMechanism.CoralHeights[desiredHeight]) < 0.25);
     }
 }
