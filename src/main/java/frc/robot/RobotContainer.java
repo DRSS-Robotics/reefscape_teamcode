@@ -55,7 +55,7 @@ public class RobotContainer {
     // public final SparkMax coralIntake = new SparkMax(18, MotorType.kBrushless);
     // public final SparkMax elevatorMechanism = new SparkMax(13,
     // MotorType.kBrushless);
-    public final CoralMechanism Coral = new CoralMechanism(13, 18, Controller2, true);
+    public final CoralMechanism Coral = new CoralMechanism(13, 11, Controller2, true);
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
