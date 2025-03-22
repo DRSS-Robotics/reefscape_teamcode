@@ -14,6 +14,7 @@ public class ElevatorMoveToIndex extends Command {
     public ElevatorMoveToIndex(ElevatorMechanism Elevator, int NewHeight) {
         m_elevatorMechanism = Elevator;
         desiredHeight = NewHeight;
+        // System.out.println(NewHeight);
         addRequirements(Elevator);
     }
 

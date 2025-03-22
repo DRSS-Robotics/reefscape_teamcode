@@ -46,6 +46,8 @@ public class ElevatorMechanism extends SubsystemBase {
         ElevConfig.voltageCompensation(10);
         ElevConfig.smartCurrentLimit(60);
         ElevConfig.idleMode(IdleMode.kBrake);
+        ElevConfig.apply(ElevCCLoop);
+
         elevatorMotor.configure(ElevConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 

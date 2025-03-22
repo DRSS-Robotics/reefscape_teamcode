@@ -71,7 +71,7 @@ public class HangMechanism extends SubsystemBase {
 
 
         public Command DriveHang(CommandXboxController Controller) {
-        if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getRightY())) {
+        if (DeadbandCheck(Controller.getRightY()) && MotorHeightBounds(Controller.getRightY())) {
             HangMotor.set(-Controller.getRightY());
             return Commands.run(() -> HangMotor.set(-Controller.getRightY()));
         } else {

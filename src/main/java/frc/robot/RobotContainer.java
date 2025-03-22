@@ -119,6 +119,10 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
+        Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
+        Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        // Controller2.rightBumper().onTrue(Commands.run(() -> SlownessModifier = 1));
+
         // reset the field-centric heading on left bumper press
         // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         //Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
