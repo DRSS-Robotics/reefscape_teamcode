@@ -16,16 +16,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.commands.coralIntakeCommand;
+import frc.commands.CoralIntakeCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.coralMechanism;
-import frc.robot.subsystems.elevatorMechanism;
-import frc.robot.subsystems.hangMechanism;
-import frc.commands.coralIntakeCommand;
-import frc.commands.coralOuttakeCommand;
+import frc.robot.subsystems.CoralMechanism;
+import frc.robot.subsystems.ElevatorMechanism;
+import frc.robot.subsystems.HangMechanism;
+import frc.commands.CoralIntakeCommand;
+import frc.commands.CoralOuttakeCommand;
 import frc.commands.CoralMoveToIndex;
-import frc.commands.CoralSetDesiredHeight;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -55,9 +54,9 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    public final coralMechanism m_coralMechanism = new coralMechanism();
-    public final hangMechanism m_hangMechanism = new hangMechanism();
-    public final elevatorMechanism m_elevatorMechanism = new elevatorMechanism();
+    public final CoralMechanism m_coralMechanism = new CoralMechanism();
+    public final HangMechanism m_hangMechanism = new HangMechanism();
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism();
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
@@ -73,8 +72,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("LiftElevatorLevel3", new CoralMoveToIndex(m_elevatorMechanism, 2));
         //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> m_elevatorMechanism.set(-0.75)));
         //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> m_elevatorMechanism.set(0.0)));
-        NamedCommands.registerCommand("DropCoral", new coralOuttakeCommand(m_coralMechanism));
-        NamedCommands.registerCommand("pickupCoral", new coralIntakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("DropCoral", new CoralOuttakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("pickupCoral", new CoralIntakeCommand(m_coralMechanism));
 
         //Don't use
         // NamedCommands.registerCommand("dropCoral", Commands.run(()  -> coralIntake.set(0.75)));
@@ -110,38 +109,11 @@ public class RobotContainer {
 
          // Controller2.y().whileTrue();
         // Controller2.y().whileFalse();
-        Controller2.x().whileTrue(new coralOuttakeCommand(m_coralMechanism));
-        Controller2.x().whileFalse(new coralOuttakeCommand(m_coralMechanism));
-        Controller2.b().whileTrue(new coralIntakeCommand(m_coralMechanism));
-        Controller2.b().whileFalse(new coralIntakeCommand(m_coralMechanism));
+        Controller2.x().onTrue(new CoralOuttakeCommand(m_coralMechanism));
+        //Controller2.x().whileFalse(new CoralOuttakeCommand(m_coralMechanism));
+        Controller2.b().onTrue(new CoralIntakeCommand(m_coralMechanism));
+        //Controller2.b().whileFalse(new CoralIntakeCommand(m_coralMechanism));
       
-        // Controller2.leftBumper().whileTrue(Commands.run(() -> {
-
-        //     if (elevatorMechanism.getEncoder().getPosition() < 110.0) {
-        //         elevatorMechanism.set(0.65);
-        //     }
-        // })); 
-        // Controller2.leftBumper().whileFalse(Commands.run(() -> {
-        //     System.out.println(elevatorMechanism.getEncoder().getPosition());
-        //     elevatorMechanism.set(0);
-        // }));
-        // Controller2.rightBumper().whileTrue(Commands.run(() -> {
-        //     if(elevatorMechanism.getEncoder().getPosition() > 3.0 || Controller2.start().getAsBoolean()) {
-        //         elevatorMechanism.set(-0.65);
-        //     }
-        // }));
-        // Controller2.rightBumper().whileFalse(Commands.run(() -> {
-        //     System.out.println(elevatorMechanism.getEncoder().getPosition());
-        //     elevatorMechanism.set(0);
-        // }));
-
-
-        // joystick.x().whileTrue(drivetrain.applyRequest(() ->
-        //     drive.withVelocityX(-0.5) // forward
-        //         .withVelocityY(0)
-        //         .withRotationalRate(0)
-        //     // point.withAngle(Rotation2d.fromDegrees(0));
-        //     )
 
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.3));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));

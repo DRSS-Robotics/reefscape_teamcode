@@ -18,16 +18,16 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 
-public class hangMechanism extends SubsystemBase {
+public class HangMechanism extends SubsystemBase {
 
     public final double Deadband = 0.04;
     private final SparkMax hangMechanism;
     /**
      * This subsytem that controls the arm.
      */
-    public hangMechanism() {
+    public HangMechanism() {
         
-        hangMechanism = new SparkMax(13, MotorType.kBrushless);
+        hangMechanism = new SparkMax(12, MotorType.kBrushless);
     // Set up the arm motor as a brushed motor
     
 

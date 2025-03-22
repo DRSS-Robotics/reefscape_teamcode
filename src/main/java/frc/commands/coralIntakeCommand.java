@@ -5,12 +5,12 @@
 
 package frc.commands;
 
-import frc.robot.subsystems.coralMechanism;
+import frc.robot.subsystems.CoralMechanism;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An ArmUpCommand that uses an Arm subsystem. */
-public class coralIntakeCommand extends Command {
-  private final coralMechanism m_coralMechanism;
+public class CoralIntakeCommand extends Command {
+  private final CoralMechanism m_coralMechanism;
 
   /**
    * Powers the arm up, when finished passively holds the arm up.
@@ -20,7 +20,7 @@ public class coralIntakeCommand extends Command {
    *
    * @param arm The subsystem used by this command.
    */
-  public coralIntakeCommand(coralMechanism cMechanism) {
+  public CoralIntakeCommand(CoralMechanism cMechanism) {
     m_coralMechanism = cMechanism;
     addRequirements(cMechanism);
   }
@@ -35,9 +35,6 @@ public class coralIntakeCommand extends Command {
     m_coralMechanism.runIntake(0.5);
   }
 
-  // Called once the command ends or is interrupted.
-  // Here we run a command that will hold the arm up after to ensure the arm does
-  // not drop due to gravity.
   @Override
   public void end(boolean interrupted) {
     m_coralMechanism.runIntake(0);
@@ -46,6 +43,6 @@ public class coralIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

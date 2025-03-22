@@ -10,16 +10,16 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class coralMechanism extends SubsystemBase {
+public class CoralMechanism extends SubsystemBase {
 
     
-    private final SparkMax coralMechanism;
+    private final SparkMax coralMotor;
     /**
      * This subsytem that controls the arm.
      */
-    public coralMechanism() {
-        coralMechanism = new SparkMax(11, MotorType.kBrushless);
-    // Set up the arm motor as a brushed motor
+    public CoralMechanism() {
+        coralMotor = new SparkMax(11, MotorType.kBrushless);
+    // Set up the arm motor as a brushless motor
     
 
 
@@ -27,11 +27,11 @@ public class coralMechanism extends SubsystemBase {
     // the arm behave the same as the battery
     // voltage dips. The current limit helps prevent breaker trips or burning out
     // the motor in the event the arm stalls.
-    SparkMaxConfig coralConfig = new SparkMaxConfig();
-    coralConfig.voltageCompensation(10);
-    coralConfig.smartCurrentLimit(60);
-    coralConfig.idleMode(IdleMode.kBrake);
-    coralMechanism.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // SparkMaxConfig coralConfig = new SparkMaxConfig();
+    // coralConfig.voltageCompensation(10);
+    // coralConfig.smartCurrentLimit(60);
+    // coralConfig.idleMode(IdleMode.kBrake);
+    // coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
@@ -45,6 +45,7 @@ public class coralMechanism extends SubsystemBase {
      * @param speed motor speed from -1.0 to 1, with 0 stopping it
      */
     public void runIntake(double speed){
-        coralMechanism.set(speed);
+        coralMotor.set(1.0);
+        System.out.println(speed);
     }
 }

@@ -5,12 +5,12 @@
 
 package frc.commands;
 
-import frc.robot.subsystems.coralMechanism;
+import frc.robot.subsystems.CoralMechanism;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An ArmUpCommand that uses an Arm subsystem. */
-public class coralOuttakeCommand extends Command {
-  private final coralMechanism m_coralMechanism;
+public class CoralOuttakeCommand extends Command {
+  private final CoralMechanism m_coralMechanism;
 
   /**
    * Powers the arm up, when finished passively holds the arm up.
@@ -20,7 +20,7 @@ public class coralOuttakeCommand extends Command {
    *
    * @param arm The subsystem used by this command.
    */
-  public coralOuttakeCommand(coralMechanism cMechanism) {
+  public CoralOuttakeCommand(CoralMechanism cMechanism) {
     m_coralMechanism = cMechanism;
     addRequirements(cMechanism);
   }
