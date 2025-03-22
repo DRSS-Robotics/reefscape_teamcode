@@ -9,7 +9,6 @@ public class StreamCamera extends TimedRobot {
 
     public void robotInit() {
         CameraServer.startAutomaticCapture();
-        System.out.println("testing this above code work");
         
     }
 

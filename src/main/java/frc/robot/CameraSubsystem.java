@@ -90,15 +90,6 @@ public class CameraSubsystem {
           
                 }
         }
-      //  }
-        // if (controller.getAButton() && targetVisible) {
-        //     // System.out.println("ID:");
-        //     // System.out.println(targetID);
-        //     System.out.println("Range:");
-        //     System.out.println(targetRange);
-        //     System.out.println("Yaw:");
-        //     System.out.println(targetYaw);
-        //   }
 
             if(controller.getBButton() && targetVisible) {
               System.out.println("dijzgh.gkcvjoz.xkchfuv");

@@ -42,13 +42,11 @@ public class CoralMechanism extends SubsystemBase {
         // Elevator.getEncoder().setPosition(0);
         // elevator encoder is relative
         Intake = new SparkMax(IntakeID, MotorType.kBrushless);
-        // System.out.println(Elevator.getEncoder().getClass());
         TeleController = Controller;
         JoystickDrive = DriveWithJoystick;
     }
 
     public boolean DeadbandCheck(double Value) {
-        // System.out.println(Math.abs(Value) > Deadband);
         return Math.abs(Value) > Deadband;
     }
 
@@ -71,7 +69,6 @@ public class CoralMechanism extends SubsystemBase {
         if (DeadbandCheck(Speed) && MotorHeightBounds(Speed)) {
             Elevator.set(Speed);
         } else {
-            System.out.println("Guhhhhh");
             Elevator.stopMotor();
         }
         return Commands.none();
@@ -89,7 +86,6 @@ public class CoralMechanism extends SubsystemBase {
     public Command SetDesiredElevatorHeight(int CoralLevelIndex) {
         IsAtTarget = false;
         DesiredCoralHeight = CoralLevelIndex;
-        System.out.println("Guhh");
         return Commands.none();
     }
 

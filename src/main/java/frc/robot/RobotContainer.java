@@ -83,7 +83,6 @@ public class RobotContainer {
 
         configureBindings();
         CameraServer.startAutomaticCapture();
-        System.out.println("testing this above code work");
     }
 
     private void configureBindings() {
