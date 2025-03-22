@@ -22,7 +22,9 @@ import frc.robot.RobotContainer;
 
 public class ElevatorMechanism extends SubsystemBase {
 
-    ClosedLoopConfig ElevCCLoop = new ClosedLoopConfig().p(0.15).i(0.0).d(0.0);
+    ClosedLoopConfig ElevCCLoop = new ClosedLoopConfig()
+    .p(Constants.kElevatorKp).i(Constants.kElevatorKi).d(Constants.kElevatorKd);
+
     SparkMaxConfig ElevConfig = new SparkMaxConfig();
 
     public final double Deadband = 0.04;
@@ -32,63 +34,32 @@ public class ElevatorMechanism extends SubsystemBase {
     public int DesiredCoralHeight;
     // This first one is the coral station and the last one is level 3
     // Change the coral station level
-    public double[] CoralHeights = { 20, 15.0, 110.0 }; 
     
     boolean PrevElevDir = true;
     /**
      * This subsytem that controls the arm.
      */
-    public ElevatorMechanism() {
+    public ElevatorMechanism(int ElevID) {
         
-        elevatorMotor = new SparkMax(13, MotorType.kBrushless);
-    // Set up the arm motor as a brushed motor
-    
+        elevatorMotor = new SparkMax(ElevID, MotorType.kBrushless);
 
-
-    // Create and apply configuration for arm motor. Voltage compensation helps
-    // the arm behave the same as the battery
-    // voltage dips. The current limit helps prevent breaker trips or burning out
-    // the motor in the event the arm stalls.
-
-    ElevConfig.voltageCompensation(10);
-    ElevConfig.smartCurrentLimit(60);
-    ElevConfig.idleMode(IdleMode.kBrake);
-    elevatorMotor.configure(ElevConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        ElevConfig.voltageCompensation(10);
+        ElevConfig.smartCurrentLimit(60);
+        ElevConfig.idleMode(IdleMode.kBrake);
+        elevatorMotor.configure(ElevConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
     public void periodic() {
-        DriveElevator(RobotContainer.Controller2);
+        // DriveElevator(RobotContainer.Controller2);
     }
-    /** 
-     * This is a method that makes the arm move at your desired speed
-     *  Positive values make it spin forward and negative values spin it in reverse
-     * 
-     * @param speed motor speed from -1.0 to 1, with 0 stopping it
-     */
-
 
     public boolean DeadbandCheck(double Value) {
         //System.out.println(Math.abs(Value) > Deadband);
         return Math.abs(Value) > Deadband;
     }
 
-
-    
-        public boolean MotorHeightBounds(double ControllerY) {
-        // in meters
-        double MotorPositionLinear =
-        elevatorMotor.getEncoder().getPosition() * Constants.kElevatorDrumRadius * 2 * Math.PI;
- 
-        // also in meters - what else did you think it would be in?
-        double MotorVelocityLinear =
-        elevatorMotor.getEncoder().getVelocity() * Constants.kElevatorDrumRadius * 2 * Math.PI;
-
-        // System.out.println(MotorPositionLinear);
-        // if (MotorPositionLinear + MotorVelocityLinear >= Constants.kMaxElevatorHeightMeters ||
-        //     MotorPositionLinear + MotorVelocityLinear < Constants.kMinElevatorHeightMeters) {
-
-        //Change values of this later for deep climb
+    public boolean MotorHeightBounds(double ControllerY) {
         if (elevatorMotor.getEncoder().getPosition() - 8 * ControllerY < -3 ||
             elevatorMotor.getEncoder().getPosition() - 8 * ControllerY >= -120) {
             return false;
@@ -101,10 +72,10 @@ public class ElevatorMechanism extends SubsystemBase {
         public Command DriveElevator(CommandXboxController Controller) {
         if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getRightY())) {
             elevatorMotor.set(-Controller.getRightY());
-            return Commands.run(() -> elevatorMotor.set(-Controller.getRightY()));
+            return Commands.none();
         } else {
             elevatorMotor.stopMotor();
-            return Commands.run(() -> elevatorMotor.stopMotor());
+            return Commands.none();
         }
     }
 
@@ -116,7 +87,7 @@ public class ElevatorMechanism extends SubsystemBase {
     }
         public Command DriveToPosition(double InPos) {
         // ShouldGoUp = (Elevator.getEncoder().getPosition() <
-        // CoralHeights[DesiredCoralHeight]);
+        // Constants.kElevatorTargetHeights[DesiredCoralHeight]);
         elevatorMotor.getClosedLoopController().setReference(InPos, ControlType.kPosition);
         return Commands.none();
     }

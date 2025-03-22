@@ -2,18 +2,19 @@ package frc.commands;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorMechanism;
 
-public class CoralMoveToIndex extends Command {
+public class ElevatorMoveToIndex extends Command {
 
     private final ElevatorMechanism m_elevatorMechanism;
     int desiredHeight;
 
 
-    public CoralMoveToIndex(ElevatorMechanism Coral, int NewHeight) {
-        m_elevatorMechanism = Coral;
+    public ElevatorMoveToIndex(ElevatorMechanism Elevator, int NewHeight) {
+        m_elevatorMechanism = Elevator;
         desiredHeight = NewHeight;
-        addRequirements(Coral);
+        addRequirements(Elevator);
     }
 
     @Override
@@ -22,7 +23,7 @@ public class CoralMoveToIndex extends Command {
     
     @Override
     public void execute() {
-        m_elevatorMechanism.elevatorMotor.getClosedLoopController().setReference(m_elevatorMechanism.CoralHeights[desiredHeight], ControlType.kPosition);
+        m_elevatorMechanism.elevatorMotor.getClosedLoopController().setReference(Constants.kElevatorTargetHeights[desiredHeight], ControlType.kPosition);
     }
     
     @Override
@@ -33,6 +34,6 @@ public class CoralMoveToIndex extends Command {
     @Override
     public boolean isFinished() {
       return (Math.abs(m_elevatorMechanism.elevatorMotor.getEncoder().getPosition() -
-      m_elevatorMechanism.CoralHeights[desiredHeight]) < 0.25);
+      Constants.kElevatorTargetHeights[desiredHeight]) < 0.25);
     }
 }

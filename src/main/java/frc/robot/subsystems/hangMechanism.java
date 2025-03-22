@@ -21,13 +21,11 @@ import frc.robot.RobotContainer;
 public class HangMechanism extends SubsystemBase {
 
     public final double Deadband = 0.04;
-    private final SparkMax hangMechanism;
-    /**
-     * This subsytem that controls the arm.
-     */
+    private final SparkMax HangMotor;
+
     public HangMechanism() {
         
-        hangMechanism = new SparkMax(12, MotorType.kBrushless);
+        HangMotor = new SparkMax(12, MotorType.kBrushless);
     // Set up the arm motor as a brushed motor
     
 
@@ -39,7 +37,7 @@ public class HangMechanism extends SubsystemBase {
     hangConfig.voltageCompensation(10);
     hangConfig.smartCurrentLimit(60);
     hangConfig.idleMode(IdleMode.kBrake);
-    hangMechanism.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    HangMotor.configure(hangConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
@@ -62,21 +60,9 @@ public class HangMechanism extends SubsystemBase {
 
     
         public boolean MotorHeightBounds(double ControllerY) {
-        // in meters
-        double MotorPositionLinear =
-        hangMechanism.getEncoder().getPosition() * Constants.kElevatorDrumRadius * 2 * Math.PI;
- 
-        // also in meters - what else did you think it would be in?
-        double MotorVelocityLinear =
-        hangMechanism.getEncoder().getVelocity() * Constants.kElevatorDrumRadius * 2 * Math.PI;
 
-        // System.out.println(MotorPositionLinear);
-        // if (MotorPositionLinear + MotorVelocityLinear >= Constants.kMaxElevatorHeightMeters ||
-        //     MotorPositionLinear + MotorVelocityLinear < Constants.kMinElevatorHeightMeters) {
-
-        //Change values of this later for deep climb
-        if (hangMechanism.getEncoder().getPosition() - 8 * ControllerY < -3 ||
-            hangMechanism.getEncoder().getPosition() - 8 * ControllerY >= -120) {
+        if (HangMotor.getEncoder().getPosition() - 8 * ControllerY < -3 ||
+        HangMotor.getEncoder().getPosition() - 8 * ControllerY >= -120) {
             return false;
         } else {
             return true;
@@ -86,11 +72,11 @@ public class HangMechanism extends SubsystemBase {
 
         public Command DriveHang(CommandXboxController Controller) {
         if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getRightY())) {
-            hangMechanism.set(-Controller.getRightY());
-            return Commands.run(() -> hangMechanism.set(-Controller.getRightY()));
+            HangMotor.set(-Controller.getRightY());
+            return Commands.run(() -> HangMotor.set(-Controller.getRightY()));
         } else {
-            hangMechanism.stopMotor();
-            return Commands.run(() -> hangMechanism.stopMotor());
+            HangMotor.stopMotor();
+            return Commands.run(() -> HangMotor.stopMotor());
         }
     }
 

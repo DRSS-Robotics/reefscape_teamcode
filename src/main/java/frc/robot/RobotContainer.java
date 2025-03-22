@@ -24,7 +24,7 @@ import frc.robot.subsystems.ElevatorMechanism;
 import frc.robot.subsystems.HangMechanism;
 import frc.commands.CoralIntakeCommand;
 import frc.commands.CoralOuttakeCommand;
-import frc.commands.CoralMoveToIndex;
+import frc.commands.ElevatorMoveToIndex;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -54,9 +54,9 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    public final CoralMechanism m_coralMechanism = new CoralMechanism();
+    public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
     public final HangMechanism m_hangMechanism = new HangMechanism();
-    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism();
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13);
 
     // public TalonFXConfigurator = new TalonFXConfigurator();
 
@@ -68,12 +68,13 @@ public class RobotContainer {
         //must register commands and event triggers before building the auto chooser
         //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        NamedCommands.registerCommand("LiftElevatorLevel2", new CoralMoveToIndex(m_elevatorMechanism, 1));
-        NamedCommands.registerCommand("LiftElevatorLevel3", new CoralMoveToIndex(m_elevatorMechanism, 2));
+        NamedCommands.registerCommand("LiftElevatorLevel2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
+        NamedCommands.registerCommand("LiftElevatorLevel3", new ElevatorMoveToIndex(m_elevatorMechanism, 2));
         //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> m_elevatorMechanism.set(-0.75)));
         //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> m_elevatorMechanism.set(0.0)));
         NamedCommands.registerCommand("DropCoral", new CoralOuttakeCommand(m_coralMechanism));
-        NamedCommands.registerCommand("pickupCoral", new CoralIntakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("PickupCoral", new CoralIntakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("StopCoralIntake", new CoralIntakeCommand(m_coralMechanism));
 
         //Don't use
         // NamedCommands.registerCommand("dropCoral", Commands.run(()  -> coralIntake.set(0.75)));
@@ -109,11 +110,8 @@ public class RobotContainer {
 
          // Controller2.y().whileTrue();
         // Controller2.y().whileFalse();
-        Controller2.x().onTrue(new CoralOuttakeCommand(m_coralMechanism));
-        //Controller2.x().whileFalse(new CoralOuttakeCommand(m_coralMechanism));
-        Controller2.b().onTrue(new CoralIntakeCommand(m_coralMechanism));
-        //Controller2.b().whileFalse(new CoralIntakeCommand(m_coralMechanism));
-      
+        Controller2.x().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+        Controller2.b().whileTrue(new CoralIntakeCommand(m_coralMechanism));
 
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.3));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));

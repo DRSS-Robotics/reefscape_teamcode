@@ -17,8 +17,8 @@ public class CoralMechanism extends SubsystemBase {
     /**
      * This subsytem that controls the arm.
      */
-    public CoralMechanism() {
-        coralMotor = new SparkMax(11, MotorType.kBrushless);
+    public CoralMechanism(int CoralID) {
+        coralMotor = new SparkMax(CoralID, MotorType.kBrushless);
     // Set up the arm motor as a brushless motor
     
 
@@ -45,7 +45,6 @@ public class CoralMechanism extends SubsystemBase {
      * @param speed motor speed from -1.0 to 1, with 0 stopping it
      */
     public void runIntake(double speed){
-        coralMotor.set(1.0);
-        System.out.println(speed);
+        coralMotor.set(speed);
     }
 }

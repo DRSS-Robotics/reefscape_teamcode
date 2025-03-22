@@ -3,13 +3,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.commands;
+package frc.robot.subsystems;
 
-import frc.robot.subsystems.CoralMechanism;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An ArmUpCommand that uses an Arm subsystem. */
-public class CoralOuttakeCommand extends Command {
+public class CoralStopCommand extends Command {
   private final CoralMechanism m_coralMechanism;
 
   /**
@@ -20,7 +19,7 @@ public class CoralOuttakeCommand extends Command {
    *
    * @param arm The subsystem used by this command.
    */
-  public CoralOuttakeCommand(CoralMechanism cMechanism) {
+  public CoralStopCommand(CoralMechanism cMechanism) {
     m_coralMechanism = cMechanism;
     addRequirements(cMechanism);
   }
@@ -32,12 +31,9 @@ public class CoralOuttakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_coralMechanism.runIntake(-0.5);
+    m_coralMechanism.runIntake(0.0);
   }
 
-  // Called once the command ends or is interrupted.
-  // Here we run a command that will hold the arm up after to ensure the arm does
-  // not drop due to gravity.
   @Override
   public void end(boolean interrupted) {
     m_coralMechanism.runIntake(0);
