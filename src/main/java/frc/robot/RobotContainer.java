@@ -96,7 +96,7 @@ public class RobotContainer {
             .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
             )
             );
-            
+            // sean is coolest person on the team (sean murphy)
             
             
         // CoralMoveToIndex ElevatorControl = new CoralMoveToIndex(Coral);

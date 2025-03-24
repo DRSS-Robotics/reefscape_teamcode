@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.767,
-        "y": 5.546
+        "x": 16.146,
+        "y": 7.184
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.767000000000001,
-        "y": 6.16025
+        "x": 15.84375,
+        "y": 6.56
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.767,
-        "y": 6.8915
+        "x": 14.14725,
+        "y": 7.184
       },
       "prevControl": {
-        "x": 13.7865,
-        "y": 6.638
+        "x": 14.49825,
+        "y": 6.920749999999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "OneCoralScorePath4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 55.0
   },
   "useDefaultConstraints": true
 }
