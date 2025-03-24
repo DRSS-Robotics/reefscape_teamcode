@@ -1,80 +1,50 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 
 public class CoralMechanism extends SubsystemBase {
 
-    SparkMax Elevator;
-    SparkMax Intake;
-    CommandXboxController TeleController;
+    
+    private final SparkMax coralMotor;
+    /**
+     * This subsytem that controls the arm.
+     */
+    public CoralMechanism(int CoralID) {
+        coralMotor = new SparkMax(CoralID, MotorType.kBrushless);
+    // Set up the arm motor as a brushless motor
+    
 
-    public final double Deadband = 0.04;
-    public CoralMechanism(int ElevID, int IntakeID, CommandXboxController Controller) {
-        Elevator = new SparkMax(ElevID, MotorType.kBrushless);
-        // Elevator.getEncoder().setPosition(0);
-        // elevator encoder is relative
-        Intake = new SparkMax(IntakeID, MotorType.kBrushless);
-        //System.out.println(Elevator.getEncoder().getClass());
-        TeleController = Controller;
-    }
 
-    public boolean DeadbandCheck(double Value) {
-        //System.out.println(Math.abs(Value) > Deadband);
-        return Math.abs(Value) > Deadband;
-    }
-
-    public boolean MotorHeightBounds(double ControllerY) {
-        // in meters
-        double MotorPositionLinear =
-        Elevator.getEncoder().getPosition() * Constants.kElevatorDrumRadius * 2 * Math.PI;
-
-        // also in meters - what else did you think it would be in?
-        double MotorVelocityLinear =
-        Elevator.getEncoder().getVelocity() * Constants.kElevatorDrumRadius * 2 * Math.PI;
-
-        // System.out.println(MotorPositionLinear);
-        // if (MotorPositionLinear + MotorVelocityLinear >= Constants.kMaxElevatorHeightMeters ||
-        //     MotorPositionLinear + MotorVelocityLinear < Constants.kMinElevatorHeightMeters) {
-        if (Elevator.getEncoder().getPosition() - 8 * ControllerY < 5 ||
-            Elevator.getEncoder().getPosition() - 8 * ControllerY >= 120) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public Command SetIntakeSpeed(double Speed) {
-        return Commands.runOnce(() -> Intake.set(Speed));
-    }
-
-    public Command DriveElevator(double Speed) {
-        if (DeadbandCheck(Speed) && MotorHeightBounds(Speed)) {
-            return Commands.runOnce(() -> Elevator.set(-Speed));
-        } else {
-            return Commands.runOnce(() -> Elevator.stopMotor());
-        }
-    }
-
-    public Command DriveElevator(CommandXboxController Controller) {
-        if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getLeftY())) {
-            Elevator.set(-Controller.getLeftY());
-            return Commands.run(() -> Elevator.set(-Controller.getLeftY()));
-        } else {
-            Elevator.stopMotor();
-            return Commands.run(() -> Elevator.stopMotor());
-        }
+    // Create and apply configuration for arm motor. Voltage compensation helps
+    // the arm behave the same as the battery
+    // voltage dips. The current limit helps prevent breaker trips or burning out
+    // the motor in the event the arm stalls.
+    // SparkMaxConfig coralConfig = new SparkMaxConfig();
+    // coralConfig.voltageCompensation(10);
+    // coralConfig.smartCurrentLimit(60);
+    // coralConfig.idleMode(IdleMode.kBrake);
+    // coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
     public void periodic() {
-        DriveElevator(TeleController);
+        
     }
-   }
+    /** 
+     * This is a method that makes the arm move at your desired speed
+     *  Positive values make it spin forward and negative values spin it in reverse
+     * 
+     * @param speed motor speed from -1.0 to 1, with 0 stopping it
+     */
+    public void runIntake(double speed){
+        coralMotor.set(speed);
+    }
+}
