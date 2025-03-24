@@ -14,12 +14,13 @@ public class ElevatorMoveToIndex extends Command {
     public ElevatorMoveToIndex(ElevatorMechanism Elevator, int NewHeight) {
         m_elevatorMechanism = Elevator;
         desiredHeight = NewHeight;
-        // System.out.println(NewHeight);
         addRequirements(Elevator);
     }
-
+    
     @Override
     public void initialize() {
+        System.out.println(desiredHeight);
+        System.out.println("Guhh");
     }
     
     @Override
@@ -35,6 +36,6 @@ public class ElevatorMoveToIndex extends Command {
     @Override
     public boolean isFinished() {
       return (Math.abs(m_elevatorMechanism.elevatorMotor.getEncoder().getPosition() -
-      Constants.kElevatorTargetHeights[desiredHeight]) < 0.25);
+      Constants.kElevatorTargetHeights[desiredHeight]) < 0.125);
     }
 }

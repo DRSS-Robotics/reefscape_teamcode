@@ -53,7 +53,6 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
-    public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
     public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2);
 
     private final SendableChooser<Command> autoChooser;
