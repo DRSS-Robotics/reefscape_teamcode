@@ -116,8 +116,8 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        Controller1.leftTrigger().whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.05)));
-        Controller1.rightTrigger().whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.05)));
+        Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.05)));
+        Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.05)));
 
         Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
         Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
