@@ -19,13 +19,14 @@ public class ElevatorMoveToIndex extends Command {
     
     @Override
     public void initialize() {
-        System.out.println(desiredHeight);
-        System.out.println("Guhh");
+        // System.out.println(desiredHeight);
+        // System.out.println("Guhh");
     }
     
     @Override
     public void execute() {
-        m_elevatorMechanism.elevatorMotor.getClosedLoopController().setReference(Constants.kElevatorTargetHeights[desiredHeight], ControlType.kPosition);
+        m_elevatorMechanism.elevatorMotor.getClosedLoopController()
+        .setReference(Constants.kElevatorTargetHeights[desiredHeight], ControlType.kPosition);
     }
     
     @Override

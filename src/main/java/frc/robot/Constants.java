@@ -15,7 +15,18 @@ public class Constants {
   public static final double kElevatorKp = 0.15;
   public static final double kElevatorKi = 0;
   public static final double kElevatorKd = 0;
+  // ignore index 0; index 1 is l2; index 2 is l3; index 3 is coral station
   public static final double[] kElevatorTargetHeights = {20, 15.0, 110.0, 42.0};
+  // bounds only used with joystick control, ignored by teleop auto
+  public static final double kElevatorLowerBound = 3.0;
+  public static final double kElevatorUpperBound = 120.0;
+
+  public static final double kHangKp = 0.15;
+  public static final double kHangKi = 0;
+  public static final double kHangKd = 0;
+  public static final double[] kHangTargetRotations = {0.0, 35.0};
+  public static final double kHangLowerBound = 0.0;
+  public static final double kHangUpperBound = 150.0;
 
   public static final double kElevatorkS = 0.0; // volts (V)
   public static final double kElevatorkG = 0.762; // volts (V)

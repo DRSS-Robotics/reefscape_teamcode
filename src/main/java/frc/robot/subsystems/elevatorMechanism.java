@@ -63,35 +63,18 @@ public class ElevatorMechanism extends SubsystemBase {
     }
 
     public boolean MotorHeightBounds(double ControllerY) {
-        if (elevatorMotor.getEncoder().getPosition() - 8 * ControllerY < -3 ||
-                elevatorMotor.getEncoder().getPosition() - 8 * ControllerY >= 120) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(elevatorMotor.getEncoder().getPosition() - 8 * ControllerY < Constants.kElevatorLowerBound ||
+                elevatorMotor.getEncoder().getPosition() - 8 * ControllerY >= Constants.kElevatorUpperBound);
     }
 
     public Command DriveElevator(CommandXboxController Controller) {
         
-        if (DeadbandCheck(Controller.getRightY()) && MotorHeightBounds(Controller.getRightY())) {
-            elevatorMotor.set(-Controller.getRightY());
-            return Commands.none();
+        if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getLeftY())) {
+            elevatorMotor.set(-Controller.getLeftY());
         } else {
             elevatorMotor.stopMotor();
-            return Commands.none();
         }
-    }
 
-    public Command SetDesiredElevatorHeight(int CoralLevelIndex) {
-        IsAtTarget = false;
-        DesiredCoralHeight = CoralLevelIndex;
-        return Commands.none();
-    }
-
-    public Command DriveToPosition(double InPos) {
-        // ShouldGoUp = (Elevator.getEncoder().getPosition() <
-        // Constants.kElevatorTargetHeights[DesiredCoralHeight]);
-        elevatorMotor.getClosedLoopController().setReference(InPos, ControlType.kPosition);
         return Commands.none();
     }
 

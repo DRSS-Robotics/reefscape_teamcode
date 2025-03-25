@@ -25,6 +25,7 @@ import frc.robot.subsystems.HangMechanism;
 import frc.commands.CoralIntakeCommand;
 import frc.commands.CoralOuttakeCommand;
 import frc.commands.ElevatorMoveToIndex;
+import frc.commands.HangMoveToIndex;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -54,6 +55,7 @@ public class RobotContainer {
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
     public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2);
+    public final HangMechanism m_hangMechanism = new HangMechanism(11, Controller2);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -115,6 +117,10 @@ public class RobotContainer {
 
         Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
         Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        Controller2.y().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 3));
+
+        Controller2.pov(0).onTrue(new HangMoveToIndex(m_hangMechanism, 1));
+        Controller2.pov(180).onTrue(new HangMoveToIndex(m_hangMechanism, 0));
         // Controller2.rightBumper().onTrue(Commands.run(() -> SlownessModifier = 1));
 
         // reset the field-centric heading on left bumper press
