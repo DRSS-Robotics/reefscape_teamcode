@@ -43,8 +43,10 @@ public class RobotContainer {
             .withDeadband(MaxSpeed * 0.05 * SlownessModifier)
             .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final SwerveRequest.RobotCentric strafe = new SwerveRequest.RobotCentric()
+            .withDeadband(MaxSpeed * 0.05 * SlownessModifier)
+            .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -67,6 +69,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("LiftElevatorLevel2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
         NamedCommands.registerCommand("LiftElevatorLevel3", new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        NamedCommands.registerCommand("ElevatorCoralStation", new ElevatorMoveToIndex(m_elevatorMechanism, 3));
         // NamedCommands.registerCommand("LowerElevator", Commands.run(() ->
         // m_elevatorMechanism.set(-0.75)));
         // NamedCommands.registerCommand("StopElveator", Commands.run(() ->
@@ -104,8 +107,6 @@ public class RobotContainer {
                         .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier)
                 ));
 
-        // l2 is 15.0 on enc readings
-
         Controller2.x().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
         Controller2.b().whileTrue(new CoralIntakeCommand(m_coralMechanism));
 
@@ -114,6 +115,9 @@ public class RobotContainer {
 
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+
+        Controller1.leftTrigger().whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.05)));
+        Controller1.rightTrigger().whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.05)));
 
         Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
         Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
