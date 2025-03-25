@@ -1,3 +1,4 @@
+
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
@@ -30,16 +31,17 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second
+                                                                                      // max angular velocity
     double speedScalar = 0.7;
     double SlownessModifier = 1;
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.05 * SlownessModifier).withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.05 * SlownessModifier)
+            .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
@@ -52,37 +54,41 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
-    public final HangMechanism m_hangMechanism = new HangMechanism();
-    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13);
+    public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2);
 
-    // public TalonFXConfigurator = new TalonFXConfigurator();
-
-    /* Path follower */ 
-   private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
-        //new EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() -> {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(() -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
+        // new
+        // EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() ->
+        // {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(()
+        // -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
         NamedCommands.registerCommand("LiftElevatorLevel2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
         NamedCommands.registerCommand("LiftElevatorLevel3", new ElevatorMoveToIndex(m_elevatorMechanism, 2));
-        //NamedCommands.registerCommand("LowerElevator", Commands.run(()  -> m_elevatorMechanism.set(-0.75)));
-        //NamedCommands.registerCommand("StopElveator", Commands.run(()  -> m_elevatorMechanism.set(0.0)));
+        // NamedCommands.registerCommand("LowerElevator", Commands.run(() ->
+        // m_elevatorMechanism.set(-0.75)));
+        // NamedCommands.registerCommand("StopElveator", Commands.run(() ->
+        // m_elevatorMechanism.set(0.0)));
         NamedCommands.registerCommand("DropCoral", new CoralOuttakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("PickupCoral", new CoralIntakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("StopCoralIntake", new CoralIntakeCommand(m_coralMechanism));
 
-        //Don't use
-        // NamedCommands.registerCommand("dropCoral", Commands.run(()  -> coralIntake.set(0.75)));
-        // NamedCommands.registerCommand("pickupAlgae", new coralOuttakeCommand(coralMechanism));
-        // NamedCommands.registerCommand("dropAlgae", Commands.run(()  -> coralIntake.set(-0.75)));
+        // Don't use
+        // NamedCommands.registerCommand("dropCoral", Commands.run(() ->
+        // coralIntake.set(0.75)));
+        // NamedCommands.registerCommand("pickupAlgae", new
+        // coralOuttakeCommand(coralMechanism));
+        // NamedCommands.registerCommand("dropAlgae", Commands.run(() ->
+        // coralIntake.set(-0.75)));
 
-
-        //NamedCommands.registerCommand("StopCoralIntake", Commands.run(()  ->  coralIntake.set(0.0)));
-       autoChooser = AutoBuilder.buildAutoChooser("Straight");
+        // NamedCommands.registerCommand("StopCoralIntake", Commands.run(() ->
+        // coralIntake.set(0.0)));
+        autoChooser = AutoBuilder.buildAutoChooser("Straight");
         PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
-        
+
         SmartDashboard.putData("Auto Mode", autoChooser);
-       
 
         configureBindings();
     }
@@ -91,23 +97,19 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-Controller1.getLeftY() * MaxSpeed * speedScalar * SlownessModifier) // Drive forward with negative Y (forward)
-                    .withVelocityY(-Controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier) // Drive left with negative X (left)
-                    .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier) // Drive counterclockwise with negative X (left)
-            )
-        );
+                // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> drive
+                        .withVelocityX(-Controller1.getLeftY() * MaxSpeed * speedScalar * SlownessModifier)  
+                        .withVelocityY(-Controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier)                                                                                                        
+                        .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier)
+                ));
 
         // l2 is 15.0 on enc readings
-        // l3 is 110.0
 
-         // Controller2.y().whileTrue();
-        // Controller2.y().whileFalse();
         Controller2.x().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
         Controller2.b().whileTrue(new CoralIntakeCommand(m_coralMechanism));
 
-        Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.3));
+        Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.2));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
@@ -118,9 +120,12 @@ public class RobotContainer {
         // Controller2.rightBumper().onTrue(Commands.run(() -> SlownessModifier = 1));
 
         // reset the field-centric heading on left bumper press
-        // Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        //Controller1.b().onTrue(Commands.runOnce(() ->  System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
-        //Controller1.a().onTrue(Commands.runOnce(() ->  elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
+        Controller1.b().onTrue(drivetrain.runOnce(() ->
+        drivetrain.seedFieldCentric()));
+        // Controller1.b().onTrue(Commands.runOnce(() ->
+        // System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
+        // Controller1.a().onTrue(Commands.runOnce(() ->
+        // elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 

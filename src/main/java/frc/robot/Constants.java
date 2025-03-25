@@ -15,7 +15,7 @@ public class Constants {
   public static final double kElevatorKp = 0.15;
   public static final double kElevatorKi = 0;
   public static final double kElevatorKd = 0;
-  public static final double[] kElevatorTargetHeights = {20, 15.0, 110.0};
+  public static final double[] kElevatorTargetHeights = {20, 15.0, 110.0, 42.0};
 
   public static final double kElevatorkS = 0.0; // volts (V)
   public static final double kElevatorkG = 0.762; // volts (V)
