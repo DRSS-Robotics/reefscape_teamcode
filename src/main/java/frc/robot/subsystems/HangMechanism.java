@@ -21,7 +21,7 @@ import frc.robot.RobotContainer;
 public class HangMechanism extends SubsystemBase {
 
     public final double Deadband = 0.04;
-    private final SparkMax HangMotor;
+    public final SparkMax HangMotor;
     private CommandXboxController Joystick;
 
     public HangMechanism(int HangID, CommandXboxController Controller) {
