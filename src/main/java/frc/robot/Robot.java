@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     cam.readCamera();
+    System.out.println(m_robotContainer.m_elevatorMechanism.elevatorMotor.getEncoder().getPosition());
   }
 
   @Override

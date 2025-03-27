@@ -20,7 +20,6 @@ public class ElevatorMoveToIndex extends Command {
     @Override
     public void initialize() {
         System.out.println(DesiredHeight);
-        // System.out.println("Guhh");
     }
 
     @Override

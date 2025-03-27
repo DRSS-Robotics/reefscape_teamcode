@@ -22,15 +22,15 @@ public class Constants {
   public static final double[] kCompElevatorTargetHeights = {20, 15.0, 110.0, 42.0} /* testing at school */;
   public static final double[] kPracticeElevatorTargetHeights = {20, 15.0, 110.0, 42.0} /* real comp values */;
   // bounds only used with joystick control, ignored by teleop auto
-  public static final double kElevatorLowerBound = 3.0;
-  public static final double kElevatorUpperBound = 120.0;
+  public static final double kElevatorLowerBound = -300.0;
+  public static final double kElevatorUpperBound = 1200.0;
 
   public static final double kHangKp = 0.15;
   public static final double kHangKi = 0;
   public static final double kHangKd = 0;
   public static final double[] kHangTargetRotations = {0.0, 35.0};
-  public static final double kHangLowerBound = -0.5;
-  public static final double kHangUpperBound = 350.0;
+  public static final double kHangLowerBound = -500;
+  public static final double kHangUpperBound = 3500.0;
 
   public static final double kElevatorkS = 0.0; // volts (V)
   public static final double kElevatorkG = 0.762; // volts (V)
