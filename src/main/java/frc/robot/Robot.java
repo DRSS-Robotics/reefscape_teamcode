@@ -43,8 +43,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    //TunerConstants.FrontLeft.withDriveMotorGains(TunerConstants.driveGainsAuto);
-    //TunerConstants.FrontLeft.withSteerMotorGains(TunerConstants.steerGainsAuto);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -63,7 +61,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    System.out.println("started teleop");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

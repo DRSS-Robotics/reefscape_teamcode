@@ -3,20 +3,20 @@
   "robotLength": 0.9398,
   "holonomicMode": true,
   "pathFolders": [
-    "1RP",
-    "2RP",
-    "3RP",
-    "Calibration Paths",
-    "4RP"
+    "TwoCoralScorePath4",
+    "OffLinePaths",
+    "OneCoralScorePath1",
+    "OneCoralScorePath2",
+    "OneCoralScorePath3",
+    "OneCoralScorePath4",
+    "TwoCoralScorePath1",
+    "TwoCoralScorePath2",
+    "TwoCoralScorePath3"
   ],
   "autoFolders": [
-    "1RP",
-    "2RP",
-    "3RP",
-    "4RP",
-    "Calibration Autos",
-    "BLUE",
-    "RED"
+    "OffLinePaths",
+    "OneCoralScorePaths",
+    "TwoCoralScorePaths"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

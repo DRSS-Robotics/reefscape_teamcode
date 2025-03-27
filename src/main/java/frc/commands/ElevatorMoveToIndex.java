@@ -8,27 +8,27 @@ import frc.robot.subsystems.ElevatorMechanism;
 public class ElevatorMoveToIndex extends Command {
 
     private final ElevatorMechanism m_elevatorMechanism;
-    int desiredHeight;
-
+    double DesiredHeight;
 
     public ElevatorMoveToIndex(ElevatorMechanism Elevator, int NewHeight) {
         m_elevatorMechanism = Elevator;
-        desiredHeight = NewHeight;
+        DesiredHeight = m_elevatorMechanism.IsAtComp ? Constants.kCompElevatorTargetHeights[NewHeight]
+                : Constants.kPracticeElevatorTargetHeights[NewHeight];
         addRequirements(Elevator);
     }
-    
+
     @Override
     public void initialize() {
-        // System.out.println(desiredHeight);
+        System.out.println(DesiredHeight);
         // System.out.println("Guhh");
     }
-    
+
     @Override
     public void execute() {
         m_elevatorMechanism.elevatorMotor.getClosedLoopController()
-        .setReference(Constants.kElevatorTargetHeights[desiredHeight], ControlType.kPosition);
+                .setReference(DesiredHeight, ControlType.kPosition);
     }
-    
+
     @Override
     public void end(boolean Interrupted) {
         m_elevatorMechanism.elevatorMotor.stopMotor();
@@ -36,7 +36,7 @@ public class ElevatorMoveToIndex extends Command {
 
     @Override
     public boolean isFinished() {
-      return (Math.abs(m_elevatorMechanism.elevatorMotor.getEncoder().getPosition() -
-      Constants.kElevatorTargetHeights[desiredHeight]) < 0.125);
+        return (Math.abs(m_elevatorMechanism.elevatorMotor.getEncoder().getPosition() -
+                DesiredHeight) < 0.125);
     }
 }

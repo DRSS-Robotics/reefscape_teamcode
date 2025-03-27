@@ -17,14 +17,19 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.commands.CoralIntakeCommand;
+
 import frc.robot.generated.TunerConstants;
+
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralMechanism;
 import frc.robot.subsystems.ElevatorMechanism;
 import frc.robot.subsystems.HangMechanism;
+
 import frc.commands.CoralIntakeCommand;
+import frc.commands.CoralAutoIntakeCommand;
 import frc.commands.CoralOuttakeCommand;
+import frc.commands.CoralAutoOuttakeCommand;
+import frc.commands.CoralStopCommand;
 import frc.commands.ElevatorMoveToIndex;
 import frc.commands.HangMoveToIndex;
 
@@ -35,11 +40,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second
-                                                                                      // max angular velocity
     double speedScalar = 0.7;
     double SlownessModifier = 1;
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.05 * SlownessModifier)
             .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
@@ -57,40 +60,22 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
-    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2);
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2, Constants.kIsAtCompetition);
     public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
 
     private final SendableChooser<Command> autoChooser;
-
+    
     public RobotContainer() {
-        // new
-        // EventTrigger("test-OneThird").onTrue(Commands.sequence(Commands.runOnce(() ->
-        // {CommandScheduler.getInstance().disable();}),Commands.waitSeconds(5),Commands.runOnce(()
-        // -> {CommandScheduler.getInstance().enable();}),Commands.print("yes")));
 
-        NamedCommands.registerCommand("LiftElevatorLevel2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
-        NamedCommands.registerCommand("LiftElevatorLevel3", new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        NamedCommands.registerCommand("ElevatorL2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
+        NamedCommands.registerCommand("ElevatorL3", new ElevatorMoveToIndex(m_elevatorMechanism, 2));
         NamedCommands.registerCommand("ElevatorCoralStation", new ElevatorMoveToIndex(m_elevatorMechanism, 3));
-        // NamedCommands.registerCommand("LowerElevator", Commands.run(() ->
-        // m_elevatorMechanism.set(-0.75)));
-        // NamedCommands.registerCommand("StopElveator", Commands.run(() ->
-        // m_elevatorMechanism.set(0.0)));
-        NamedCommands.registerCommand("DropCoral", new CoralOuttakeCommand(m_coralMechanism));
-        NamedCommands.registerCommand("PickupCoral", new CoralIntakeCommand(m_coralMechanism));
-        NamedCommands.registerCommand("StopCoralIntake", new CoralIntakeCommand(m_coralMechanism));
-
-        // Don't use
-        // NamedCommands.registerCommand("dropCoral", Commands.run(() ->
-        // coralIntake.set(0.75)));
-        // NamedCommands.registerCommand("pickupAlgae", new
-        // coralOuttakeCommand(coralMechanism));
-        // NamedCommands.registerCommand("dropAlgae", Commands.run(() ->
-        // coralIntake.set(-0.75)));
-
-        // NamedCommands.registerCommand("StopCoralIntake", Commands.run(() ->
-        // coralIntake.set(0.0)));
-        autoChooser = AutoBuilder.buildAutoChooser("Straight");
-        PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
+        NamedCommands.registerCommand("DropCoral", new CoralAutoOuttakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("PickupCoral", new CoralAutoIntakeCommand(m_coralMechanism));
+        NamedCommands.registerCommand("StopCoral", new CoralStopCommand(m_coralMechanism));
+        
+        autoChooser = AutoBuilder.buildAutoChooser("TwoCoralScore_Path3");
+        // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
 
         SmartDashboard.putData("Auto Mode", autoChooser);
 

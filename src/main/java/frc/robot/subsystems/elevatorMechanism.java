@@ -28,22 +28,17 @@ public class ElevatorMechanism extends SubsystemBase {
 
     public final double Deadband = 0.04;
     public final SparkMax elevatorMotor;
-    boolean IsAtTarget = false;
-    boolean ShouldGoUp = false;
-    public int DesiredCoralHeight;
     CommandXboxController Joystick;
-    // This first one is the coral station and the last one is level 3
-    // Change the coral station level
+    
+    // indicates whether closed-loop control should use our practice field setpoints
+    // or the actual competition values.
+    public boolean IsAtComp;
 
-    boolean PrevElevDir = true;
-
-    /**
-     * This subsytem that controls the arm.
-     */
-    public ElevatorMechanism(int ElevID, CommandXboxController Controller) {
+    public ElevatorMechanism(int ElevID, CommandXboxController Controller, boolean IsAtCompetition) {
 
         elevatorMotor = new SparkMax(ElevID, MotorType.kBrushless);
         Joystick = Controller;
+        IsAtComp = IsAtCompetition;
 
         ElevConfig.voltageCompensation(10);
         ElevConfig.smartCurrentLimit(60);
@@ -68,7 +63,7 @@ public class ElevatorMechanism extends SubsystemBase {
     }
 
     public Command DriveElevator(CommandXboxController Controller) {
-        
+
         if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getLeftY())) {
             elevatorMotor.set(-Controller.getLeftY());
         } else {
