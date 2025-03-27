@@ -32,7 +32,7 @@ public class CoralIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_coralMechanism.runIntake(0.5);
+    m_coralMechanism.runIntake(-0.5);
   }
 
   @Override
