@@ -25,7 +25,7 @@ public class Constants {
   public static final double kHangKi = 0;
   public static final double kHangKd = 0;
   public static final double[] kHangTargetRotations = {0.0, 35.0};
-  public static final double kHangLowerBound = 0.0;
+  public static final double kHangLowerBound = -0.5;
   public static final double kHangUpperBound = 150.0;
 
   public static final double kElevatorkS = 0.0; // volts (V)

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,7 +58,7 @@ public class RobotContainer {
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
     public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2);
-    public final HangMechanism m_hangMechanism = new HangMechanism(11, Controller2);
+    public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -93,6 +94,7 @@ public class RobotContainer {
 
         SmartDashboard.putData("Auto Mode", autoChooser);
 
+        CameraServer.startAutomaticCapture();
         configureBindings();
     }
 
@@ -102,43 +104,37 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> drive
-                        .withVelocityX(-Controller1.getLeftY() * MaxSpeed * speedScalar * SlownessModifier)  
-                        .withVelocityY(-Controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier)                                                                                                        
-                        .withRotationalRate(-Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier)
-                ));
-
-        Controller2.x().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
-        Controller2.b().whileTrue(new CoralIntakeCommand(m_coralMechanism));
-
+                        .withVelocityX(-Controller1.getLeftY() * MaxSpeed * speedScalar * SlownessModifier)
+                        .withVelocityY(-Controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier)
+                        .withRotationalRate(
+                                -Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier)));
+        
+        // controller1 binding
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.2));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.05)));
-        Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.05)));
+        Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.15)));
+        Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.15)));
+        Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+        // controller2 binding
         Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
         Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
         Controller2.y().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 3));
 
         Controller2.pov(0).onTrue(new HangMoveToIndex(m_hangMechanism, 1));
         Controller2.pov(180).onTrue(new HangMoveToIndex(m_hangMechanism, 0));
-        // Controller2.rightBumper().onTrue(Commands.run(() -> SlownessModifier = 1));
 
-        // reset the field-centric heading on left bumper press
-        Controller1.b().onTrue(drivetrain.runOnce(() ->
-        drivetrain.seedFieldCentric()));
-        // Controller1.b().onTrue(Commands.runOnce(() ->
-        // System.out.println(elevatorMechanism.elevatorMechanism.getEncoder().getPosition())));
-        // Controller1.a().onTrue(Commands.runOnce(() ->
-        // elevatorMechanism.elevatorMechanism.getEncoder().setPosition(0.0)));
+        Controller2.x().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+        Controller2.b().whileTrue(new CoralIntakeCommand(m_coralMechanism));
+
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
     }
 }
