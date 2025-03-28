@@ -101,9 +101,19 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.15)));
-        Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.15)));
+        // Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.15)));
+        // Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.15)));
         Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        Controller1.pov(0).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.1)));
+        Controller1.pov(90).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.1)));
+        Controller1.pov(180).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.1)));
+        Controller1.pov(270).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.1)));
+
+        Controller1.pov(45).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.1).withVelocityY(-0.1)));
+        Controller1.pov(135).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.1).withVelocityX(-0.1)));
+        Controller1.pov(225).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.1).withVelocityY(0.1)));
+        Controller1.pov(315).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.1).withVelocityX(0.1)));
 
         // controller2 binding
         Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
