@@ -74,7 +74,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeCoral", new CoralAutoIntakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("StopCoral", new CoralStopCommand(m_coralMechanism));
         
-        autoChooser = AutoBuilder.buildAutoChooser("TwoCoralScore_Path3");
+        autoChooser = AutoBuilder.buildAutoChooser("MiddlePath");
         // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
 
         SmartDashboard.putData("Auto Mode", autoChooser);
