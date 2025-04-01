@@ -30,6 +30,7 @@ import frc.commands.CoralAutoIntakeCommand;
 import frc.commands.CoralOuttakeCommand;
 import frc.commands.CoralAutoOuttakeCommand;
 import frc.commands.CoralStopCommand;
+import frc.commands.CoralAutoStopCommand;
 import frc.commands.ElevatorMoveToIndex;
 import frc.commands.HangMoveToIndex;
 
@@ -48,8 +49,8 @@ public class RobotContainer {
             .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.RobotCentric strafe = new SwerveRequest.RobotCentric()
-            .withDeadband(MaxSpeed * 0.05 * SlownessModifier)
-            .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
+            .withDeadband(0.075)
+            .withRotationalDeadband(0.075)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -60,11 +61,12 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
-    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2, Constants.kIsAtCompetition);
-    public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2,
+            Constants.kIsAtCompetition);
+//     public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
 
     private final SendableChooser<Command> autoChooser;
-    
+
     public RobotContainer() {
 
         NamedCommands.registerCommand("ElevatorL2", new ElevatorMoveToIndex(m_elevatorMechanism, 1));
@@ -72,9 +74,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("ElevatorCoralStation", new ElevatorMoveToIndex(m_elevatorMechanism, 3));
         NamedCommands.registerCommand("OuttakeCoral", new CoralAutoOuttakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("IntakeCoral", new CoralAutoIntakeCommand(m_coralMechanism));
-        NamedCommands.registerCommand("StopCoral", new CoralStopCommand(m_coralMechanism));
-        
-        autoChooser = AutoBuilder.buildAutoChooser("MiddlePath");
+        NamedCommands.registerCommand("StopCoral", new CoralAutoStopCommand(m_coralMechanism));
+
+        autoChooser = AutoBuilder.buildAutoChooser("MVRTwoCoral");
         // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
 
         SmartDashboard.putData("Auto Mode", autoChooser);
@@ -93,7 +95,7 @@ public class RobotContainer {
                         .withVelocityY(-Controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier)
                         .withRotationalRate(
                                 -Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier)));
-        
+
         // controller1 binding
         Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.2));
         Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
@@ -101,19 +103,17 @@ public class RobotContainer {
         Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
         Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
 
-        // Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.15)));
-        // Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.15)));
+        // Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() ->
+        // strafe.withVelocityY(0.15)));
+        // Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() ->
+        // strafe.withVelocityY(-0.15)));
         Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        Controller1.pov(0).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.1)));
-        Controller1.pov(90).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.1)));
-        Controller1.pov(180).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.1)));
-        Controller1.pov(270).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.1)));
+        Controller1.pov(0).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.12)));
+        Controller1.pov(180).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.12)));
 
-        Controller1.pov(45).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.1).withVelocityY(-0.1)));
-        Controller1.pov(135).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.1).withVelocityX(-0.1)));
-        Controller1.pov(225).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.1).withVelocityY(0.1)));
-        Controller1.pov(315).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.1).withVelocityX(0.1)));
+        Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.12)));
+        Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.12)));
 
         // controller2 binding
         Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
