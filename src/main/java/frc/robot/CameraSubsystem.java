@@ -1,12 +1,18 @@
 package frc.robot;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.GenericPublisher;
@@ -21,8 +27,15 @@ public class CameraSubsystem {
   public double closestYaw = 0.0;
   public Transform3d closestOffset;
   public int closestID;
+  public PhotonPipelineResult Result;
+  public boolean ResultsAreEmpty;
 
-
+  AprilTagFieldLayout tagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  // position of camera relative to robot origin
+  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+  PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(tagFieldLayout,
+      PoseStrategy.CLOSEST_TO_REFERENCE_POSE, robotToCam);
+      
   public CameraSubsystem() {
     camera = new PhotonCamera("April_RGB_Cam");
     System.out.println("works");
@@ -30,8 +43,7 @@ public class CameraSubsystem {
   }
 
   public void readCamera() {
-    // AprilTagFieldLayout tagFieldLayout =
-    // AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
     boolean targetVisible = false;
     double targetYaw = 0.0;
     Transform3d targetOffset;
@@ -40,11 +52,14 @@ public class CameraSubsystem {
     double closestRange = -1.0;
     double cameraPitch = 0.0;
     var results = camera.getAllUnreadResults();
+
+    ResultsAreEmpty = results.isEmpty();
     if (!results.isEmpty()) {
-      PhotonPipelineResult result = results.get(results.size() - 1);
-      if (result.hasTargets()) {
-        for (var target : result.getTargets()) {
-          // if (target.getFiducialId() == 7)
+      Result = results.get(results.size() - 1);
+
+      if (Result.hasTargets()) {
+
+        for (var target : Result.getTargets()) {
           int targetID = target.getFiducialId();
           /* Found Tag, record its information */
           targetYaw = target.getYaw();
@@ -58,6 +73,7 @@ public class CameraSubsystem {
           targetVisible = true;
           // checks if the target is the current closest target and then saves its values
           if (targetRange < closestRange || closestRange == -1) {
+
             closestRange = targetRange;
             closestTarget = target;
             closestYaw = targetYaw;
@@ -66,6 +82,7 @@ public class CameraSubsystem {
             // in the future
             closestID = targetID;
           }
+
           if (targetVisible) {
             System.out.println("ID:");
             System.out.println(targetID); /* print the ID */

@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,9 +18,9 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.RobotContainer;
 
 public class Robot extends TimedRobot {
-    XboxController controller = new XboxController(0);
-    private CameraSubsystem cam = new CameraSubsystem();
-   // private RobotContainer robotContainer = new RobotContainer();
+  XboxController controller = new XboxController(0);
+  private CameraSubsystem cam = new CameraSubsystem();
+  // private RobotContainer robotContainer = new RobotContainer();
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
@@ -27,7 +33,14 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     cam.readCamera();
-    // System.out.println(m_robotContainer.m_elevatorMechanism.elevatorMotor.getEncoder().getPosition());
+    if (cam.ResultsAreEmpty) {
+      Optional<EstimatedRobotPose> poseEstimate = cam.photonPoseEstimator.update(cam.Result);
+      if (poseEstimate.isPresent()) {
+        EstimatedRobotPose visionPose = poseEstimate.get();
+        m_robotContainer.drivetrain.addVisionMeasurement(visionPose.estimatedPose.toPose2d(),
+            visionPose.timestampSeconds);
+      }
+    }
   }
 
   @Override
