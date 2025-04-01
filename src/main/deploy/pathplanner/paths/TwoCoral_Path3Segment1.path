@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 12.197249999999999,
-        "y": 5.029249999999999
+        "x": 14.381,
+        "y": 4.09
       },
       "prevControl": {
-        "x": 10.5495,
-        "y": 6.1114999999999995
+        "x": 12.733250000000002,
+        "y": 5.172249999999995
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "TwoCoralScorePath3",
