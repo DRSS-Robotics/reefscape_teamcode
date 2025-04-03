@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
@@ -72,5 +73,4 @@ public class ElevatorMechanism extends SubsystemBase {
 
         return Commands.none();
     }
-
 }
