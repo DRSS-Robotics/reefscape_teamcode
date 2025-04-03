@@ -3,20 +3,21 @@
   "robotLength": 0.9398,
   "holonomicMode": true,
   "pathFolders": [
-    "1RP",
-    "2RP",
-    "3RP",
-    "Calibration Paths",
-    "4RP"
+    "StartMiddlePaths",
+    "OffLinePaths",
+    "OneCoralScorePath1",
+    "OneCoralScorePath2",
+    "OneCoralScorePath3",
+    "OneCoralScorePath4",
+    "TwoCoralScorePath1",
+    "TwoCoralScorePath2",
+    "TwoCoralScorePath3",
+    "TwoCoralScorePath4"
   ],
   "autoFolders": [
-    "1RP",
-    "2RP",
-    "3RP",
-    "4RP",
-    "Calibration Autos",
-    "BLUE",
-    "RED"
+    "OffLinePaths",
+    "OneCoralScorePaths",
+    "TwoCoralScorePaths"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
@@ -42,5 +43,7 @@
   "brModuleY": -0.2794,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.0,\"y\":0.0},\"size\":{\"width\":0.2,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }
