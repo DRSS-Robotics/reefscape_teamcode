@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -27,13 +27,13 @@ public class CameraSubsystem {
   public double closestYaw = 0.0;
   public Transform3d closestOffset;
   public int closestID;
-  public PhotonPipelineResult Result;
-  public boolean ResultsAreEmpty;
+  public PhotonPipelineResult result;
+  public boolean resultsAreEmpty;
 
   AprilTagFieldLayout tagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   // position of camera relative to robot origin
   Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
-  PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(tagFieldLayout,
+  public PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(tagFieldLayout,
       PoseStrategy.CLOSEST_TO_REFERENCE_POSE, robotToCam);
       
   public CameraSubsystem() {
@@ -53,13 +53,13 @@ public class CameraSubsystem {
     double cameraPitch = 0.0;
     var results = camera.getAllUnreadResults();
 
-    ResultsAreEmpty = results.isEmpty();
+    resultsAreEmpty = results.isEmpty();
     if (!results.isEmpty()) {
-      Result = results.get(results.size() - 1);
+      result = results.get(results.size() - 1);
 
-      if (Result.hasTargets()) {
+      if (result.hasTargets()) {
 
-        for (var target : Result.getTargets()) {
+        for (var target : result.getTargets()) {
           int targetID = target.getFiducialId();
           /* Found Tag, record its information */
           targetYaw = target.getYaw();

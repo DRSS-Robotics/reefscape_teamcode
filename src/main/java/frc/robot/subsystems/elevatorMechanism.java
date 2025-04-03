@@ -21,51 +21,51 @@ import frc.robot.RobotContainer;
 
 public class ElevatorMechanism extends SubsystemBase {
 
-    ClosedLoopConfig ElevCCLoop = new ClosedLoopConfig()
+    ClosedLoopConfig elevCCLoop = new ClosedLoopConfig()
             .p(Constants.kElevatorKp).i(Constants.kElevatorKi).d(Constants.kElevatorKd);
 
-    SparkMaxConfig ElevConfig = new SparkMaxConfig();
+    SparkMaxConfig elevConfig = new SparkMaxConfig();
 
-    public final double Deadband = 0.04;
+    public final double deadband = 0.04;
     public final SparkMax elevatorMotor;
-    CommandXboxController Joystick;
+    CommandXboxController joystick;
     
     // indicates whether closed-loop control should use our practice field setpoints
     // or the actual competition values.
-    public boolean IsAtComp;
+    public boolean isAtComp;
 
     public ElevatorMechanism(int ElevID, CommandXboxController Controller, boolean IsAtCompetition) {
 
         elevatorMotor = new SparkMax(ElevID, MotorType.kBrushless);
-        Joystick = Controller;
-        IsAtComp = IsAtCompetition;
+        joystick = Controller;
+        isAtComp = IsAtCompetition;
 
-        ElevConfig.voltageCompensation(10);
-        ElevConfig.smartCurrentLimit(60);
-        ElevConfig.idleMode(IdleMode.kBrake);
-        ElevConfig.apply(ElevCCLoop);
+        elevConfig.voltageCompensation(10);
+        elevConfig.smartCurrentLimit(60);
+        elevConfig.idleMode(IdleMode.kBrake);
+        elevConfig.apply(elevCCLoop);
 
-        elevatorMotor.configure(ElevConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        elevatorMotor.configure(elevConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
     public void periodic() {
-        DriveElevator(Joystick);
+        driveElevator(joystick);
     }
 
-    public boolean DeadbandCheck(double Value) {
-        return Math.abs(Value) > Deadband;
+    public boolean deadbandCheck(double Value) {
+        return Math.abs(Value) > deadband;
     }
 
-    public boolean MotorHeightBounds(double ControllerY) {
-        return !(elevatorMotor.getEncoder().getPosition() - 8 * ControllerY < Constants.kElevatorLowerBound ||
-                elevatorMotor.getEncoder().getPosition() - 8 * ControllerY >= Constants.kElevatorUpperBound);
+    public boolean motorHeightBounds(double controllerY) {
+        return !(elevatorMotor.getEncoder().getPosition() - 8 * controllerY < Constants.kElevatorLowerBound ||
+                elevatorMotor.getEncoder().getPosition() - 8 * controllerY >= Constants.kElevatorUpperBound);
     }
 
-    public Command DriveElevator(CommandXboxController Controller) {
+    public Command driveElevator(CommandXboxController controller) {
 
-        if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getLeftY())) {
-            elevatorMotor.set(-Controller.getLeftY());
+        if (deadbandCheck(controller.getLeftY()) && motorHeightBounds(controller.getLeftY())) {
+            elevatorMotor.set(-controller.getLeftY());
         } else {
             elevatorMotor.stopMotor();
         }

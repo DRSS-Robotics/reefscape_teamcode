@@ -25,18 +25,18 @@ public class HangMoveToIndex extends Command {
     
     @Override
     public void execute() {
-        m_HangMechanism.HangMotor.getClosedLoopController()
+        m_HangMechanism.hangMotor.getClosedLoopController()
         .setReference(Constants.kHangTargetRotations[desiredRotations], ControlType.kPosition);
     }
     
     @Override
     public void end(boolean Interrupted) {
-        m_HangMechanism.HangMotor.stopMotor();
+        m_HangMechanism.hangMotor.stopMotor();
     }
 
     @Override
     public boolean isFinished() {
-      return (Math.abs(m_HangMechanism.HangMotor.getEncoder().getPosition() -
+      return (Math.abs(m_HangMechanism.hangMotor.getEncoder().getPosition() -
       Constants.kHangTargetRotations[desiredRotations]) < 0.125);
     }
 }

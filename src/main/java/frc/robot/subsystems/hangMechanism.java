@@ -21,51 +21,51 @@ import frc.robot.RobotContainer;
 
 public class HangMechanism extends SubsystemBase {
 
-    ClosedLoopConfig HangCCLoop = new ClosedLoopConfig()
+    ClosedLoopConfig hangCCLoop = new ClosedLoopConfig()
             .p(Constants.kElevatorKp).i(Constants.kElevatorKi).d(Constants.kElevatorKd);
 
-    SparkMaxConfig HangConfig = new SparkMaxConfig();
+    SparkMaxConfig hangConfig = new SparkMaxConfig();
 
-    public final double Deadband = 0.04;
-    public final SparkMax HangMotor;
-    boolean IsAtTarget = false;
-    boolean ShouldGoUp = false;
-    public int DesiredCoralHeight;
-    CommandXboxController Joystick;
+    public final double deadband = 0.04;
+    public final SparkMax hangMotor;
+    boolean isAtTarget = false;
+    boolean shouldGoUp = false;
+    public int desiredCoralHeight;
+    CommandXboxController joystick;
     // This first one is the coral station and the last one is level 3
     // Change the coral station level
     public HangMechanism(int HangID, CommandXboxController Controller) {
 
-        HangMotor = new SparkMax(HangID, MotorType.kBrushless);
-        Joystick = Controller;
+        hangMotor = new SparkMax(HangID, MotorType.kBrushless);
+        joystick = Controller;
 
-        HangConfig.voltageCompensation(10);
-        HangConfig.smartCurrentLimit(60);
-        HangConfig.idleMode(IdleMode.kBrake);
-        HangConfig.apply(HangCCLoop);
+        hangConfig.voltageCompensation(10);
+        hangConfig.smartCurrentLimit(60);
+        hangConfig.idleMode(IdleMode.kBrake);
+        hangConfig.apply(hangCCLoop);
 
-        HangMotor.configure(HangConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        hangMotor.configure(hangConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
     public void periodic() {
-        DriveHang(Joystick);
+        driveHang(joystick);
     }
 
-    public boolean DeadbandCheck(double Value) {
-        return Math.abs(Value) > Deadband;
+    public boolean deadbandCheck(double Value) {
+        return Math.abs(Value) > deadband;
     }
 
-    public boolean MotorHeightBounds(double ControllerY) {
-        return !(HangMotor.getEncoder().getPosition() - 8 * ControllerY < Constants.kHangLowerBound ||
-                HangMotor.getEncoder().getPosition() - 8 * ControllerY >= Constants.kHangUpperBound);
+    public boolean motorHeightBounds(double controllerY) {
+        return !(hangMotor.getEncoder().getPosition() - 8 * controllerY < Constants.kHangLowerBound ||
+                hangMotor.getEncoder().getPosition() - 8 * controllerY >= Constants.kHangUpperBound);
     }
 
-    public Command DriveHang(CommandXboxController Controller) {
-        if (DeadbandCheck(Controller.getRightY()) && MotorHeightBounds(Controller.getRightY())) {
-            HangMotor.set(-Controller.getRightY());
+    public Command driveHang(CommandXboxController controller) {
+        if (deadbandCheck(controller.getRightY()) && motorHeightBounds(controller.getRightY())) {
+            hangMotor.set(-controller.getRightY());
         } else {
-            HangMotor.stopMotor();
+            hangMotor.stopMotor();
         }
         return Commands.none();
     }

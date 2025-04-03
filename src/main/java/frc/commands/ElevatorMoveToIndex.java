@@ -12,7 +12,7 @@ public class ElevatorMoveToIndex extends Command {
 
     public ElevatorMoveToIndex(ElevatorMechanism Elevator, int NewHeight) {
         m_elevatorMechanism = Elevator;
-        DesiredHeight = m_elevatorMechanism.IsAtComp ? Constants.kCompElevatorTargetHeights[NewHeight]
+        DesiredHeight = m_elevatorMechanism.isAtComp ? Constants.kCompElevatorTargetHeights[NewHeight]
                 : Constants.kPracticeElevatorTargetHeights[NewHeight];
         addRequirements(Elevator);
     }

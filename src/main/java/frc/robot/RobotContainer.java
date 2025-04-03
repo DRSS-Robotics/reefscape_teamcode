@@ -39,29 +39,29 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 public class RobotContainer {
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second
+    private double maxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double maxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second
     double speedScalar = 0.7;
-    double SlownessModifier = 1;
+    double slownessModifier = 1;
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.05 * SlownessModifier)
-            .withRotationalDeadband(MaxAngularRate * 0.05 * SlownessModifier) // Add a 10% deadband
+            .withDeadband(maxSpeed * 0.05 * slownessModifier)
+            .withRotationalDeadband(maxAngularRate * 0.05 * slownessModifier) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.RobotCentric strafe = new SwerveRequest.RobotCentric()
             .withDeadband(0.075)
             .withRotationalDeadband(0.075)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    private final Telemetry logger = new Telemetry(maxSpeed);
 
-    private final CommandXboxController Controller1 = new CommandXboxController(0);
-    public final static CommandXboxController Controller2 = new CommandXboxController(1);
+    private final CommandXboxController controller1 = new CommandXboxController(0);
+    public final static CommandXboxController controller2 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
-    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2,
+    public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, controller2,
             Constants.kIsAtCompetition);
 //     public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
 
@@ -91,40 +91,40 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> drive
-                        .withVelocityX(-Controller1.getLeftY() * MaxSpeed * speedScalar * SlownessModifier)
-                        .withVelocityY(-Controller1.getLeftX() * MaxSpeed * speedScalar * SlownessModifier)
+                        .withVelocityX(-controller1.getLeftY() * maxSpeed * speedScalar * slownessModifier)
+                        .withVelocityY(-controller1.getLeftX() * maxSpeed * speedScalar * slownessModifier)
                         .withRotationalRate(
-                                -Controller1.getRightX() * MaxAngularRate * speedScalar * SlownessModifier)));
+                                -controller1.getRightX() * maxAngularRate * speedScalar * slownessModifier)));
 
         // controller1 binding
-        Controller1.rightBumper().whileTrue(Commands.run(() -> SlownessModifier = 0.2));
-        Controller1.rightBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+        controller1.rightBumper().whileTrue(Commands.run(() -> slownessModifier = 0.2));
+        controller1.rightBumper().whileFalse(Commands.run(() -> slownessModifier = 1));
 
-        Controller1.leftBumper().whileTrue(Commands.run(() -> SlownessModifier = 1 / speedScalar));
-        Controller1.leftBumper().whileFalse(Commands.run(() -> SlownessModifier = 1));
+        controller1.leftBumper().whileTrue(Commands.run(() -> slownessModifier = 1 / speedScalar));
+        controller1.leftBumper().whileFalse(Commands.run(() -> slownessModifier = 1));
 
         // Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() ->
         // strafe.withVelocityY(0.15)));
         // Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() ->
         // strafe.withVelocityY(-0.15)));
-        Controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        controller1.b().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        Controller1.pov(0).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.12)));
-        Controller1.pov(180).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.12)));
+        controller1.pov(0).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(0.12)));
+        controller1.pov(180).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityX(-0.12)));
 
-        Controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.12)));
-        Controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.12)));
+        controller1.leftTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(0.12)));
+        controller1.rightTrigger(0.1).whileTrue(drivetrain.applyRequest(() -> strafe.withVelocityY(-0.12)));
 
         // controller2 binding
-        Controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
-        Controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
-        Controller2.y().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 3));
+        controller2.leftBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 1));
+        controller2.rightBumper().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 2));
+        controller2.y().onTrue(new ElevatorMoveToIndex(m_elevatorMechanism, 3));
 
         // Controller2.pov(0).onTrue(new HangMoveToIndex(m_hangMechanism, 1));
         // Controller2.pov(180).onTrue(new HangMoveToIndex(m_hangMechanism, 0));
 
-        Controller2.x().whileTrue(new CoralIntakeCommand(m_coralMechanism));
-        Controller2.b().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+        controller2.x().whileTrue(new CoralIntakeCommand(m_coralMechanism));
+        controller2.b().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
