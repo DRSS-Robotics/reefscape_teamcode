@@ -62,6 +62,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
+    public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
     public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2,
             Constants.kIsAtCompetition);
 //     public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
@@ -126,6 +127,10 @@ public class RobotContainer {
 
         Controller2.x().whileTrue(new CoralIntakeCommand(m_coralMechanism));
         Controller2.b().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+
+        //Change values later
+        Controller2.pov(0).onTrue(new HangMoveToIndex(m_hangMechanism, 0));
+        Controller2.pov(180).onTrue(new HangMoveToIndex(m_hangMechanism, 0));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
