@@ -27,7 +27,6 @@ public class ElevatorDriveWithJoystick extends Command {
     @Override
     public void execute() {
         // m_elevatorMechanism.elevatorMotor.getClosedLoopController().setReference(-Joystick.getLeftY(), ControlType.kVelocity);
-        System.out.println(Joystick.getLeftY());
     }
     
     @Override
