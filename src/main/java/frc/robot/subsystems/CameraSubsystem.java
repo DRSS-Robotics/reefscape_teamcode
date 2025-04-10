@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -32,76 +35,92 @@ public class CameraSubsystem {
 
   AprilTagFieldLayout tagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   // position of camera relative to robot origin
-  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
-  public PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(tagFieldLayout,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE, robotToCam);
-      
+  Transform3d robotToCam;
+  public PhotonPoseEstimator photonPoseEstimator;
+
   public CameraSubsystem() {
+    robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 180));
+    photonPoseEstimator = new PhotonPoseEstimator(tagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
+    photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     camera = new PhotonCamera("April_RGB_Cam");
-    System.out.println("works");
-    /* return camera/controller */
   }
 
-  public void readCamera() {
-
-    boolean targetVisible = false;
-    double targetYaw = 0.0;
-    Transform3d targetOffset;
-    double targetRange = 0.0;
-
-    double closestRange = -1.0;
-    double cameraPitch = 0.0;
-    var results = camera.getAllUnreadResults();
-
-    resultsAreEmpty = results.isEmpty();
-    if (!results.isEmpty()) {
-      result = results.get(results.size() - 1);
-
-      if (result.hasTargets()) {
-
-        for (var target : result.getTargets()) {
-          int targetID = target.getFiducialId();
-          /* Found Tag, record its information */
-          targetYaw = target.getYaw();
-          targetOffset = target.getBestCameraToTarget();
-          targetRange = PhotonUtils.calculateDistanceToTargetMeters(
-              0.025, /* The height of the camera in meters */
-              0.22225, /* height of apriltag from ground to bottom */
-              Units.degreesToRadians(cameraPitch),
-              Units.degreesToRadians(target.getPitch()));
-
-          targetVisible = true;
-          // checks if the target is the current closest target and then saves its values
-          if (targetRange < closestRange || closestRange == -1) {
-
-            closestRange = targetRange;
-            closestTarget = target;
-            closestYaw = targetYaw;
-            closestOffset = targetOffset;
-            // the targetID is saved, since it may be useful to display to the driver
-            // in the future
-            closestID = targetID;
-          }
-
-          if (targetVisible) {
-            System.out.println("ID:");
-            System.out.println(targetID); /* print the ID */
-            System.out.println("Range:");
-            System.out.println(targetRange); /* print the range */
-            System.out.println("Yaw:");
-            System.out.println(targetYaw); /* print the yaw */
-            System.out.println("Offset:");
-            System.out.println(targetOffset); /* print the yaw */
-          }
-        }
-        // print for testing the closest target values
-        System.out.println("Closest Range:");
-        System.out.println(closestRange);
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("CameraData");
-
-      }
+  public Optional<EstimatedRobotPose> getPoseEstimate() {
+    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
+    for (var change : camera.getAllUnreadResults()) {
+      visionEstimate = photonPoseEstimator.update(change);
     }
+    // visionEstimate = photonPoseEstimator.update(camera.getLatestResult());
+    return visionEstimate;
+    // get all frames
+    // var results = camera.getAllUnreadResults();
 
+    // // if there are any frames
+    // if (!results.isEmpty()) {
+    // // System.out.println("Size: " + results.size());
+    // // get the last one in the queue
+    // result = results.get(results.size() - 1);
+
+    // // are there any April tag targets in the frame?
+    // if (result.hasTargets()) {
+    // System.out.println("Targets: " + result.getTargets().size());
+    // // return Optional pose estimate from Photon Vision
+    // return photonPoseEstimator.update(result);
+    // } else {
+    // System.out.println("No targets, size: " + results.size());
+    // }
+    // }
   }
 }
+
+// boolean targetVisible = false;
+// double targetYaw = 0.0;
+// Transform3d targetOffset;
+// double targetRange = 0.0;
+
+// double closestRange = -1.0;
+// double cameraPitch = 0.0;
+
+// for (var target : result.getTargets()) {
+// int targetID = target.getFiducialId();
+// /* Found Tag, record its information */
+// targetYaw = target.getYaw();
+// System.out.println(targetID);
+// targetOffset = target.getBestCameraToTarget();
+// targetRange = PhotonUtils.calculateDistanceToTargetMeters(
+// 0.025, /* The height of the camera in meters */
+// 0.22225, /* height of apriltag from ground to bottom */
+// Units.degreesToRadians(cameraPitch),
+// Units.degreesToRadians(target.getPitch()));
+
+// targetVisible = true;
+// // checks if the target is the current closest target and then saves its
+// values
+// if (targetRange < closestRange || closestRange == -1) {
+
+// closestRange = targetRange;
+// closestTarget = target;
+// closestYaw = targetYaw;
+// closestOffset = targetOffset;
+// // the targetID is saved, since it may be useful to display to the driver
+// // in the future
+// closestID = targetID;
+// }
+
+// if (targetVisible) {
+// System.out.println("ID:");
+// System.out.println(targetID); /* print the ID */
+// System.out.println("Range:");
+// System.out.println(targetRange); /* print the range */
+// System.out.println("Yaw:");
+// System.out.println(targetYaw); /* print the yaw */
+// System.out.println("Offset:");
+// System.out.println(targetOffset); /* print the yaw */
+// }
+// }
+// // print for testing the closest target values
+// System.out.println("Closest Range:");
+// System.out.println(closestRange);
+// NetworkTableInstance inst = NetworkTableInstance.getDefault();
+// NetworkTable table = inst.getTable("CameraData");
