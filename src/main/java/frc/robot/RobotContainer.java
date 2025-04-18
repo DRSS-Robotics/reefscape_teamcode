@@ -63,8 +63,9 @@ public class RobotContainer {
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
     public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, controller2,
             Constants.kIsAtCompetition);
-            public final HangMechanism m_hangMechanism = new HangMechanism(11, controller2);
-//     public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
+    public final HangMechanism m_hangMechanism = new HangMechanism(11, controller2);
+    // public final HangMechanism m_hangMechanism = new HangMechanism(12,
+    // Controller2);
 
     private final SendableChooser<Command> autoChooser;
 
@@ -77,8 +78,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeCoral", new CoralAutoIntakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("StopCoral", new CoralAutoStopCommand(m_coralMechanism));
 
-        autoChooser = AutoBuilder.buildAutoChooser("AutoPhotonTest");
-        PathPlannerAuto auto = new PathPlannerAuto("AutoPhotonTest");
+        autoChooser = AutoBuilder.buildAutoChooser("MVRTwoCoral");
+        PathPlannerAuto auto = new PathPlannerAuto("MVRTwoCoral");
         // autoChooser.addOption("PhotonAuto", auto);
         SmartDashboard.putData("Auto Mode", autoChooser);
 

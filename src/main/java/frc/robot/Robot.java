@@ -17,7 +17,7 @@ import frc.robot.subsystems.CameraSubsystem;
 
 public class Robot extends TimedRobot {
   XboxController controller = new XboxController(0);
-  private CameraSubsystem cam = new CameraSubsystem();
+  // private CameraSubsystem cam = new CameraSubsystem();
   private Optional<EstimatedRobotPose> poseEstimate;
   // private RobotContainer robotContainer = new RobotContainer();
   private Command m_autonomousCommand;
@@ -31,16 +31,16 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    poseEstimate = cam.getPoseEstimate();
-    if (poseEstimate.isPresent()) {
-      System.out.println("New pose estimate");
-      EstimatedRobotPose visionPose = poseEstimate.get();
-      System.out.println(visionPose.estimatedPose);
-      m_robotContainer.drivetrain.addVisionMeasurement(visionPose.estimatedPose.toPose2d(),
-          visionPose.timestampSeconds);
-    } else {
-      // System.out.println("No pose estimate");
-    }
+    // poseEstimate = cam.getPoseEstimate();
+    // // if (poseEstimate.isPresent()) {
+    // if (false) {
+    //   EstimatedRobotPose visi+onPose = poseEstimate.get();
+    //   System.out.println(visionPose.estimatedPose);
+    //   m_robotContainer.drivetrain.addVisionMeasurement(visionPose.estimatedPose.toPose2d(),
+    //       visionPose.timestampSeconds);
+    // } else {
+    //   // System.out.println("No pose estimate");
+    // }
   }
 
   @Override
