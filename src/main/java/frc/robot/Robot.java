@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    m_robotContainer.updateDashboardValues();
     CommandScheduler.getInstance().run();
     // poseEstimate = cam.getPoseEstimate();
     // // if (poseEstimate.isPresent()) {

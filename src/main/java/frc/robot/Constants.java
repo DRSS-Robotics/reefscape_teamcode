@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 
 public class Constants {
 
-  public static final boolean kIsAtCompetition = true;
+  public static final boolean kIsAtCompetition = false;
 
   public static final int kMotorPort = 0;
   public static final int kEncoderAChannel = 0;

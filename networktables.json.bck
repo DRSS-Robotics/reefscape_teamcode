@@ -2,7 +2,7 @@
   {
     "name": "/Preferences/Speed Scalar",
     "type": "double",
-    "value": 0.1,
+    "value": 0.8,
     "properties": {
       "cached": true,
       "persistent": true,

@@ -28,7 +28,7 @@ public class AutoPathfindToAprilTagCommand extends Command {
     @Override
     public void initialize() {
         System.out.println(Cam.closestID);
-
+        
         switch (Cam.closestID) {
             case 7:
                 DesiredRotation = new Rotation2d(180.0);
