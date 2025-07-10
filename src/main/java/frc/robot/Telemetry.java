@@ -33,6 +33,7 @@ public class Telemetry {
         SignalLogger.start();
     }
 
+
     /* What to publish over networktables for telemetry */
     private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
 

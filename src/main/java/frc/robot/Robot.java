@@ -11,14 +11,23 @@ import org.photonvision.PhotonPoseEstimator;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.CameraSubsystem;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Robot extends TimedRobot {
   XboxController controller = new XboxController(0);
-  // private CameraSubsystem cam = new CameraSubsystem();
+   private CameraSubsystem cam = new CameraSubsystem();
   private Optional<EstimatedRobotPose> poseEstimate;
+
   // private RobotContainer robotContainer = new RobotContainer();
   private Command m_autonomousCommand;
 
@@ -26,21 +35,23 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+    DataLogManager.start();
+    //starting to log joystick movments and the driver station
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // poseEstimate = cam.getPoseEstimate();
-    // // if (poseEstimate.isPresent()) {
-    // if (false) {
-    //   EstimatedRobotPose visi+onPose = poseEstimate.get();
-    //   System.out.println(visionPose.estimatedPose);
-    //   m_robotContainer.drivetrain.addVisionMeasurement(visionPose.estimatedPose.toPose2d(),
-    //       visionPose.timestampSeconds);
-    // } else {
-    //   // System.out.println("No pose estimate");
-    // }
+    poseEstimate = cam.getPoseEstimate();
+   if (poseEstimate.isPresent()) {
+      EstimatedRobotPose visionPose = poseEstimate.get();
+      System.out.println(visionPose.estimatedPose);
+      m_robotContainer.drivetrain.addVisionMeasurement(visionPose.estimatedPose.toPose2d(),
+          visionPose.timestampSeconds);
+    } else {
+       System.out.println("No pose estimate");
+  }
   }
 
   @Override

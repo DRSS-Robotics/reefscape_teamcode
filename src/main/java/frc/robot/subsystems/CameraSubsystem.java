@@ -43,7 +43,7 @@ public class CameraSubsystem {
     photonPoseEstimator = new PhotonPoseEstimator(tagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
     photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-    camera = new PhotonCamera("April_RGB_Cam");
+    camera = new PhotonCamera("Arducam_AprilTag_Camera");
   }
 
   public Optional<EstimatedRobotPose> getPoseEstimate() {
@@ -51,6 +51,7 @@ public class CameraSubsystem {
     for (var change : camera.getAllUnreadResults()) {
       visionEstimate = photonPoseEstimator.update(change);
     }
+
     // visionEstimate = photonPoseEstimator.update(camera.getLatestResult());
     return visionEstimate;
     // get all frames
