@@ -79,7 +79,7 @@ public class TunerConstants {
     private static final double kCoupleRatio = 4.5;
 
     private static final double kDriveGearRatio = 5.684210526315789;
-    private static final double kSteerGearRatio = 12.1;
+    public static final double kSteerGearRatio = 12.1;
     private static final Distance kWheelRadius = Inches.of(2);
 
     private static final boolean kInvertLeftSide = false;
@@ -167,6 +167,12 @@ public class TunerConstants {
 
     private static final Distance kBackRightXPos = Inches.of(-11);
     private static final Distance kBackRightYPos = Inches.of(-11);
+
+            //may need to change these values later
+            public static final int ODOEMTRY_CACHE_CAPACITY = 10;
+            public static final  double ODOEMTRY_FREQUENCY = 250;
+            public static final double ODOEMTRY_WAIT_TIMEOUT_SECONDS = 0.02;
+            public static final int SIMULATED_TICKS_IN_1_PERIOD = 5;
 
 
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
@@ -282,5 +288,7 @@ public class TunerConstants {
                 odometryStandardDeviation, visionStandardDeviation, modules
             );
         }
+
+
     }
 }

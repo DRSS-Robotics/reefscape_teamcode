@@ -1,7 +1,7 @@
 package frc.commands;
 
-import frc.robot.subsystems.CoralMechanism;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralMechanism.CoralMechanism;
 
 public class CoralStopCommand extends Command {
   private final CoralMechanism m_coralMechanism;

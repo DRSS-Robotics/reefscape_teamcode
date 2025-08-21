@@ -5,8 +5,8 @@
 
 package frc.commands;
 
-import frc.robot.subsystems.CoralMechanism;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CoralMechanism.CoralMechanism;
 
 /** An ArmUpCommand that uses an Arm subsystem. */
 public class CoralIntakeCommand extends Command {
