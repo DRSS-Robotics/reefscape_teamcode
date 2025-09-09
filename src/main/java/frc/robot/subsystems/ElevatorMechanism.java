@@ -27,8 +27,8 @@ public class ElevatorMechanism extends SubsystemBase {
 
     SparkMaxConfig ElevConfig = new SparkMaxConfig();
 
-    public final double Deadband = 0.04;
     public final SparkMax elevatorMotor;
+    public final double Deadband = 0.04;
     CommandXboxController Joystick;
     
     // indicates whether closed-loop control should use our practice field setpoints
@@ -38,7 +38,7 @@ public class ElevatorMechanism extends SubsystemBase {
     public ElevatorMechanism(int ElevID, CommandXboxController Controller, boolean IsAtCompetition) {
 
         elevatorMotor = new SparkMax(ElevID, MotorType.kBrushless);
-        Joystick = Controller;
+        Joystick = Controller; 
         IsAtComp = IsAtCompetition;
 
         ElevConfig.voltageCompensation(10);

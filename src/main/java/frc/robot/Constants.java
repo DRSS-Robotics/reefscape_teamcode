@@ -32,6 +32,9 @@ public class Constants {
   public static final double kHangLowerBound = -0.5;
   public static final double kHangUpperBound = 3500.0;
 
+  public static final double guhHangUp = 30.0;
+  public static final double guhHangDown = 0.0;
+
   public static final double kElevatorkS = 0.0; // volts (V)
   public static final double kElevatorkG = 0.762; // volts (V)
   public static final double kElevatorkV = 0.762; // volt per velocity (V/(m/s))
