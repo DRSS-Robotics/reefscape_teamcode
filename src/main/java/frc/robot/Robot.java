@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     cam.readCamera();
+    // System.out.println(m_robotContainer.m_elevatorMechanism.elevatorMotor.getEncoder().getPosition());
   }
 
   @Override
@@ -44,8 +45,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    //TunerConstants.FrontLeft.withDriveMotorGains(TunerConstants.driveGainsAuto);
-    //TunerConstants.FrontLeft.withSteerMotorGains(TunerConstants.steerGainsAuto);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -64,7 +63,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    System.out.println("started teleop");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -72,9 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // System.out.println("angle error: " + (m_robotContainer.joystick.getRightX() -
-    // ));
-    //System.out.println(m_robotContainer.elevatorMechanism.getEncoder().getPosition());
+    // System.out.println(m_robotContainer.m_hangMechanism.HangMotor.getEncoder().getPosition());
 
   }
 

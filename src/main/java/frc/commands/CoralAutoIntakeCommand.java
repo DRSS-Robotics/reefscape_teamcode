@@ -9,7 +9,7 @@ import frc.robot.subsystems.CoralMechanism;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An ArmUpCommand that uses an Arm subsystem. */
-public class CoralIntakeCommand extends Command {
+public class CoralAutoIntakeCommand extends Command {
   private final CoralMechanism m_coralMechanism;
 
   /**
@@ -20,29 +20,28 @@ public class CoralIntakeCommand extends Command {
    *
    * @param arm The subsystem used by this command.
    */
-  public CoralIntakeCommand(CoralMechanism cMechanism) {
+  public CoralAutoIntakeCommand(CoralMechanism cMechanism) {
     m_coralMechanism = cMechanism;
     addRequirements(cMechanism);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  m_coralMechanism.runIntake(-0.5);}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_coralMechanism.runIntake(-0.5);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_coralMechanism.runIntake(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

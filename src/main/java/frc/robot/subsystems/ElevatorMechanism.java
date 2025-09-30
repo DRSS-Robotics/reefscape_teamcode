@@ -29,22 +29,17 @@ public class ElevatorMechanism extends SubsystemBase {
 
     public final double Deadband = 0.04;
     public final SparkMax elevatorMotor;
-    boolean IsAtTarget = false;
-    boolean ShouldGoUp = false;
-    public int DesiredCoralHeight;
     CommandXboxController Joystick;
-    // This first one is the coral station and the last one is level 3
-    // Change the coral station level
+    
+    // indicates whether closed-loop control should use our practice field setpoints
+    // or the actual competition values.
+    public boolean IsAtComp;
 
-    boolean PrevElevDir = true;
-
-    /**
-     * This subsytem that controls the arm.
-     */
-    public ElevatorMechanism(int ElevID, CommandXboxController Controller) {
+    public ElevatorMechanism(int ElevID, CommandXboxController Controller, boolean IsAtCompetition) {
 
         elevatorMotor = new SparkMax(ElevID, MotorType.kBrushless);
         Joystick = Controller;
+        IsAtComp = IsAtCompetition;
 
         ElevConfig.voltageCompensation(10);
         ElevConfig.smartCurrentLimit(60);
@@ -64,36 +59,18 @@ public class ElevatorMechanism extends SubsystemBase {
     }
 
     public boolean MotorHeightBounds(double ControllerY) {
-        if (elevatorMotor.getEncoder().getPosition() - 8 * ControllerY < -3 ||
-                elevatorMotor.getEncoder().getPosition() - 8 * ControllerY >= 120) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(elevatorMotor.getEncoder().getPosition() - 8 * ControllerY < Constants.kElevatorLowerBound ||
+                elevatorMotor.getEncoder().getPosition() - 8 * ControllerY >= Constants.kElevatorUpperBound);
     }
 
     public Command DriveElevator(CommandXboxController Controller) {
-        
-        if (DeadbandCheck(Controller.getRightY()) && MotorHeightBounds(Controller.getRightY())) {
-            elevatorMotor.set(-Controller.getRightY());
-            return Commands.none();
+
+        if (DeadbandCheck(Controller.getLeftY()) && MotorHeightBounds(Controller.getLeftY())) {
+            elevatorMotor.set(-Controller.getLeftY());
         } else {
             elevatorMotor.stopMotor();
-            return Commands.none();
         }
-    }
 
-    public Command SetDesiredElevatorHeight(int CoralLevelIndex) {
-        IsAtTarget = false;
-        DesiredCoralHeight = CoralLevelIndex;
         return Commands.none();
     }
-
-    public Command DriveToPosition(double InPos) {
-        // ShouldGoUp = (Elevator.getEncoder().getPosition() <
-        // Constants.kElevatorTargetHeights[DesiredCoralHeight]);
-        elevatorMotor.getClosedLoopController().setReference(InPos, ControlType.kPosition);
-        return Commands.none();
-    }
-
 }
