@@ -42,6 +42,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // 1/4 of a rotation per second
+    //comment                                                             // max angular velocity
     double speedScalar = 0.7;
     double SlownessModifier = 1;
 
