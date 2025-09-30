@@ -20,10 +20,12 @@ public class CoralMechanismIOSim implements CoralMechanismIO {
     @Override
     public void runIntake() {
         intakeSpeed = 1;
+        System.out.println("Intake running");
     }
 
     public void runOuttake(){
         intakeSpeed = -1;
+        System.out.println("Outtake running");
     }
     @Override
     public void setSpeed(double speed) {
@@ -36,6 +38,7 @@ public class CoralMechanismIOSim implements CoralMechanismIO {
 
         if (intakeSpeed == 0){
             isReady = true;
+            System.out.println("Isready");
         } else{
             isReady = false;
         }

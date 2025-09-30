@@ -8,7 +8,6 @@ import org.ironmaple.simulation.*;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.*;
 
 import com.pathplanner.lib.util.FlippingUtil;
-import frc.robot.Field;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import edu.wpi.first.math.geometry.*;
@@ -18,7 +17,7 @@ public abstract class SimLogic {
     
     public static final Pose2d redHPCoralPose = new Pose2d(16.17, 1.33, new Rotation2d());
     public static final Pose2d blueHPCoralPose = FlippingUtil.flipFieldPose(redHPCoralPose);
-    public static final double CORAL_LENGTH = Field.CORAL_LENGTH.in(Meters);
+   // public static final double CORAL_LENGTH = Field.CORAL_LENGTH.in(Meters);
 
     public static boolean intakeHasCoral = false;
     public static boolean armHasCoral = false;
@@ -43,7 +42,7 @@ public abstract class SimLogic {
             return;
         }
     }
-    
+
 }
 
 

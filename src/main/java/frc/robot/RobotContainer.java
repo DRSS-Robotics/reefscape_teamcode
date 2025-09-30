@@ -61,6 +61,7 @@ public class RobotContainer {
 
     public final static CommandXboxController controller1 = new CommandXboxController(0);
     public final static CommandXboxController controller2 = new CommandXboxController(1);
+public static final String vision = null;
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
