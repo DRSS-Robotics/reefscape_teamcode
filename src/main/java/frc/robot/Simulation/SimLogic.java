@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import org.ironmaple.simulation.*;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.*;
 
 import com.pathplanner.lib.util.FlippingUtil;
@@ -41,8 +42,32 @@ public abstract class SimLogic {
         if (!RobotContainer.MAPLESIM) {
             return;
         }
+        for (int i = 0; i < 2; i++){
+            Pose2d coralPose = blue ? blueHPCoralPose : redHPCoralPose;
+            if (i == 1) {
+                coralPose = coralPose.transformBy(new Transform2d(0, 5, new Rotation2d()));
+            }
+            double xOffset = randomNumberPlusMinus(0.3);
+            double yOffset = randomNumberPlusMinus(0.3);
+            double rotationOffset = Math.random() * 360;
+            Transform2d randomTransform = new Transform2d(xOffset, yOffset, Rotation2d.fromDegrees((rotationOffset)));
+            spawnCoral(coralPose.transformBy(randomTransform));
+        }
     }
+    public static void spawnCoral(Pose2d pose){
+        SimulatedArena.getInstance().addGamePiece(new ReefscapeCoralOnField(pose));
+    }
+    public static void scoreCoral(){
+        if (!RobotContainer.MAPLESIM){
+            return;
+        }
+        RobotContainer rc = RobotContainer.instance;
 
+        // SwerveDriveSimulation swerveSim = rc.drivetrain.getDriveSim();
+    }
+    private static double randomNumberPlusMinus(double range){
+        return Math.random() * (range * 2) - range;
+    }
 }
 
 

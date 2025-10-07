@@ -88,6 +88,12 @@ public class MapleSimDriveTrain {
             SimulatedArena.overrideSimulationTimings(simPeriod, 1);
             SimulatedArena.getInstance().addDriveTrainSimulation(mapleSimDrive);
     }
+    public SwerveDriveSimulation getDriveSim() {
+        if (mapleSimDrive != null) {
+            return mapleSimDrive;
+        }
+        return null;
+    }
 
     // public void update() {
     //     System.out.println("Updating");

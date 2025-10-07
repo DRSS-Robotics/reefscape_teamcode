@@ -14,18 +14,25 @@ public class CoralMechanismIOSim implements CoralMechanismIO {
 
     //double speed;
     public CoralMechanismIOSim (AbstractDriveTrainSimulation driveTrain) {
-        this.intakeSimulation = IntakeSimulation.InTheFrameIntake("Coral", driveTrain, Inches.of(7), IntakeSide.FRONT, 1);
+        this.intakeSimulation = IntakeSimulation.InTheFrameIntake(
+            "Coral",
+            driveTrain, 
+            Inches.of(9), 
+            IntakeSide.FRONT, 
+            1);
     }
 
     @Override
     public void runIntake() {
         intakeSpeed = 1;
         System.out.println("Intake running");
+        intakeSimulation.startIntake();
     }
 
     public void runOuttake(){
         intakeSpeed = -1;
         System.out.println("Outtake running");
+        intakeSimulation.stopIntake();
     }
     @Override
     public void setSpeed(double speed) {
