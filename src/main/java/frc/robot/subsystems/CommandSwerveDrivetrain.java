@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -31,8 +32,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.generated.TunerConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.Simulation.MapleSimDriveTrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -55,6 +57,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    private Pose2d mapleSimPose = null;
+    private SwerveDriveState cachedState = null;
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -285,6 +289,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        if (mapleSimSwerveDrivetrain != null) {
+            mapleSimPose = mapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose();
+        }
+    }
+    public SwerveDriveSimulation getDriveSim() {
+        if (mapleSimSwerveDrivetrain != null) {
+            return mapleSimSwerveDrivetrain.mapleSimDrive;
+        }
+        return null;
     }
     // public SwerveDriveSimulation getDriveSim() {
     //     if (mapleSimSwerveDrivetrain != null) {
@@ -292,8 +305,24 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     //     }
     //     return null;
     // }
-
+    private MapleSimDriveTrain mapleSimSwerveDrivetrain = null;
     private void startSimThread() {
+         mapleSimSwerveDrivetrain = new MapleSimDriveTrain(
+                Seconds.of(kSimLoopPeriod),
+                Pounds.of(115), // robot weight
+                Inches.of(30), // bumper length
+                Inches.of(30), // bumper width
+                DCMotor.getKrakenX60Foc(1), // drive motor type
+                DCMotor.getKrakenX60Foc(1), // steer motor type
+                1.916, // wheel COF, Vex Grip V2
+                getModuleLocations(),
+                getPigeon2(),
+                getModules(),
+                TunerConstants.FrontLeft,
+                TunerConstants.FrontRight,
+                TunerConstants.BackLeft,
+                TunerConstants.BackRight
+        );
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
         /* Run simulation at a faster rate so PID gains behave more reasonably */
@@ -340,6 +369,16 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+    public Pose2d getPose() {
+        return getCachedState().Pose;
+    }
+    public SwerveDriveState getCachedState() {
+        if (cachedState == null) cachedState = getState();
+        return cachedState;
+    }
+    public Pose2d getSimPose() {
+        return mapleSimPose != null ? mapleSimPose : getPose();
     }
 }
 

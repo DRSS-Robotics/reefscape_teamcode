@@ -61,7 +61,14 @@ public abstract class SimLogic {
         if (!RobotContainer.MAPLESIM){
             return;
         }
-        RobotContainer rc = RobotContainer.instance;
+        //needed for elevator, but we have no way of determining the height currently 10/14/2025
+        //RobotContainer rc = RobotContainer.instance;
+        //SwerveDriveSimulation swerveSim = rc.drivetrain.getDriveSim();
+        //Pose2d simRobotPose = swerveSim.getSimulatedDriveTrainPose();
+        //double coralAngle;
+        //double heightOffset = 0.6;
+        //double xOffset;
+
 
         // SwerveDriveSimulation swerveSim = rc.drivetrain.getDriveSim();
     }

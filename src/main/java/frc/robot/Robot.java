@@ -137,9 +137,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void simulationPeriodic() {
-     RobotContainer rc = m_robotContainer;
-      Pose3d[] coral = SimulatedArena.getInstance().getGamePiecesArrayByType("Coral");
-      coralPoses.accept(coral);
+    RobotContainer rc = m_robotContainer;
+    Pose3d[] coral = SimulatedArena.getInstance().getGamePiecesArrayByType("Coral");
+    coralPoses.accept(coral);
     //  Pose3d robotPose = new Pose3d(rc.drivetrain.getSimPose());
 
       Pose2d[] airobotPosesArray = new Pose2d[simulatedAIRobots.size()];
@@ -147,7 +147,10 @@ public class Robot extends TimedRobot {
         airobotPosesArray[i] = simulatedAIRobots.get(i).getPose();
       }
       aiRobotPoses.accept(airobotPosesArray);
-      //SimulatedArena.getInstance().simulationPeriodic();
+      if (RobotContainer.MAPLESIM) {
+        // appears to be necessary based on MapleSim, but had side effects (increased sensitivity in motion... SPINNING)
+        //SimulatedArena.getInstance().simulationPeriodic();
+      }
   }
 
   @Override
