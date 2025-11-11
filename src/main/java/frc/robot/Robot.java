@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
   private static boolean isBlueAlliance = false;
-
+  
   public Robot() {
     m_robotContainer = new RobotContainer();
     DataLogManager.start();
@@ -148,7 +148,7 @@ public class Robot extends TimedRobot {
       }
       aiRobotPoses.accept(airobotPosesArray);
       if (RobotContainer.MAPLESIM) {
-        // appears to be necessary based on MapleSim, but had side effects (increased sensitivity in motion... SPINNING)
+        m_robotContainer.drivetrain.mapleSimSwerveDrivetrain.update();
         //SimulatedArena.getInstance().simulationPeriodic();
       }
   }

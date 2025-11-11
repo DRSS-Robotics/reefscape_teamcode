@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.rmi.Remote;
 
+import org.littletonrobotics.junction.Logger;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -95,14 +96,15 @@ public class MapleSimDriveTrain {
         return null;
     }
 
-    // public void update() {
-    //     System.out.println("Updating");
-    //     SimulatedArena.getInstance().simulationPeriodic();
-    //     pigeonSim.setRawYaw(
-    //         mapleSimDrive.getSimulatedDriveTrainPose().getRotation().getMeasure());
-    //     pigeonSim.setAngularVelocityZ(RadiansPerSecond.of(
-    //         mapleSimDrive.getDriveTrainSimulatedChassisSpeedsRobotRelative().omegaRadiansPerSecond));
-    // }
+    public void update() {
+        Logger.recordOutput("FieldSimulation/RobotPosition", mapleSimDrive.getSimulatedDriveTrainPose());
+         System.out.println("Updating");
+         SimulatedArena.getInstance().simulationPeriodic();
+         pigeonSim.setRawYaw(
+             mapleSimDrive.getSimulatedDriveTrainPose().getRotation().getMeasure());
+         pigeonSim.setAngularVelocityZ(RadiansPerSecond.of(
+             mapleSimDrive.getDriveTrainSimulatedChassisSpeedsRobotRelative().omegaRadiansPerSecond));
+     }
 
     protected static class SimSwerveModule {
         public final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> moduleConstants;
