@@ -25,6 +25,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralMechanism;
 import frc.robot.subsystems.ElevatorMechanism;
 import frc.robot.subsystems.HangMechanism;
+import frc.robot.subsystems.guh;
 
 import frc.commands.CoralIntakeCommand;
 import frc.commands.CoralAutoIntakeCommand;
@@ -33,6 +34,8 @@ import frc.commands.CoralAutoOuttakeCommand;
 import frc.commands.CoralStopCommand;
 import frc.commands.CoralAutoStopCommand;
 import frc.commands.ElevatorMoveToIndex;
+import frc.commands.GuhCommandA;
+import frc.commands.GuhCommandB;
 import frc.commands.HangMoveToIndex;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -62,6 +65,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     public final CoralMechanism m_coralMechanism = new CoralMechanism(18);
+    public final guh m_guh = new guh(12, Controller2);
     public final ElevatorMechanism m_elevatorMechanism = new ElevatorMechanism(13, Controller2,
             Constants.kIsAtCompetition);
 //     public final HangMechanism m_hangMechanism = new HangMechanism(12, Controller2);
@@ -76,6 +80,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("OuttakeCoral", new CoralAutoOuttakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("IntakeCoral", new CoralAutoIntakeCommand(m_coralMechanism));
         NamedCommands.registerCommand("StopCoral", new CoralAutoStopCommand(m_coralMechanism));
+        NamedCommands.registerCommand("guh", new GuhCommandA(m_guh));
 
         autoChooser = AutoBuilder.buildAutoChooser("MVRTwoCoral");
         // PathPlannerAuto auto = new PathPlannerAuto("L2Middle");
@@ -125,7 +130,10 @@ public class RobotContainer {
         // Controller2.pov(180).onTrue(new HangMoveToIndex(m_hangMechanism, 0));
 
         Controller2.x().whileTrue(new CoralIntakeCommand(m_coralMechanism));
-        Controller2.b().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+        //Controller2.b().whileTrue(new CoralOuttakeCommand(m_coralMechanism));
+        Controller2.b().whileTrue(new GuhCommandB(m_guh));
+        Controller2.a().whileTrue(new GuhCommandA(m_guh));
+        
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

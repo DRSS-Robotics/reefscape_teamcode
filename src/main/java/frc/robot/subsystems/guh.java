@@ -24,16 +24,23 @@ public class guh extends SubsystemBase {
 //Motor controller, xbox controller, 
     SparkMaxConfig HangConfig = new SparkMaxConfig();
 
+    boolean jimGuh;
+
+    ClosedLoopConfig HangCCLoop = new ClosedLoopConfig()
+            .p(Constants.kHangKp).i(Constants.kHangKi).d(Constants.kHangKd);
+
     public final SparkMax hangMotor;
     CommandXboxController joystick;
+
+    //Constructor guh
     public guh(int hangMotorID, CommandXboxController gamepad) {
         hangMotor = new SparkMax(hangMotorID, MotorType.kBrushless);
         joystick = gamepad;
-
+        jimGuh = true;
         
         HangConfig.smartCurrentLimit(60);
         HangConfig.voltageCompensation(10);
-        HangConfig.apply(ElevCCLoop);
+        HangConfig.apply(HangCCLoop);
         HangConfig.idleMode(IdleMode.kBrake);
 
         hangMotor.configure(HangConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
@@ -41,11 +48,30 @@ public class guh extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (joystick.isAButtonPressed()) {
-            hangMotor.getClosedLoopController().setReference(Constants.guhHangUp, ControlType.kPosition);
-        }else if (joystick.isBButtonPressed()) {
-            hangMotor.getClosedLoopController().setReference(Constants.guhHangDown, ControlType.kPosition)
+        // if (joystick.a().getAsBoolean()) {
+        //     hangMotor.getClosedLoopController().setReference(Constants.guhHangUp, ControlType.kPosition);
+            
+        //     if (jimGuh) {
+        //         System.out.println("Guh hello");
+        //     }
+        //     jimGuh = false;
+        // }else if (joystick.b().getAsBoolean()) {
+        //     hangMotor.getClosedLoopController().setReference(Constants.guhHangDown, ControlType.kPosition);
+        // }else if (!joystick.a().getAsBoolean()) {
+        //     jimGuh = true;
+        // }
+
+        if (!jimGuh && (joystick.a().getAsBoolean() || joystick.b().getAsBoolean())) {
+            System.out.println("Guh hello");
         }
-        
+
+        if (joystick.a().getAsBoolean()) {
+            hangMotor.getClosedLoopController().setReference(Constants.guhHangUp, ControlType.kPosition);
+
+        }else if (joystick.b().getAsBoolean()) {
+            hangMotor.getClosedLoopController().setReference(Constants.guhHangDown, ControlType.kPosition);
+        }
+
+        jimGuh = joystick.a().getAsBoolean() || joystick.b().getAsBoolean();
     }
 }
